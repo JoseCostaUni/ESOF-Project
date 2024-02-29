@@ -11,4 +11,4 @@
 
 ### Theme
 
-We're developing an event application that 
+We're developing an event application that will enable users to create several susteinable events which people will be able to enter and participate accordingly.
