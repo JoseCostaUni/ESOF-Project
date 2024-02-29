@@ -8,3 +8,7 @@
 3. Ângelo Oliveira - up202207798
 4. Diogo Leandro - up202005304
 5. Carolina Almeida - up202108757
+
+### Theme
+
+We're developing an event application that 
