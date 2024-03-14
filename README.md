@@ -39,7 +39,7 @@ We're developing an event application that will enable users to create several s
 |------------|-----|----------|-------------|
 |  US01  | Register in events   |  High  |  As a user, I want to be able to register in an event, so that I can show up for events.|
 |  US02  | Unregister in events   |  High  |  As a user, I want to be able to unregister in an event, so that I'm able to leave events that im no longer interesed in going.|
-|  US03  | Unregister in events   |  High  |  As a user, I want to be able to delete my own events, so that I'm able to delete all events that i do not want to host anymore|
+|  US03  | Delete events   |  High  |  As a user, I want to be able to delete my own events, so that I'm able to delete all events that i do not want to host anymore|
 |  US04  | Delete my account   |  High  |  As a user, I want to be able to delete my account in case I do not want to keep using the app.  |
 |  US05  | Change Username   |  High  |  As a user, I want to change my username, so that I can update my own information.  |
 | US06 | Change Password | High | As a user, I want to be able to change my password, so that I'm able to enter my account even if any predicamente that led me to forget my password happen. |
