@@ -61,7 +61,6 @@ We're developing an event application that will enable users to create several s
 | US03 | See Participants | High | As a user, I want to be able to login into an account, so that I am able to sign up for events as well as post my own  |
 | US04 | Change event details(evento mudado enviar notificação pros participantes) | High | As a user, I want to be able to login off an account, so that I am able to either sign in or register another one  |
 | US05 | Cancel the event(seria enviada uma notificação) | High | As a user, I want to be able to login off an account, so that I am able to either sign in or register another one  |
-| US06 | 
-Aceitar os participantes | High | As a user, I want to be able to login off an account, so that I am able to either sign in or register another one  |
+ US06 | Aceitar os participantes | High | As a user, I want to be able to login off an account, so that I am able to either sign in or register another one  |
 |  US07 |  Event Group's hat group creation |  Low |  As a user, I want to be able to view the main page so that I know all so that I can choose which ones to attend. | 
 
