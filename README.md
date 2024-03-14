@@ -24,9 +24,6 @@ We're developing an event application that will enable users to create several s
 | US02 | See other user's accounts | Medium | As a user, I want to be able  to see other user's accounts, so that I am able to sign up for events as well as post my own  |
 |  US03  | Search Events   |  High  |  As a user, I want to be able to search events using different filters, so that I'm able to filter events to fit my preferences .|
 
-
-<br>
-
 #### 2. Unregistered User
 
 | Identifier |Name | Priority | Description |
