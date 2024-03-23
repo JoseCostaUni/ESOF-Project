@@ -55,7 +55,7 @@ Are you an advocate for sustainability and enjoy connecting with like-minded ind
 | Identifier |Name | Priority | Description |
 |------------|-----|----------|-------------|
 |  US18  | Create Events   |  High  |  As a user, I want to be able to create my own events, so that I'm able to gather people for it|
-|  US19  | Kick Participants  |  High  |  As a user, I want to be able to register an account, so that I can sign up for events as well as post my own.  |
+|  US19  | Kick Participants  |  High  |  As a user, I want to be able to kick participants from my event, so that I can manage the list of participants and ensure that only desired users participate in the event.  |
 | US20 | See Participants | High | As a user, I want to be able to login into an account, so that I am able to sign up for events as well as post my own  |
 | US21 | Change event details(evento mudado enviar notificação pros participantes) | High | As a user, I want to be able to login off an account, so that I am able to either sign in or register another one  |
 | US22 | Cancel the event(seria enviada uma notificação) | High | As a user, I want to be able to login off an account, so that I am able to either sign in or register another one  |
