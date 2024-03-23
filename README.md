@@ -9,7 +9,7 @@
 3. Ângelo Oliveira - up202207798
 5. Carolina Almeida - up202108757
 
-### Product Vision
+### Product Vision:
 
 Are you an advocate for sustainability and enjoy connecting with like-minded individuals? HelpBuddies is the ultimate app for eco-conscious socializing! With HelpBuddies, you can easily discover and participate in a variety of sustainable events, or take the lead by creating your own eco-friendly gatherings. 
 
