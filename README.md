@@ -54,11 +54,11 @@ Are you an advocate for sustainability and enjoy connecting with like-minded ind
 
 | Identifier |Name | Priority | Description |
 |------------|-----|----------|-------------|
-|  US18  | Create Events   |  High  |  As a user, I want to be able to create my own events, so that I'm able to gather people for it|
-|  US19  | Kick Participants  |  High  |  As a user, I want to be able to kick participants from my event, so that I can manage the list of participants and ensure that only desired users participate in the event.  |
-| US20 | See Participants | High | As a user, I want to be able to login into an account, so that I am able to sign up for events as well as post my own  |
-| US21 | Change event details(evento mudado enviar notificação pros participantes) | High | As a user, I want to be able to login off an account, so that I am able to either sign in or register another one  |
-| US22 | Cancel the event(seria enviada uma notificação) | High | As a user, I want to be able to login off an account, so that I am able to either sign in or register another one  |
- US23 | Aceitar os participantes | High | As a user, I want to be able to login off an account, so that I am able to either sign in or register another one  |
-|  US24 |  Event Group's hat group creation |  Low |  As a user, I want to be able to view the main page so that I know all so that I can choose which ones to attend. | 
+|  US18  | Create Events   |  High  |  As a user, I want to be able to create my own events, so that I'm able to gather people for it.|
+|  US19  | Kick Participants  |  High  |  As an Event Administrator, I want to be able to kick participants from my event, so that I can manage the list of participants.|
+| US20 | See Participants | High | As an Event Administrator, I want to be able to see the participants, so that I am able to know who is attending the event. |
+| US21 | Change event details | High | As an Event Administrator, I want to be able to change event details and send notifications to participants, so that I can keep them informed about any updates.  |
+| US22 | Cancel the event | High | As an Event Administrator, I want to be able to cancel the event and send notifications to participants, so that I can inform them about the cancellation.|
+| US23 | Aceitar os participantes | High | As an Event Administrator, I want to be able to accept participants, so that I can manage the list of attendees effectively.|
+|  US24 |  Event Group's hat group creation |  Low |  As an Event Administrator, I want to be able to create a group chat so that I all the people that will attend the event can talk with each other.| 
 
