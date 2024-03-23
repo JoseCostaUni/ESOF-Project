@@ -318,23 +318,92 @@ class NextSignupPageState extends State<NextSignupPage> {
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    const items = 4;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home page'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+
+            },
+          ),
+        ],
       ),
-      body: Center(
-        child: GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const MapsPage()),
-            );
-          },
-          child: const Text('Go to maps'),
+       body: Padding(
+        padding: const EdgeInsets.only(bottom: 60.0), // Espaço entre o BottomAppBar e o LayoutBuilder
+        child: LayoutBuilder(builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  ...List.generate(
+                    items,
+                    (index) => ItemWidget(text: 'Item $index'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.home), 
+                onPressed: () {  
+                  // Adicionar lógica para navegar para a página inicial
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.add), 
+                onPressed: () {  
+                  // Adicionar lógica para adicionar conteúdo
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.notifications), 
+                onPressed: () {  
+                  // Adicionar lógica para exibir notificações
+                },
+              ),
+              const CircleAvatar(
+                radius: 14, // Tamanho do avatar
+                 // Altere isso para o caminho da sua imagem de perfil
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+class ItemWidget extends StatelessWidget {
+  const ItemWidget({
+    super.key,
+    required this.text,
+  });
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: SizedBox(
+        height: 100,
+        child: Center(
+          child: Text(text),
         ),
       ),
     );
