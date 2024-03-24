@@ -59,6 +59,6 @@ Are you an advocate for sustainability and enjoy connecting with like-minded ind
 | US20 | See Participants | High | As an Event Administrator, I want to be able to see the participants, so that I am able to know who is attending the event. |
 | US21 | Change event details | High | As an Event Administrator, I want to be able to change event details and send notifications to participants, so that I can keep them informed about any updates.  |
 | US22 | Cancel the event | High | As an Event Administrator, I want to be able to cancel the event and send notifications to participants, so that I can inform them about the cancellation.|
-| US23 | Aceitar os participantes | High | As an Event Administrator, I want to be able to accept participants, so that I can manage the list of attendees effectively.|
+| US23 | Accept the participants | High | As an Event Administrator, I want to be able to accept participants, so that I can manage the list of attendees effectively.|
 |  US24 |  Event Group's hat group creation |  Low |  As an Event Administrator, I want to be able to create a group chat so that I all the people that will attend the event can talk with each other.| 
 
