@@ -15,6 +15,8 @@ Best regards, 2LEIC04T4
 4. Diogo Leandro - up202005304
 3. Ângelo Oliveira - up202207798
 5. Carolina Almeida - up202108757
+---
+## Index
 
 * [Business modeling](#Business-Modelling)
   * [Product Vision](#Product-Vision)
