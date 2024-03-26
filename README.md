@@ -20,9 +20,9 @@ Best regards, 2LEIC04T4
   * [Product Vision](#Product-Vision)
   * [Elevator Pitch](#Elevator-Pitch)
 * [Requirements](#Requirements)
-  * [User stories]
+  * [User stories](#https://github.com/orgs/FEUP-LEIC-ES-2023-24/projects/68)
   * [Domain model](#Domain-Model)
-* [Architecture and Design](https://github.com/LEIC-ES-2021-22/3LEIC04T2/blob/main/docs/architecture_and_design.md)
+* [Architecture and Design]()
   * [Logical architecture](#Logical-Architeture)
   * [Physical architecture](#Physical-Architeture)
   * [Vertical prototype](#Vertical-Prototype)
@@ -64,7 +64,9 @@ Are you an advocate for sustainability and enjoy connecting with like-minded ind
 * Event: Event has idEvent(a unique identifier for each event),name(which provides a brief title for the event), description of the event( providing information about its purpose, activities, etc), location (the adress where the event will take place), image associated with the event.
 * Event Administrator: The one who can manage and create the event, he is also able to kick members out of an event.
 * Event member: Can join an already existing event, after being approved by the administrator.
-* Messages: The event or his members can create messages that other users receive directly or undirectly through a notification. 
+* Messages: The event or his members can create messages that other users receive directly or undirectly through a notification.
+
+## Architeture and Design
 
 ### Logical Architeture:
 ![image](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/643ec387-0691-4778-b7ec-a3492d0dff5d)
