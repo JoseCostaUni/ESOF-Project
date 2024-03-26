@@ -16,6 +16,17 @@ Best regards, 2LEIC04T4
 3. Ângelo Oliveira - up202207798
 5. Carolina Almeida - up202108757
 
+* Business modeling(#Business-Modelling)
+  * [Product Vision](#Product-Vision)
+  * [Elevator Pitch](#Elevator-Pitch)
+* [Requirements](#Requirements)
+  * [User stories]
+  * [Domain model](#Domain-Model)
+* [Architecture and Design](https://github.com/LEIC-ES-2021-22/3LEIC04T2/blob/main/docs/architecture_and_design.md)
+  * [Logical architecture](#Logical-Architeture)
+  * [Physical architecture](#Physical-Architeture)
+  * [Vertical prototype](#Vertical-Prototype)
+
 ---
 
 ## Business Modelling
