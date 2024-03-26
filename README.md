@@ -47,10 +47,16 @@ Are you an advocate for sustainability and enjoy connecting with like-minded ind
 ### Domain Model:
 ![ClassDiagram.drawio](https://hackmd.io/_uploads/r1NIdPe1R.png)
 
-
+* User: The user is able to see the feed, search for events and see the account's of the other users, the users can either be registered or unregistered
+* Unregistered User: An unregistered user can also register an account or sign in a previously created one.
+* Registered User: Registered user has an username which is used as it's tag, the full name, a profile picture, email, biography that appears in his profile and a password.
+* Event: Event has idEvent(a unique identifier for each event),name(which provides a brief title for the event), description of the event( providing information about its purpose, activities, etc), location (the adress where the event will take place), image associated with the event.
+* Event Administrator: The one who can manage and create the event, he is also able to kick members out of an event.
+* Event member: Can join an already existing event, after being approved by the administrator.
+* Messages: The event or his members can create messages that other users receive directly or undirectly through a notification. 
 
 ### Logical Architeture:
-
+![image](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/643ec387-0691-4778-b7ec-a3492d0dff5d)
 
 ### Physical Architeture:
 ![Component_Diagram.drawio](https://hackmd.io/_uploads/SJTl_ve1R.png)
