@@ -75,6 +75,11 @@ Are you an advocate for sustainability and enjoy connecting with like-minded ind
 ### Logical Architeture:
 ![image](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/643ec387-0691-4778-b7ec-a3492d0dff5d)
 
+#### API's:
+* Google Maps: Integration with the Google Maps API enables the app to provide interactive maps for event locations.
+* Awesome Notifications: Enhances user engagement by delivering dynamic and visually appealing notifications.
+* Firebase: Real-time data synchronization across multiple devices.
+
 ### Physical Architeture:
 ![image](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/bbdc0a99-0d38-4221-8fb9-1731cc1bf5c2)
 
