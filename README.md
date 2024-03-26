@@ -83,6 +83,7 @@ Are you an advocate for sustainability and enjoy connecting with like-minded ind
 ### Physical Architeture:
 ![image](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/bbdc0a99-0d38-4221-8fb9-1731cc1bf5c2)
 
-
-
-
+#### Languages/Development kits used:
+* Flutter: It allows developers to write code that can be used across multiple platforms using a single codebase, saving time and effort
+* Dart: This language is highly optimized with flutter and can be used as both frontend(Flutter) and backend(Dart server), promoting consistency.
+* Firebase: Firebase offers a wide amount of backend services, including real-time database, authentication, cloud storage, and hosting, simplifying backend development for Flutter apps.
