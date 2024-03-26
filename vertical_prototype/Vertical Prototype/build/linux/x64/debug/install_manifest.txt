@@ -1,0 +1,14 @@
+/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/first_app
+/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/data/icudtl.dat
+/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/lib/libflutter_linux_gtk.so
+/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/lib/libawesome_notifications_plugin.so
+/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/data/flutter_assets/FontManifest.json
+/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/data/flutter_assets/version.json
+/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/data/flutter_assets/fonts/MaterialIcons-Regular.otf
+/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/data/flutter_assets/AssetManifest.json
+/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/data/flutter_assets/shaders/ink_sparkle.frag
+/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/data/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf
+/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/data/flutter_assets/packages/awesome_notifications/test/assets/images/test_image.png
+/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/data/flutter_assets/NOTICES.Z
+/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/data/flutter_assets/kernel_blob.bin
+/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/data/flutter_assets/AssetManifest.bin

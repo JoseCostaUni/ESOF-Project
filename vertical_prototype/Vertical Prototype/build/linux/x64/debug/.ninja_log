@@ -1,0 +1,79 @@
+# ninja log v5
+0	14834	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/libflutter_linux_gtk.so	9499e66cae81fa4c
+0	14834	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_basic_message_channel.h	9499e66cae81fa4c
+0	14834	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_binary_codec.h	9499e66cae81fa4c
+0	14834	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_binary_messenger.h	9499e66cae81fa4c
+0	14834	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_dart_project.h	9499e66cae81fa4c
+0	14834	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_engine.h	9499e66cae81fa4c
+0	14834	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_json_message_codec.h	9499e66cae81fa4c
+0	14834	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_json_method_codec.h	9499e66cae81fa4c
+0	14834	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_message_codec.h	9499e66cae81fa4c
+0	14834	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_method_call.h	9499e66cae81fa4c
+0	14834	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_method_channel.h	9499e66cae81fa4c
+0	14834	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_method_codec.h	9499e66cae81fa4c
+0	14834	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_method_response.h	9499e66cae81fa4c
+0	14834	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_plugin_registrar.h	9499e66cae81fa4c
+0	14834	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_plugin_registry.h	9499e66cae81fa4c
+0	14834	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_standard_message_codec.h	9499e66cae81fa4c
+0	14834	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_standard_method_codec.h	9499e66cae81fa4c
+0	14834	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_string_codec.h	9499e66cae81fa4c
+0	14834	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_value.h	9499e66cae81fa4c
+0	14834	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_view.h	9499e66cae81fa4c
+0	14834	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/flutter_linux.h	9499e66cae81fa4c
+0	14834	0	flutter/_phony_	9499e66cae81fa4c
+14835	16386	1711212991934079488	CMakeFiles/first_app.dir/flutter/generated_plugin_registrant.cc.o	f638a7e7ff34410b
+14834	16524	1711212992070080398	CMakeFiles/first_app.dir/main.cc.o	a035e5c7557a5409
+14835	16598	1711212992146080906	CMakeFiles/first_app.dir/my_application.cc.o	d139bfee2e7092b3
+16598	17129	1711212992682084489	intermediates_do_not_run/first_app	4b5ae5cce8132010
+17129	17310	0	CMakeFiles/install.util	5de9499c4f74b08d
+32	4086	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/libflutter_linux_gtk.so	9499e66cae81fa4c
+32	4086	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_basic_message_channel.h	9499e66cae81fa4c
+32	4086	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_binary_codec.h	9499e66cae81fa4c
+32	4086	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_binary_messenger.h	9499e66cae81fa4c
+32	4086	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_dart_project.h	9499e66cae81fa4c
+32	4086	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_engine.h	9499e66cae81fa4c
+32	4086	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_json_message_codec.h	9499e66cae81fa4c
+32	4086	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_json_method_codec.h	9499e66cae81fa4c
+32	4086	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_message_codec.h	9499e66cae81fa4c
+32	4086	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_method_call.h	9499e66cae81fa4c
+32	4086	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_method_channel.h	9499e66cae81fa4c
+32	4086	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_method_codec.h	9499e66cae81fa4c
+32	4086	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_method_response.h	9499e66cae81fa4c
+32	4086	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_plugin_registrar.h	9499e66cae81fa4c
+32	4086	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_plugin_registry.h	9499e66cae81fa4c
+32	4086	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_standard_message_codec.h	9499e66cae81fa4c
+32	4086	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_standard_method_codec.h	9499e66cae81fa4c
+32	4086	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_string_codec.h	9499e66cae81fa4c
+32	4086	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_value.h	9499e66cae81fa4c
+32	4086	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_view.h	9499e66cae81fa4c
+32	4086	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/flutter_linux.h	9499e66cae81fa4c
+32	4086	0	flutter/_phony_	9499e66cae81fa4c
+4087	5296	1711471716397275241	CMakeFiles/first_app.dir/flutter/generated_plugin_registrant.cc.o	c35ce0c5089e701c
+4086	5297	1711471716397275241	CMakeFiles/first_app.dir/main.cc.o	28cdafed8be49f39
+4087	5302	1711471716401275280	plugins/awesome_notifications/CMakeFiles/awesome_notifications_plugin.dir/awesome_notifications_plugin.cc.o	d6bb60c7528aae96
+4087	5304	1711471716401275280	CMakeFiles/first_app.dir/my_application.cc.o	8194e97934dcb88e
+5302	5518	1711471716617277429	plugins/awesome_notifications/libawesome_notifications_plugin.so	da1b351c228f3da5
+5518	5704	1711471716805279298	intermediates_do_not_run/first_app	1c5b7fda0b15cce5
+5704	5777	0	CMakeFiles/install.util	5de9499c4f74b08d
+1	3979	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/libflutter_linux_gtk.so	9499e66cae81fa4c
+1	3979	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_basic_message_channel.h	9499e66cae81fa4c
+1	3979	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_binary_codec.h	9499e66cae81fa4c
+1	3979	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_binary_messenger.h	9499e66cae81fa4c
+1	3979	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_dart_project.h	9499e66cae81fa4c
+1	3979	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_engine.h	9499e66cae81fa4c
+1	3979	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_json_message_codec.h	9499e66cae81fa4c
+1	3979	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_json_method_codec.h	9499e66cae81fa4c
+1	3979	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_message_codec.h	9499e66cae81fa4c
+1	3979	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_method_call.h	9499e66cae81fa4c
+1	3979	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_method_channel.h	9499e66cae81fa4c
+1	3979	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_method_codec.h	9499e66cae81fa4c
+1	3979	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_method_response.h	9499e66cae81fa4c
+1	3979	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_plugin_registrar.h	9499e66cae81fa4c
+1	3979	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_plugin_registry.h	9499e66cae81fa4c
+1	3979	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_standard_message_codec.h	9499e66cae81fa4c
+1	3979	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_standard_method_codec.h	9499e66cae81fa4c
+1	3979	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_string_codec.h	9499e66cae81fa4c
+1	3979	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_value.h	9499e66cae81fa4c
+1	3979	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/fl_view.h	9499e66cae81fa4c
+1	3979	0	/home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical Prototype/linux/flutter/ephemeral/flutter_linux/flutter_linux.h	9499e66cae81fa4c
+1	3979	0	flutter/_phony_	9499e66cae81fa4c

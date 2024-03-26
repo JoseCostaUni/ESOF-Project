@@ -1,0 +1,1 @@
+ /home/angelo/Downloads/Universidade/2Ano2Semestre/ES/Trabalho/2LEIC04T4/vertical_prototype/Vertical\ Prototype/.dart_tool/flutter_build/3d5edc451165830fe4d7985b521e7d60/native_assets.yaml: 
