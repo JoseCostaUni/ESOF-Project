@@ -1,4 +1,4 @@
-# _Help Buddies_ Development Report ![buddy](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/ab34d52e-5a44-4ca2-b611-ecc75b00b6cc)
+# _Help Buddies_ Development Report ![output-onlinepngtools](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/907044b1-9633-4905-b55f-7c15e947e7cb)
 
 Welcome to the documentation pages of the _Help Buddies_!
 
