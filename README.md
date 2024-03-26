@@ -66,6 +66,8 @@ Are you an advocate for sustainability and enjoy connecting with like-minded ind
 * Event member: Can join an already existing event, after being approved by the administrator.
 * Messages: The event or his members can create messages that other users receive directly or undirectly through a notification.
 
+---
+
 ## Architeture and Design
 
 ### Logical Architeture:
