@@ -45,7 +45,8 @@ Are you an advocate for sustainability and enjoy connecting with like-minded ind
 ## Requirements:
 
 ### Domain Model:
-![ClassDiagram.drawio](https://hackmd.io/_uploads/SJNRPDe1C.png)
+![ClassDiagram.drawio](https://hackmd.io/_uploads/r1NIdPe1R.png)
+
 
 
 ### Logical Architeture:
@@ -53,3 +54,6 @@ Are you an advocate for sustainability and enjoy connecting with like-minded ind
 
 ### Physical Architeture:
 ![Component_Diagram.drawio](https://hackmd.io/_uploads/SJTl_ve1R.png)
+
+
+
