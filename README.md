@@ -7,9 +7,6 @@ Initially, contributions are anticipated to originate solely from the founding t
 Don't hesitate to contact us for any changes you think are healthy for the development of the full extent of the app!
 Best regards, 2LEIC04T4
 
-## 2LEIC04T4
-
-
 ### Membros
 
 1. José Costa - up202207871 
