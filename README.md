@@ -1,4 +1,4 @@
-# _Help Buddies_ Development Report
+# _Help Buddies_ Development Report ![buddy](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/ab34d52e-5a44-4ca2-b611-ecc75b00b6cc)
 
 Welcome to the documentation pages of the _Help Buddies_!
 
@@ -56,7 +56,7 @@ Are you an advocate for sustainability and enjoy connecting with like-minded ind
 ## Requirements:
 
 ### Domain Model:
-![ClassDiagram.drawio](https://hackmd.io/_uploads/r1NIdPe1R.png)
+![image](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/68c24aec-6055-46ac-80f5-8966820f7c88)
 
 * User: The user is able to see the feed, search for events and see the account's of the other users, the users can either be registered or unregistered
 * Unregistered User: An unregistered user can also register an account or sign in a previously created one.
@@ -72,7 +72,8 @@ Are you an advocate for sustainability and enjoy connecting with like-minded ind
 ![image](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/643ec387-0691-4778-b7ec-a3492d0dff5d)
 
 ### Physical Architeture:
-![Component_Diagram.drawio](https://hackmd.io/_uploads/SJTl_ve1R.png)
+![image](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/bbdc0a99-0d38-4221-8fb9-1731cc1bf5c2)
+
 
 
 
