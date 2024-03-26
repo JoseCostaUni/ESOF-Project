@@ -16,7 +16,7 @@ Best regards, 2LEIC04T4
 3. Ângelo Oliveira - up202207798
 5. Carolina Almeida - up202108757
 
-* Business modeling(#Business-Modelling)
+* [Business modeling](#Business-Modelling):
   * [Product Vision](#Product-Vision)
   * [Elevator Pitch](#Elevator-Pitch)
 * [Requirements](#Requirements)
@@ -29,7 +29,7 @@ Best regards, 2LEIC04T4
 
 ---
 
-## Business Modelling
+## Business Modelling:
 
 ### Product Vision:
 
