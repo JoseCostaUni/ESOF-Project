@@ -22,7 +22,7 @@ Best regards, 2LEIC04T4
   * [Product Vision](#Product-Vision)
   * [Elevator Pitch](#Elevator-Pitch)
 * [Requirements](#Requirements)
-  * [User stories](#https://github.com/orgs/FEUP-LEIC-ES-2023-24/projects/68)
+  * [User stories](https://github.com/orgs/FEUP-LEIC-ES-2023-24/projects/68)
   * [Domain model](#Domain-Model)
 * [Architecture and Design]()
   * [Logical architecture](#Logical-Architeture)
