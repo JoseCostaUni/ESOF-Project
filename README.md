@@ -1,3 +1,12 @@
+# _Help Buddies_ Development Report
+
+Welcome to the documentation pages of the _Help Buddies_!
+
+Initially, contributions are anticipated to originate solely from the founding team. However, following the ES class program's completion, we aim to extend participation to the broader community across various domains and subjects, encompassing requirements, technologies, development, experimentation, testing, and more.
+
+Don't hesitate to contact us for any changes you think are healthy for the development of the full extent of the app!
+Best regards, 2LEIC04T4
+
 ## 2LEIC04T4
 
 
