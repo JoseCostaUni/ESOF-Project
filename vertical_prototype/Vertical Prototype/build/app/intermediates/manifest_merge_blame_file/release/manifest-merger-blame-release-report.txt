@@ -1,0 +1,786 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.first_app"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+8-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml
+9        android:targetSdkVersion="34" />
+9-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml
+10    <!--
+11         Required to query activities that can process text, see:
+12         https://developer.android.com/training/package-visibility?hl=en and
+13         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
+14
+15         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin.
+16    -->
+17    <queries>
+17-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:40:5-45:15
+18        <intent>
+18-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:41:9-44:18
+19            <action android:name="android.intent.action.PROCESS_TEXT" />
+19-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:42:13-72
+19-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:42:21-70
+20
+21            <data android:mimeType="text/plain" />
+21-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:43:13-50
+21-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:43:19-48
+22        </intent>
+23        <!-- Needs to be explicitly declared on Android R+ -->
+24        <package android:name="com.google.android.apps.maps" />
+24-->[com.google.android.gms:play-services-maps:18.2.0] /home/bruno/.gradle/caches/transforms-3/8d73d6bc87c76ecf5b018fac93b410d1/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:33:9-64
+24-->[com.google.android.gms:play-services-maps:18.2.0] /home/bruno/.gradle/caches/transforms-3/8d73d6bc87c76ecf5b018fac93b410d1/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:33:18-61
+25    </queries>
+26
+27    <uses-permission android:name="android.permission.INTERNET" />
+27-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:9:5-67
+27-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:9:22-64
+28    <uses-permission android:name="android.permission.WAKE_LOCK" />
+28-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:10:5-68
+28-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:10:22-65
+29    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Permissions options for the `notification` group -->
+29-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:11:5-79
+29-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:11:22-76
+30    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+30-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:13:5-77
+30-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:13:22-74
+31    <uses-permission android:name="android.permission.BROADCAST_CLOSE_SYSTEM_DIALOGS" />
+31-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:10:5-89
+31-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:10:22-86
+32    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+32-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:11:5-81
+32-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:11:22-78
+33    <uses-permission android:name="android.permission.VIBRATE" />
+33-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:12:5-66
+33-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:12:22-63
+34    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+34-->[:location] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/location/intermediates/merged_manifest/release/AndroidManifest.xml:9:5-81
+34-->[:location] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/location/intermediates/merged_manifest/release/AndroidManifest.xml:9:22-78
+35    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- Required by older versions of Google Play services to create IID tokens -->
+35-->[:location] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/location/intermediates/merged_manifest/release/AndroidManifest.xml:10:5-79
+35-->[:location] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/location/intermediates/merged_manifest/release/AndroidManifest.xml:10:22-76
+36    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+36-->[com.google.firebase:firebase-iid:21.1.0] /home/bruno/.gradle/caches/transforms-3/9acd5f80791cdafad6b6f08e67e0b090/transformed/jetified-firebase-iid-21.1.0/AndroidManifest.xml:26:5-82
+36-->[com.google.firebase:firebase-iid:21.1.0] /home/bruno/.gradle/caches/transforms-3/9acd5f80791cdafad6b6f08e67e0b090/transformed/jetified-firebase-iid-21.1.0/AndroidManifest.xml:26:22-79
+37    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+37-->[com.google.android.gms:play-services-measurement-api:21.6.1] /home/bruno/.gradle/caches/transforms-3/50e584471e620842b1abd24480a62a7b/transformed/jetified-play-services-measurement-api-21.6.1/AndroidManifest.xml:25:5-79
+37-->[com.google.android.gms:play-services-measurement-api:21.6.1] /home/bruno/.gradle/caches/transforms-3/50e584471e620842b1abd24480a62a7b/transformed/jetified-play-services-measurement-api-21.6.1/AndroidManifest.xml:25:22-76
+38    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_ATTRIBUTION" />
+38-->[com.google.android.gms:play-services-measurement-api:21.6.1] /home/bruno/.gradle/caches/transforms-3/50e584471e620842b1abd24480a62a7b/transformed/jetified-play-services-measurement-api-21.6.1/AndroidManifest.xml:26:5-88
+38-->[com.google.android.gms:play-services-measurement-api:21.6.1] /home/bruno/.gradle/caches/transforms-3/50e584471e620842b1abd24480a62a7b/transformed/jetified-play-services-measurement-api-21.6.1/AndroidManifest.xml:26:22-85
+39    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_AD_ID" />
+39-->[com.google.android.gms:play-services-measurement-api:21.6.1] /home/bruno/.gradle/caches/transforms-3/50e584471e620842b1abd24480a62a7b/transformed/jetified-play-services-measurement-api-21.6.1/AndroidManifest.xml:27:5-82
+39-->[com.google.android.gms:play-services-measurement-api:21.6.1] /home/bruno/.gradle/caches/transforms-3/50e584471e620842b1abd24480a62a7b/transformed/jetified-play-services-measurement-api-21.6.1/AndroidManifest.xml:27:22-79
+40    <uses-permission
+40-->[me.carda:AndroidAwnCore:0.9.3] /home/bruno/.gradle/caches/transforms-3/77842410e6f32cba3576cae6011dc782/transformed/jetified-AndroidAwnCore-0.9.3/AndroidManifest.xml:10:5-12:38
+41        android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
+41-->[me.carda:AndroidAwnCore:0.9.3] /home/bruno/.gradle/caches/transforms-3/77842410e6f32cba3576cae6011dc782/transformed/jetified-AndroidAwnCore-0.9.3/AndroidManifest.xml:11:9-77
+42        android:maxSdkVersion="22" />
+42-->[me.carda:AndroidAwnCore:0.9.3] /home/bruno/.gradle/caches/transforms-3/77842410e6f32cba3576cae6011dc782/transformed/jetified-AndroidAwnCore-0.9.3/AndroidManifest.xml:12:9-35
+43
+44    <uses-feature
+44-->[com.google.android.gms:play-services-maps:18.2.0] /home/bruno/.gradle/caches/transforms-3/8d73d6bc87c76ecf5b018fac93b410d1/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:26:5-28:35
+45        android:glEsVersion="0x00020000"
+45-->[com.google.android.gms:play-services-maps:18.2.0] /home/bruno/.gradle/caches/transforms-3/8d73d6bc87c76ecf5b018fac93b410d1/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:27:9-41
+46        android:required="true" />
+46-->[com.google.android.gms:play-services-maps:18.2.0] /home/bruno/.gradle/caches/transforms-3/8d73d6bc87c76ecf5b018fac93b410d1/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:28:9-32
+47
+48    <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
+48-->[com.google.android.gms:play-services-measurement:21.6.1] /home/bruno/.gradle/caches/transforms-3/267dcd182e292378f6e95369f9b01827/transformed/jetified-play-services-measurement-21.6.1/AndroidManifest.xml:26:5-110
+48-->[com.google.android.gms:play-services-measurement:21.6.1] /home/bruno/.gradle/caches/transforms-3/267dcd182e292378f6e95369f9b01827/transformed/jetified-play-services-measurement-21.6.1/AndroidManifest.xml:26:22-107
+49    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+49-->[com.google.android.recaptcha:recaptcha:18.4.0] /home/bruno/.gradle/caches/transforms-3/3275e2f02ff063d38012c2026ab6979f/transformed/jetified-recaptcha-18.4.0/AndroidManifest.xml:9:5-98
+49-->[com.google.android.recaptcha:recaptcha:18.4.0] /home/bruno/.gradle/caches/transforms-3/3275e2f02ff063d38012c2026ab6979f/transformed/jetified-recaptcha-18.4.0/AndroidManifest.xml:9:22-95
+50
+51    <permission
+51-->[androidx.core:core:1.10.1] /home/bruno/.gradle/caches/transforms-3/53e1c90acc2736ef9d388444ed595ca9/transformed/core-1.10.1/AndroidManifest.xml:22:5-24:47
+52        android:name="com.example.first_app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+52-->[androidx.core:core:1.10.1] /home/bruno/.gradle/caches/transforms-3/53e1c90acc2736ef9d388444ed595ca9/transformed/core-1.10.1/AndroidManifest.xml:23:9-81
+53        android:protectionLevel="signature" />
+53-->[androidx.core:core:1.10.1] /home/bruno/.gradle/caches/transforms-3/53e1c90acc2736ef9d388444ed595ca9/transformed/core-1.10.1/AndroidManifest.xml:24:9-44
+54
+55    <uses-permission android:name="com.example.first_app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" /> <!-- for android -->
+55-->[androidx.core:core:1.10.1] /home/bruno/.gradle/caches/transforms-3/53e1c90acc2736ef9d388444ed595ca9/transformed/core-1.10.1/AndroidManifest.xml:26:5-97
+55-->[androidx.core:core:1.10.1] /home/bruno/.gradle/caches/transforms-3/53e1c90acc2736ef9d388444ed595ca9/transformed/core-1.10.1/AndroidManifest.xml:26:22-94
+56    <!-- <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/> -->
+57    <!-- <uses-permission android:name="com.android.launcher.permission.WRITE_SETTINGS"/> -->
+58    <!-- <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" /> -->
+59    <!-- <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" /> -->
+60    <!-- for Samsung -->
+61    <uses-permission android:name="com.sec.android.provider.badge.permission.READ" />
+61-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:19:5-86
+61-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:19:22-83
+62    <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE" /> <!-- for htc -->
+62-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:20:5-87
+62-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:20:22-84
+63    <uses-permission android:name="com.htc.launcher.permission.READ_SETTINGS" />
+63-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:23:5-81
+63-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:23:22-78
+64    <uses-permission android:name="com.htc.launcher.permission.UPDATE_SHORTCUT" /> <!-- for sony -->
+64-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:24:5-83
+64-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:24:22-80
+65    <uses-permission android:name="com.sonyericsson.home.permission.BROADCAST_BADGE" />
+65-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:27:5-88
+65-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:27:22-85
+66    <uses-permission android:name="com.sonymobile.home.permission.PROVIDER_INSERT_BADGE" /> <!-- for apex -->
+66-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:28:5-92
+66-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:28:22-89
+67    <uses-permission android:name="com.anddoes.launcher.permission.UPDATE_COUNT" /> <!-- for solid -->
+67-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:31:5-84
+67-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:31:22-81
+68    <uses-permission android:name="com.majeur.launcher.permission.UPDATE_BADGE" /> <!-- for huawei -->
+68-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:34:5-83
+68-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:34:22-80
+69    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
+69-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:37:5-91
+69-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:37:22-88
+70    <uses-permission android:name="com.huawei.android.launcher.permission.READ_SETTINGS" />
+70-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:38:5-92
+70-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:38:22-89
+71    <uses-permission android:name="com.huawei.android.launcher.permission.WRITE_SETTINGS" /> <!-- for ZUK -->
+71-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:39:5-93
+71-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:39:22-90
+72    <uses-permission android:name="android.permission.READ_APP_BADGE" /> <!-- for OPPO -->
+72-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:42:5-73
+72-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:42:22-70
+73    <uses-permission android:name="com.oppo.launcher.permission.READ_SETTINGS" />
+73-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:45:5-82
+73-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:45:22-79
+74    <uses-permission android:name="com.oppo.launcher.permission.WRITE_SETTINGS" /> <!-- for EvMe -->
+74-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:46:5-83
+74-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:46:22-80
+75    <uses-permission android:name="me.everything.badger.permission.BADGE_COUNT_READ" />
+75-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:49:5-88
+75-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:49:22-85
+76    <uses-permission android:name="me.everything.badger.permission.BADGE_COUNT_WRITE" />
+76-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:50:5-89
+76-->[me.leolin:ShortcutBadger:1.1.22] /home/bruno/.gradle/caches/transforms-3/eeeb1ea242eae05dec24752d63b018f4/transformed/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:50:22-86
+77
+78    <application
+79        android:name="io.flutter.app.FlutterMultiDexApplication"
+79-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:4:9-42
+80        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+80-->[androidx.core:core:1.10.1] /home/bruno/.gradle/caches/transforms-3/53e1c90acc2736ef9d388444ed595ca9/transformed/core-1.10.1/AndroidManifest.xml:28:18-86
+81        android:icon="@mipmap/ic_launcher"
+81-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:5:9-43
+82        android:label="first_app" >
+82-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:3:9-34
+83        <activity
+83-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:6:9-26:20
+84            android:name="com.example.first_app.MainActivity"
+84-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:7:13-41
+85            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+85-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:11:13-163
+86            android:exported="true"
+86-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:8:13-36
+87            android:hardwareAccelerated="true"
+87-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:12:13-47
+88            android:launchMode="singleTop"
+88-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:9:13-43
+89            android:theme="@style/LaunchTheme"
+89-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:10:13-47
+90            android:windowSoftInputMode="adjustResize" >
+90-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:13:13-55
+91
+92            <!--
+93                 Specifies an Android theme to apply to this Activity as soon as
+94                 the Android process has started. This theme is visible to the user
+95                 while the Flutter UI initializes. After that, this theme continues
+96                 to determine the Window background behind the Flutter UI.
+97            -->
+98            <meta-data
+98-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:18:13-21:17
+99                android:name="io.flutter.embedding.android.NormalTheme"
+99-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:19:15-70
+100                android:resource="@style/NormalTheme" />
+100-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:20:15-52
+101
+102            <intent-filter>
+102-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:22:13-25:29
+103                <action android:name="android.intent.action.MAIN" />
+103-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:23:17-68
+103-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:23:25-66
+104
+105                <category android:name="android.intent.category.LAUNCHER" />
+105-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:24:17-76
+105-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:24:27-74
+106            </intent-filter>
+107        </activity>
+108        <!--
+109             Don't delete the meta-data below.
+110             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+111        -->
+112        <meta-data
+112-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:29:9-31:33
+113            android:name="flutterEmbedding"
+113-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:30:13-44
+114            android:value="2" />
+114-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:31:13-30
+115        <meta-data
+115-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:32:13-33:80
+116            android:name="com.google.android.geo.API_KEY"
+116-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:32:24-71
+117            android:value="AIzaSyBs-rqqUizowhqPaA3Iwb0bot-KP0HspK4" />
+117-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:33:21-78
+118
+119        <service
+119-->[:firebase_auth] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_auth/intermediates/merged_manifest/release/AndroidManifest.xml:10:9-14:19
+120            android:name="com.google.firebase.components.ComponentDiscoveryService"
+120-->[:firebase_auth] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_auth/intermediates/merged_manifest/release/AndroidManifest.xml:10:18-89
+121            android:directBootAware="true"
+121-->[com.google.firebase:firebase-common:20.4.3] /home/bruno/.gradle/caches/transforms-3/b87f5ea8879d69742d2c2a73e8103bbe/transformed/jetified-firebase-common-20.4.3/AndroidManifest.xml:32:13-43
+122            android:exported="false" >
+122-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:68:13-37
+123            <meta-data
+123-->[:firebase_auth] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_auth/intermediates/merged_manifest/release/AndroidManifest.xml:11:13-13:85
+124                android:name="com.google.firebase.components:io.flutter.plugins.firebase.auth.FlutterFirebaseAuthRegistrar"
+124-->[:firebase_auth] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_auth/intermediates/merged_manifest/release/AndroidManifest.xml:12:17-124
+125                android:value="com.google.firebase.components.ComponentRegistrar" />
+125-->[:firebase_auth] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_auth/intermediates/merged_manifest/release/AndroidManifest.xml:13:17-82
+126            <meta-data
+126-->[:firebase_database] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_database/intermediates/merged_manifest/release/AndroidManifest.xml:11:13-13:85
+127                android:name="com.google.firebase.components:io.flutter.plugins.firebase.database.FlutterFirebaseAppRegistrar"
+127-->[:firebase_database] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_database/intermediates/merged_manifest/release/AndroidManifest.xml:12:17-127
+128                android:value="com.google.firebase.components.ComponentRegistrar" />
+128-->[:firebase_database] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_database/intermediates/merged_manifest/release/AndroidManifest.xml:13:17-82
+129            <meta-data
+129-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:38:13-40:85
+130                android:name="com.google.firebase.components:io.flutter.plugins.firebase.messaging.FlutterFirebaseAppRegistrar"
+130-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:39:17-128
+131                android:value="com.google.firebase.components.ComponentRegistrar" />
+131-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:40:17-82
+132            <meta-data
+132-->[:firebase_core] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_core/intermediates/merged_manifest/release/AndroidManifest.xml:11:13-13:85
+133                android:name="com.google.firebase.components:io.flutter.plugins.firebase.core.FlutterFirebaseCoreRegistrar"
+133-->[:firebase_core] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_core/intermediates/merged_manifest/release/AndroidManifest.xml:12:17-124
+134                android:value="com.google.firebase.components.ComponentRegistrar" />
+134-->[:firebase_core] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_core/intermediates/merged_manifest/release/AndroidManifest.xml:13:17-82
+135            <meta-data
+135-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:69:13-71:85
+136                android:name="com.google.firebase.components:com.google.firebase.auth.FirebaseAuthRegistrar"
+136-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:70:17-109
+137                android:value="com.google.firebase.components.ComponentRegistrar" />
+137-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:71:17-82
+138            <meta-data
+138-->[com.google.firebase:firebase-database:20.3.1] /home/bruno/.gradle/caches/transforms-3/7f6a4c22464b1004c57d486754c6434b/transformed/jetified-firebase-database-20.3.1/AndroidManifest.xml:29:13-31:85
+139                android:name="com.google.firebase.components:com.google.firebase.database.FirebaseDatabaseKtxRegistrar"
+139-->[com.google.firebase:firebase-database:20.3.1] /home/bruno/.gradle/caches/transforms-3/7f6a4c22464b1004c57d486754c6434b/transformed/jetified-firebase-database-20.3.1/AndroidManifest.xml:30:17-120
+140                android:value="com.google.firebase.components.ComponentRegistrar" />
+140-->[com.google.firebase:firebase-database:20.3.1] /home/bruno/.gradle/caches/transforms-3/7f6a4c22464b1004c57d486754c6434b/transformed/jetified-firebase-database-20.3.1/AndroidManifest.xml:31:17-82
+141            <meta-data
+141-->[com.google.firebase:firebase-database:20.3.1] /home/bruno/.gradle/caches/transforms-3/7f6a4c22464b1004c57d486754c6434b/transformed/jetified-firebase-database-20.3.1/AndroidManifest.xml:32:13-34:85
+142                android:name="com.google.firebase.components:com.google.firebase.database.DatabaseRegistrar"
+142-->[com.google.firebase:firebase-database:20.3.1] /home/bruno/.gradle/caches/transforms-3/7f6a4c22464b1004c57d486754c6434b/transformed/jetified-firebase-database-20.3.1/AndroidManifest.xml:33:17-109
+143                android:value="com.google.firebase.components.ComponentRegistrar" />
+143-->[com.google.firebase:firebase-database:20.3.1] /home/bruno/.gradle/caches/transforms-3/7f6a4c22464b1004c57d486754c6434b/transformed/jetified-firebase-database-20.3.1/AndroidManifest.xml:34:17-82
+144            <meta-data
+144-->[com.google.firebase:firebase-iid:21.1.0] /home/bruno/.gradle/caches/transforms-3/9acd5f80791cdafad6b6f08e67e0b090/transformed/jetified-firebase-iid-21.1.0/AndroidManifest.xml:32:13-34:85
+145                android:name="com.google.firebase.components:com.google.firebase.iid.Registrar"
+145-->[com.google.firebase:firebase-iid:21.1.0] /home/bruno/.gradle/caches/transforms-3/9acd5f80791cdafad6b6f08e67e0b090/transformed/jetified-firebase-iid-21.1.0/AndroidManifest.xml:33:17-96
+146                android:value="com.google.firebase.components.ComponentRegistrar" />
+146-->[com.google.firebase:firebase-iid:21.1.0] /home/bruno/.gradle/caches/transforms-3/9acd5f80791cdafad6b6f08e67e0b090/transformed/jetified-firebase-iid-21.1.0/AndroidManifest.xml:34:17-82
+147            <meta-data
+147-->[com.google.firebase:firebase-messaging:23.4.1] /home/bruno/.gradle/caches/transforms-3/248c7ce48a32d2c1837a1f7990b2e155/transformed/jetified-firebase-messaging-23.4.1/AndroidManifest.xml:57:13-59:85
+148                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingKtxRegistrar"
+148-->[com.google.firebase:firebase-messaging:23.4.1] /home/bruno/.gradle/caches/transforms-3/248c7ce48a32d2c1837a1f7990b2e155/transformed/jetified-firebase-messaging-23.4.1/AndroidManifest.xml:58:17-122
+149                android:value="com.google.firebase.components.ComponentRegistrar" />
+149-->[com.google.firebase:firebase-messaging:23.4.1] /home/bruno/.gradle/caches/transforms-3/248c7ce48a32d2c1837a1f7990b2e155/transformed/jetified-firebase-messaging-23.4.1/AndroidManifest.xml:59:17-82
+150            <meta-data
+150-->[com.google.firebase:firebase-messaging:23.4.1] /home/bruno/.gradle/caches/transforms-3/248c7ce48a32d2c1837a1f7990b2e155/transformed/jetified-firebase-messaging-23.4.1/AndroidManifest.xml:60:13-62:85
+151                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingRegistrar"
+151-->[com.google.firebase:firebase-messaging:23.4.1] /home/bruno/.gradle/caches/transforms-3/248c7ce48a32d2c1837a1f7990b2e155/transformed/jetified-firebase-messaging-23.4.1/AndroidManifest.xml:61:17-119
+152                android:value="com.google.firebase.components.ComponentRegistrar" />
+152-->[com.google.firebase:firebase-messaging:23.4.1] /home/bruno/.gradle/caches/transforms-3/248c7ce48a32d2c1837a1f7990b2e155/transformed/jetified-firebase-messaging-23.4.1/AndroidManifest.xml:62:17-82
+153            <meta-data
+153-->[com.google.android.gms:play-services-measurement-api:21.6.1] /home/bruno/.gradle/caches/transforms-3/50e584471e620842b1abd24480a62a7b/transformed/jetified-play-services-measurement-api-21.6.1/AndroidManifest.xml:37:13-39:85
+154                android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
+154-->[com.google.android.gms:play-services-measurement-api:21.6.1] /home/bruno/.gradle/caches/transforms-3/50e584471e620842b1abd24480a62a7b/transformed/jetified-play-services-measurement-api-21.6.1/AndroidManifest.xml:38:17-139
+155                android:value="com.google.firebase.components.ComponentRegistrar" />
+155-->[com.google.android.gms:play-services-measurement-api:21.6.1] /home/bruno/.gradle/caches/transforms-3/50e584471e620842b1abd24480a62a7b/transformed/jetified-play-services-measurement-api-21.6.1/AndroidManifest.xml:39:17-82
+156            <meta-data
+156-->[com.google.firebase:firebase-installations:17.2.0] /home/bruno/.gradle/caches/transforms-3/92af424a8ddfe08c49d6a4fc80761b86/transformed/jetified-firebase-installations-17.2.0/AndroidManifest.xml:15:13-17:85
+157                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsKtxRegistrar"
+157-->[com.google.firebase:firebase-installations:17.2.0] /home/bruno/.gradle/caches/transforms-3/92af424a8ddfe08c49d6a4fc80761b86/transformed/jetified-firebase-installations-17.2.0/AndroidManifest.xml:16:17-130
+158                android:value="com.google.firebase.components.ComponentRegistrar" />
+158-->[com.google.firebase:firebase-installations:17.2.0] /home/bruno/.gradle/caches/transforms-3/92af424a8ddfe08c49d6a4fc80761b86/transformed/jetified-firebase-installations-17.2.0/AndroidManifest.xml:17:17-82
+159            <meta-data
+159-->[com.google.firebase:firebase-installations:17.2.0] /home/bruno/.gradle/caches/transforms-3/92af424a8ddfe08c49d6a4fc80761b86/transformed/jetified-firebase-installations-17.2.0/AndroidManifest.xml:18:13-20:85
+160                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
+160-->[com.google.firebase:firebase-installations:17.2.0] /home/bruno/.gradle/caches/transforms-3/92af424a8ddfe08c49d6a4fc80761b86/transformed/jetified-firebase-installations-17.2.0/AndroidManifest.xml:19:17-127
+161                android:value="com.google.firebase.components.ComponentRegistrar" />
+161-->[com.google.firebase:firebase-installations:17.2.0] /home/bruno/.gradle/caches/transforms-3/92af424a8ddfe08c49d6a4fc80761b86/transformed/jetified-firebase-installations-17.2.0/AndroidManifest.xml:20:17-82
+162            <meta-data
+162-->[com.google.firebase:firebase-common-ktx:20.4.3] /home/bruno/.gradle/caches/transforms-3/d4d152f26ad56e1782b325fda8a29540/transformed/jetified-firebase-common-ktx-20.4.3/AndroidManifest.xml:12:13-14:85
+163                android:name="com.google.firebase.components:com.google.firebase.ktx.FirebaseCommonLegacyRegistrar"
+163-->[com.google.firebase:firebase-common-ktx:20.4.3] /home/bruno/.gradle/caches/transforms-3/d4d152f26ad56e1782b325fda8a29540/transformed/jetified-firebase-common-ktx-20.4.3/AndroidManifest.xml:13:17-116
+164                android:value="com.google.firebase.components.ComponentRegistrar" />
+164-->[com.google.firebase:firebase-common-ktx:20.4.3] /home/bruno/.gradle/caches/transforms-3/d4d152f26ad56e1782b325fda8a29540/transformed/jetified-firebase-common-ktx-20.4.3/AndroidManifest.xml:14:17-82
+165            <meta-data
+165-->[com.google.firebase:firebase-common:20.4.3] /home/bruno/.gradle/caches/transforms-3/b87f5ea8879d69742d2c2a73e8103bbe/transformed/jetified-firebase-common-20.4.3/AndroidManifest.xml:35:13-37:85
+166                android:name="com.google.firebase.components:com.google.firebase.FirebaseCommonKtxRegistrar"
+166-->[com.google.firebase:firebase-common:20.4.3] /home/bruno/.gradle/caches/transforms-3/b87f5ea8879d69742d2c2a73e8103bbe/transformed/jetified-firebase-common-20.4.3/AndroidManifest.xml:36:17-109
+167                android:value="com.google.firebase.components.ComponentRegistrar" />
+167-->[com.google.firebase:firebase-common:20.4.3] /home/bruno/.gradle/caches/transforms-3/b87f5ea8879d69742d2c2a73e8103bbe/transformed/jetified-firebase-common-20.4.3/AndroidManifest.xml:37:17-82
+168            <meta-data
+168-->[com.google.firebase:firebase-datatransport:18.1.7] /home/bruno/.gradle/caches/transforms-3/fc1923883aea828b8a16ced833a6da81/transformed/jetified-firebase-datatransport-18.1.7/AndroidManifest.xml:27:13-29:85
+169                android:name="com.google.firebase.components:com.google.firebase.datatransport.TransportRegistrar"
+169-->[com.google.firebase:firebase-datatransport:18.1.7] /home/bruno/.gradle/caches/transforms-3/fc1923883aea828b8a16ced833a6da81/transformed/jetified-firebase-datatransport-18.1.7/AndroidManifest.xml:28:17-115
+170                android:value="com.google.firebase.components.ComponentRegistrar" />
+170-->[com.google.firebase:firebase-datatransport:18.1.7] /home/bruno/.gradle/caches/transforms-3/fc1923883aea828b8a16ced833a6da81/transformed/jetified-firebase-datatransport-18.1.7/AndroidManifest.xml:29:17-82
+171        </service>
+172        <service
+172-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:16:9-19:72
+173            android:name="io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingBackgroundService"
+173-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:17:13-107
+174            android:exported="false"
+174-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:18:13-37
+175            android:permission="android.permission.BIND_JOB_SERVICE" />
+175-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:19:13-69
+176        <service
+176-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:20:9-26:19
+177            android:name="io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingService"
+177-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:21:13-97
+178            android:exported="false" >
+178-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:22:13-37
+179            <intent-filter>
+179-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:23:13-25:29
+180                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+180-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:24:17-78
+180-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:24:25-75
+181            </intent-filter>
+182        </service>
+183
+184        <receiver
+184-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:28:9-35:20
+185            android:name="io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingReceiver"
+185-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:29:13-98
+186            android:exported="true"
+186-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:30:13-36
+187            android:permission="com.google.android.c2dm.permission.SEND" >
+187-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:31:13-73
+188            <intent-filter>
+188-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:32:13-34:29
+189                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+189-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:33:17-81
+189-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:33:25-78
+190            </intent-filter>
+191        </receiver>
+192
+193        <provider
+193-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:43:9-47:38
+194            android:name="io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingInitProvider"
+194-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:44:13-102
+195            android:authorities="com.example.first_app.flutterfirebasemessaginginitprovider"
+195-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:45:13-88
+196            android:exported="false"
+196-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:46:13-37
+197            android:initOrder="99" />
+197-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:47:13-35
+198
+199        <receiver
+199-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:15:9-17:39
+200            android:name="me.carda.awesome_notifications.DartNotificationActionReceiver"
+200-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:16:13-89
+201            android:exported="true" />
+201-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:17:13-36
+202        <receiver
+202-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:18:9-20:39
+203            android:name="me.carda.awesome_notifications.DartDismissedNotificationReceiver"
+203-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:19:13-92
+204            android:exported="true" />
+204-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:20:13-36
+205        <receiver
+205-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:21:9-23:39
+206            android:name="me.carda.awesome_notifications.DartScheduledNotificationReceiver"
+206-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:22:13-92
+207            android:exported="true" />
+207-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:23:13-36
+208        <receiver
+208-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:24:9-38:20
+209            android:name="me.carda.awesome_notifications.DartRefreshSchedulesReceiver"
+209-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:25:13-87
+210            android:enabled="true"
+210-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:26:13-35
+211            android:exported="true" >
+211-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:27:13-36
+212            <intent-filter>
+212-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:28:13-37:29
+213                <category android:name="android.intent.category.DEFAULT" />
+213-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:29:17-76
+213-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:29:27-73
+214
+215                <action android:name="android.intent.action.BOOT_COMPLETED" />
+215-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:31:17-79
+215-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:31:25-76
+216                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+216-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:32:17-86
+216-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:32:25-83
+217                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+217-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:33:17-84
+217-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:33:25-81
+218                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+218-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:34:17-82
+218-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:34:25-79
+219                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+219-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:35:17-82
+219-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:35:25-79
+220                <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
+220-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:36:17-107
+220-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:36:25-104
+221            </intent-filter>
+222        </receiver>
+223
+224        <service
+224-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:40:9-43:72
+225            android:name="me.carda.awesome_notifications.DartBackgroundService"
+225-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:41:13-80
+226            android:exported="false"
+226-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:42:13-37
+227            android:permission="android.permission.BIND_JOB_SERVICE" />
+227-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:43:13-69
+228        <service
+228-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:44:9-49:43
+229            android:name="me.carda.awesome_notifications.core.services.ForegroundService"
+229-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:45:13-90
+230            android:enabled="true"
+230-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:46:13-35
+231            android:exported="false"
+231-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:47:13-37
+232            android:foregroundServiceType="phoneCall"
+232-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:48:13-54
+233            android:stopWithTask="true" />
+233-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:49:13-40
+234        <service
+234-->[:location] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/location/intermediates/merged_manifest/release/AndroidManifest.xml:13:9-17:56
+235            android:name="com.lyokone.location.FlutterLocationService"
+235-->[:location] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/location/intermediates/merged_manifest/release/AndroidManifest.xml:14:13-71
+236            android:enabled="true"
+236-->[:location] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/location/intermediates/merged_manifest/release/AndroidManifest.xml:15:13-35
+237            android:exported="false"
+237-->[:location] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/location/intermediates/merged_manifest/release/AndroidManifest.xml:16:13-37
+238            android:foregroundServiceType="location" />
+238-->[:location] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/location/intermediates/merged_manifest/release/AndroidManifest.xml:17:13-53
+239
+240        <activity
+240-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:29:9-46:20
+241            android:name="com.google.firebase.auth.internal.GenericIdpActivity"
+241-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:30:13-80
+242            android:excludeFromRecents="true"
+242-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:31:13-46
+243            android:exported="true"
+243-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:32:13-36
+244            android:launchMode="singleTask"
+244-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:33:13-44
+245            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+245-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:34:13-72
+246            <intent-filter>
+246-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:35:13-45:29
+247                <action android:name="android.intent.action.VIEW" />
+247-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:36:17-69
+247-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:36:25-66
+248
+249                <category android:name="android.intent.category.DEFAULT" />
+249-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:29:17-76
+249-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:29:27-73
+250                <category android:name="android.intent.category.BROWSABLE" />
+250-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:39:17-78
+250-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:39:27-75
+251
+252                <data
+252-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:43:13-50
+253                    android:host="firebase.auth"
+254                    android:path="/"
+255                    android:scheme="genericidp" />
+256            </intent-filter>
+257        </activity>
+258        <activity
+258-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:47:9-64:20
+259            android:name="com.google.firebase.auth.internal.RecaptchaActivity"
+259-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:48:13-79
+260            android:excludeFromRecents="true"
+260-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:49:13-46
+261            android:exported="true"
+261-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:50:13-36
+262            android:launchMode="singleTask"
+262-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:51:13-44
+263            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+263-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:52:13-72
+264            <intent-filter>
+264-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:53:13-63:29
+265                <action android:name="android.intent.action.VIEW" />
+265-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:36:17-69
+265-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:36:25-66
+266
+267                <category android:name="android.intent.category.DEFAULT" />
+267-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:29:17-76
+267-->[:awesome_notifications] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/awesome_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:29:27-73
+268                <category android:name="android.intent.category.BROWSABLE" />
+268-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:39:17-78
+268-->[com.google.firebase:firebase-auth:22.3.1] /home/bruno/.gradle/caches/transforms-3/2afcefa4dffe2f206221f4c249716599/transformed/jetified-firebase-auth-22.3.1/AndroidManifest.xml:39:27-75
+269
+270                <data
+270-->/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app/src/main/AndroidManifest.xml:43:13-50
+271                    android:host="firebase.auth"
+272                    android:path="/"
+273                    android:scheme="recaptcha" />
+274            </intent-filter>
+275        </activity>
+276
+277        <receiver
+277-->[com.google.firebase:firebase-messaging:23.4.1] /home/bruno/.gradle/caches/transforms-3/248c7ce48a32d2c1837a1f7990b2e155/transformed/jetified-firebase-messaging-23.4.1/AndroidManifest.xml:29:9-40:20
+278            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+278-->[com.google.firebase:firebase-messaging:23.4.1] /home/bruno/.gradle/caches/transforms-3/248c7ce48a32d2c1837a1f7990b2e155/transformed/jetified-firebase-messaging-23.4.1/AndroidManifest.xml:30:13-78
+279            android:exported="true"
+279-->[com.google.firebase:firebase-messaging:23.4.1] /home/bruno/.gradle/caches/transforms-3/248c7ce48a32d2c1837a1f7990b2e155/transformed/jetified-firebase-messaging-23.4.1/AndroidManifest.xml:31:13-36
+280            android:permission="com.google.android.c2dm.permission.SEND" >
+280-->[com.google.firebase:firebase-messaging:23.4.1] /home/bruno/.gradle/caches/transforms-3/248c7ce48a32d2c1837a1f7990b2e155/transformed/jetified-firebase-messaging-23.4.1/AndroidManifest.xml:32:13-73
+281            <intent-filter>
+281-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:32:13-34:29
+282                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+282-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:33:17-81
+282-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:33:25-78
+283            </intent-filter>
+284
+285            <meta-data
+285-->[com.google.firebase:firebase-messaging:23.4.1] /home/bruno/.gradle/caches/transforms-3/248c7ce48a32d2c1837a1f7990b2e155/transformed/jetified-firebase-messaging-23.4.1/AndroidManifest.xml:37:13-39:40
+286                android:name="com.google.android.gms.cloudmessaging.FINISHED_AFTER_HANDLED"
+286-->[com.google.firebase:firebase-messaging:23.4.1] /home/bruno/.gradle/caches/transforms-3/248c7ce48a32d2c1837a1f7990b2e155/transformed/jetified-firebase-messaging-23.4.1/AndroidManifest.xml:38:17-92
+287                android:value="true" />
+287-->[com.google.firebase:firebase-messaging:23.4.1] /home/bruno/.gradle/caches/transforms-3/248c7ce48a32d2c1837a1f7990b2e155/transformed/jetified-firebase-messaging-23.4.1/AndroidManifest.xml:39:17-37
+288        </receiver>
+289        <!--
+290             FirebaseMessagingService performs security checks at runtime,
+291             but set to not exported to explicitly avoid allowing another app to call it.
+292        -->
+293        <service
+293-->[com.google.firebase:firebase-messaging:23.4.1] /home/bruno/.gradle/caches/transforms-3/248c7ce48a32d2c1837a1f7990b2e155/transformed/jetified-firebase-messaging-23.4.1/AndroidManifest.xml:46:9-53:19
+294            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+294-->[com.google.firebase:firebase-messaging:23.4.1] /home/bruno/.gradle/caches/transforms-3/248c7ce48a32d2c1837a1f7990b2e155/transformed/jetified-firebase-messaging-23.4.1/AndroidManifest.xml:47:13-82
+295            android:directBootAware="true"
+295-->[com.google.firebase:firebase-messaging:23.4.1] /home/bruno/.gradle/caches/transforms-3/248c7ce48a32d2c1837a1f7990b2e155/transformed/jetified-firebase-messaging-23.4.1/AndroidManifest.xml:48:13-43
+296            android:exported="false" >
+296-->[com.google.firebase:firebase-messaging:23.4.1] /home/bruno/.gradle/caches/transforms-3/248c7ce48a32d2c1837a1f7990b2e155/transformed/jetified-firebase-messaging-23.4.1/AndroidManifest.xml:49:13-37
+297            <intent-filter android:priority="-500" >
+297-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:23:13-25:29
+298                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+298-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:24:17-78
+298-->[:firebase_messaging] /home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:24:25-75
+299            </intent-filter>
+300        </service>
+301
+302        <property
+302-->[com.google.android.gms:play-services-measurement-api:21.6.1] /home/bruno/.gradle/caches/transforms-3/50e584471e620842b1abd24480a62a7b/transformed/jetified-play-services-measurement-api-21.6.1/AndroidManifest.xml:30:9-32:61
+303            android:name="android.adservices.AD_SERVICES_CONFIG"
+303-->[com.google.android.gms:play-services-measurement-api:21.6.1] /home/bruno/.gradle/caches/transforms-3/50e584471e620842b1abd24480a62a7b/transformed/jetified-play-services-measurement-api-21.6.1/AndroidManifest.xml:31:13-65
+304            android:resource="@xml/ga_ad_services_config" />
+304-->[com.google.android.gms:play-services-measurement-api:21.6.1] /home/bruno/.gradle/caches/transforms-3/50e584471e620842b1abd24480a62a7b/transformed/jetified-play-services-measurement-api-21.6.1/AndroidManifest.xml:32:13-58
+305
+306        <provider
+306-->[com.google.firebase:firebase-common:20.4.3] /home/bruno/.gradle/caches/transforms-3/b87f5ea8879d69742d2c2a73e8103bbe/transformed/jetified-firebase-common-20.4.3/AndroidManifest.xml:23:9-28:39
+307            android:name="com.google.firebase.provider.FirebaseInitProvider"
+307-->[com.google.firebase:firebase-common:20.4.3] /home/bruno/.gradle/caches/transforms-3/b87f5ea8879d69742d2c2a73e8103bbe/transformed/jetified-firebase-common-20.4.3/AndroidManifest.xml:24:13-77
+308            android:authorities="com.example.first_app.firebaseinitprovider"
+308-->[com.google.firebase:firebase-common:20.4.3] /home/bruno/.gradle/caches/transforms-3/b87f5ea8879d69742d2c2a73e8103bbe/transformed/jetified-firebase-common-20.4.3/AndroidManifest.xml:25:13-72
+309            android:directBootAware="true"
+309-->[com.google.firebase:firebase-common:20.4.3] /home/bruno/.gradle/caches/transforms-3/b87f5ea8879d69742d2c2a73e8103bbe/transformed/jetified-firebase-common-20.4.3/AndroidManifest.xml:26:13-43
+310            android:exported="false"
+310-->[com.google.firebase:firebase-common:20.4.3] /home/bruno/.gradle/caches/transforms-3/b87f5ea8879d69742d2c2a73e8103bbe/transformed/jetified-firebase-common-20.4.3/AndroidManifest.xml:27:13-37
+311            android:initOrder="100" />
+311-->[com.google.firebase:firebase-common:20.4.3] /home/bruno/.gradle/caches/transforms-3/b87f5ea8879d69742d2c2a73e8103bbe/transformed/jetified-firebase-common-20.4.3/AndroidManifest.xml:28:13-36
+312
+313        <service
+313-->[me.carda:AndroidAwnCore:0.9.3] /home/bruno/.gradle/caches/transforms-3/77842410e6f32cba3576cae6011dc782/transformed/jetified-AndroidAwnCore-0.9.3/AndroidManifest.xml:21:9-28:19
+314            android:name="me.carda.awesome_notifications.core.managers.StatusBarManager"
+314-->[me.carda:AndroidAwnCore:0.9.3] /home/bruno/.gradle/caches/transforms-3/77842410e6f32cba3576cae6011dc782/transformed/jetified-AndroidAwnCore-0.9.3/AndroidManifest.xml:22:13-89
+315            android:exported="true"
+315-->[me.carda:AndroidAwnCore:0.9.3] /home/bruno/.gradle/caches/transforms-3/77842410e6f32cba3576cae6011dc782/transformed/jetified-AndroidAwnCore-0.9.3/AndroidManifest.xml:23:13-36
+316            android:label="My Notification Listener Service" >
+316-->[me.carda:AndroidAwnCore:0.9.3] /home/bruno/.gradle/caches/transforms-3/77842410e6f32cba3576cae6011dc782/transformed/jetified-AndroidAwnCore-0.9.3/AndroidManifest.xml:24:13-61
+317            <intent-filter>
+317-->[me.carda:AndroidAwnCore:0.9.3] /home/bruno/.gradle/caches/transforms-3/77842410e6f32cba3576cae6011dc782/transformed/jetified-AndroidAwnCore-0.9.3/AndroidManifest.xml:25:13-27:29
+318                <action android:name="android.service.notification.NotificationListenerService" />
+318-->[me.carda:AndroidAwnCore:0.9.3] /home/bruno/.gradle/caches/transforms-3/77842410e6f32cba3576cae6011dc782/transformed/jetified-AndroidAwnCore-0.9.3/AndroidManifest.xml:26:17-99
+318-->[me.carda:AndroidAwnCore:0.9.3] /home/bruno/.gradle/caches/transforms-3/77842410e6f32cba3576cae6011dc782/transformed/jetified-AndroidAwnCore-0.9.3/AndroidManifest.xml:26:25-96
+319            </intent-filter>
+320        </service> <!-- Needs to be explicitly declared on P+ -->
+321        <uses-library
+321-->[com.google.android.gms:play-services-maps:18.2.0] /home/bruno/.gradle/caches/transforms-3/8d73d6bc87c76ecf5b018fac93b410d1/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:39:9-41:40
+322            android:name="org.apache.http.legacy"
+322-->[com.google.android.gms:play-services-maps:18.2.0] /home/bruno/.gradle/caches/transforms-3/8d73d6bc87c76ecf5b018fac93b410d1/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:40:13-50
+323            android:required="false" />
+323-->[com.google.android.gms:play-services-maps:18.2.0] /home/bruno/.gradle/caches/transforms-3/8d73d6bc87c76ecf5b018fac93b410d1/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:41:13-37
+324
+325        <receiver
+325-->[com.google.android.gms:play-services-measurement:21.6.1] /home/bruno/.gradle/caches/transforms-3/267dcd182e292378f6e95369f9b01827/transformed/jetified-play-services-measurement-21.6.1/AndroidManifest.xml:29:9-33:20
+326            android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
+326-->[com.google.android.gms:play-services-measurement:21.6.1] /home/bruno/.gradle/caches/transforms-3/267dcd182e292378f6e95369f9b01827/transformed/jetified-play-services-measurement-21.6.1/AndroidManifest.xml:30:13-85
+327            android:enabled="true"
+327-->[com.google.android.gms:play-services-measurement:21.6.1] /home/bruno/.gradle/caches/transforms-3/267dcd182e292378f6e95369f9b01827/transformed/jetified-play-services-measurement-21.6.1/AndroidManifest.xml:31:13-35
+328            android:exported="false" >
+328-->[com.google.android.gms:play-services-measurement:21.6.1] /home/bruno/.gradle/caches/transforms-3/267dcd182e292378f6e95369f9b01827/transformed/jetified-play-services-measurement-21.6.1/AndroidManifest.xml:32:13-37
+329        </receiver>
+330
+331        <service
+331-->[com.google.android.gms:play-services-measurement:21.6.1] /home/bruno/.gradle/caches/transforms-3/267dcd182e292378f6e95369f9b01827/transformed/jetified-play-services-measurement-21.6.1/AndroidManifest.xml:35:9-38:40
+332            android:name="com.google.android.gms.measurement.AppMeasurementService"
+332-->[com.google.android.gms:play-services-measurement:21.6.1] /home/bruno/.gradle/caches/transforms-3/267dcd182e292378f6e95369f9b01827/transformed/jetified-play-services-measurement-21.6.1/AndroidManifest.xml:36:13-84
+333            android:enabled="true"
+333-->[com.google.android.gms:play-services-measurement:21.6.1] /home/bruno/.gradle/caches/transforms-3/267dcd182e292378f6e95369f9b01827/transformed/jetified-play-services-measurement-21.6.1/AndroidManifest.xml:37:13-35
+334            android:exported="false" />
+334-->[com.google.android.gms:play-services-measurement:21.6.1] /home/bruno/.gradle/caches/transforms-3/267dcd182e292378f6e95369f9b01827/transformed/jetified-play-services-measurement-21.6.1/AndroidManifest.xml:38:13-37
+335        <service
+335-->[com.google.android.gms:play-services-measurement:21.6.1] /home/bruno/.gradle/caches/transforms-3/267dcd182e292378f6e95369f9b01827/transformed/jetified-play-services-measurement-21.6.1/AndroidManifest.xml:39:9-43:72
+336            android:name="com.google.android.gms.measurement.AppMeasurementJobService"
+336-->[com.google.android.gms:play-services-measurement:21.6.1] /home/bruno/.gradle/caches/transforms-3/267dcd182e292378f6e95369f9b01827/transformed/jetified-play-services-measurement-21.6.1/AndroidManifest.xml:40:13-87
+337            android:enabled="true"
+337-->[com.google.android.gms:play-services-measurement:21.6.1] /home/bruno/.gradle/caches/transforms-3/267dcd182e292378f6e95369f9b01827/transformed/jetified-play-services-measurement-21.6.1/AndroidManifest.xml:41:13-35
+338            android:exported="false"
+338-->[com.google.android.gms:play-services-measurement:21.6.1] /home/bruno/.gradle/caches/transforms-3/267dcd182e292378f6e95369f9b01827/transformed/jetified-play-services-measurement-21.6.1/AndroidManifest.xml:42:13-37
+339            android:permission="android.permission.BIND_JOB_SERVICE" />
+339-->[com.google.android.gms:play-services-measurement:21.6.1] /home/bruno/.gradle/caches/transforms-3/267dcd182e292378f6e95369f9b01827/transformed/jetified-play-services-measurement-21.6.1/AndroidManifest.xml:43:13-69
+340
+341        <activity
+341-->[com.google.android.gms:play-services-base:18.1.0] /home/bruno/.gradle/caches/transforms-3/231c5d2132ba8179acc6529bb28d4932/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:9-22:45
+342            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+342-->[com.google.android.gms:play-services-base:18.1.0] /home/bruno/.gradle/caches/transforms-3/231c5d2132ba8179acc6529bb28d4932/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:19-85
+343            android:exported="false"
+343-->[com.google.android.gms:play-services-base:18.1.0] /home/bruno/.gradle/caches/transforms-3/231c5d2132ba8179acc6529bb28d4932/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:22:19-43
+344            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+344-->[com.google.android.gms:play-services-base:18.1.0] /home/bruno/.gradle/caches/transforms-3/231c5d2132ba8179acc6529bb28d4932/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:21:19-78
+345
+346        <uses-library
+346-->[androidx.window:window:1.0.0-beta04] /home/bruno/.gradle/caches/transforms-3/0b18acd6f94d30ed2643a810c4531bfb/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:25:9-27:40
+347            android:name="androidx.window.extensions"
+347-->[androidx.window:window:1.0.0-beta04] /home/bruno/.gradle/caches/transforms-3/0b18acd6f94d30ed2643a810c4531bfb/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:26:13-54
+348            android:required="false" />
+348-->[androidx.window:window:1.0.0-beta04] /home/bruno/.gradle/caches/transforms-3/0b18acd6f94d30ed2643a810c4531bfb/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:27:13-37
+349        <uses-library
+349-->[androidx.window:window:1.0.0-beta04] /home/bruno/.gradle/caches/transforms-3/0b18acd6f94d30ed2643a810c4531bfb/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:28:9-30:40
+350            android:name="androidx.window.sidecar"
+350-->[androidx.window:window:1.0.0-beta04] /home/bruno/.gradle/caches/transforms-3/0b18acd6f94d30ed2643a810c4531bfb/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:29:13-51
+351            android:required="false" />
+351-->[androidx.window:window:1.0.0-beta04] /home/bruno/.gradle/caches/transforms-3/0b18acd6f94d30ed2643a810c4531bfb/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:30:13-37
+352
+353        <provider
+353-->[androidx.emoji2:emoji2:1.2.0] /home/bruno/.gradle/caches/transforms-3/017216a9fed1ad5771759690c435a526/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
+354            android:name="androidx.startup.InitializationProvider"
+354-->[androidx.emoji2:emoji2:1.2.0] /home/bruno/.gradle/caches/transforms-3/017216a9fed1ad5771759690c435a526/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:25:13-67
+355            android:authorities="com.example.first_app.androidx-startup"
+355-->[androidx.emoji2:emoji2:1.2.0] /home/bruno/.gradle/caches/transforms-3/017216a9fed1ad5771759690c435a526/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:26:13-68
+356            android:exported="false" >
+356-->[androidx.emoji2:emoji2:1.2.0] /home/bruno/.gradle/caches/transforms-3/017216a9fed1ad5771759690c435a526/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:27:13-37
+357            <meta-data
+357-->[androidx.emoji2:emoji2:1.2.0] /home/bruno/.gradle/caches/transforms-3/017216a9fed1ad5771759690c435a526/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
+358                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+358-->[androidx.emoji2:emoji2:1.2.0] /home/bruno/.gradle/caches/transforms-3/017216a9fed1ad5771759690c435a526/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:30:17-75
+359                android:value="androidx.startup" />
+359-->[androidx.emoji2:emoji2:1.2.0] /home/bruno/.gradle/caches/transforms-3/017216a9fed1ad5771759690c435a526/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:31:17-49
+360            <meta-data
+360-->[androidx.lifecycle:lifecycle-process:2.6.1] /home/bruno/.gradle/caches/transforms-3/f17ac8c21997a0a6fbf726de973b328d/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:29:13-31:52
+361                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+361-->[androidx.lifecycle:lifecycle-process:2.6.1] /home/bruno/.gradle/caches/transforms-3/f17ac8c21997a0a6fbf726de973b328d/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:30:17-78
+362                android:value="androidx.startup" />
+362-->[androidx.lifecycle:lifecycle-process:2.6.1] /home/bruno/.gradle/caches/transforms-3/f17ac8c21997a0a6fbf726de973b328d/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:31:17-49
+363            <meta-data
+363-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/bruno/.gradle/caches/transforms-3/b6a4fa9569348a64ef74c703f0a2d9e3/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+364                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+364-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/bruno/.gradle/caches/transforms-3/b6a4fa9569348a64ef74c703f0a2d9e3/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+365                android:value="androidx.startup" />
+365-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/bruno/.gradle/caches/transforms-3/b6a4fa9569348a64ef74c703f0a2d9e3/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+366        </provider>
+367
+368        <uses-library
+368-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] /home/bruno/.gradle/caches/transforms-3/89a1e8dafa2861a3c5ea6161864176e8/transformed/jetified-ads-adservices-1.0.0-beta05/AndroidManifest.xml:23:9-25:40
+369            android:name="android.ext.adservices"
+369-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] /home/bruno/.gradle/caches/transforms-3/89a1e8dafa2861a3c5ea6161864176e8/transformed/jetified-ads-adservices-1.0.0-beta05/AndroidManifest.xml:24:13-50
+370            android:required="false" />
+370-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] /home/bruno/.gradle/caches/transforms-3/89a1e8dafa2861a3c5ea6161864176e8/transformed/jetified-ads-adservices-1.0.0-beta05/AndroidManifest.xml:25:13-37
+371
+372        <meta-data
+372-->[com.google.android.gms:play-services-basement:18.3.0] /home/bruno/.gradle/caches/transforms-3/92c5dc716bd3dba4808a6413fe0fd326/transformed/jetified-play-services-basement-18.3.0/AndroidManifest.xml:21:9-23:69
+373            android:name="com.google.android.gms.version"
+373-->[com.google.android.gms:play-services-basement:18.3.0] /home/bruno/.gradle/caches/transforms-3/92c5dc716bd3dba4808a6413fe0fd326/transformed/jetified-play-services-basement-18.3.0/AndroidManifest.xml:22:13-58
+374            android:value="@integer/google_play_services_version" />
+374-->[com.google.android.gms:play-services-basement:18.3.0] /home/bruno/.gradle/caches/transforms-3/92c5dc716bd3dba4808a6413fe0fd326/transformed/jetified-play-services-basement-18.3.0/AndroidManifest.xml:23:13-66
+375
+376        <service
+376-->[androidx.room:room-runtime:2.5.0] /home/bruno/.gradle/caches/transforms-3/f9c5700808297ad29f6175b9d5c14d00/transformed/room-runtime-2.5.0/AndroidManifest.xml:24:9-28:63
+377            android:name="androidx.room.MultiInstanceInvalidationService"
+377-->[androidx.room:room-runtime:2.5.0] /home/bruno/.gradle/caches/transforms-3/f9c5700808297ad29f6175b9d5c14d00/transformed/room-runtime-2.5.0/AndroidManifest.xml:25:13-74
+378            android:directBootAware="true"
+378-->[androidx.room:room-runtime:2.5.0] /home/bruno/.gradle/caches/transforms-3/f9c5700808297ad29f6175b9d5c14d00/transformed/room-runtime-2.5.0/AndroidManifest.xml:26:13-43
+379            android:exported="false" />
+379-->[androidx.room:room-runtime:2.5.0] /home/bruno/.gradle/caches/transforms-3/f9c5700808297ad29f6175b9d5c14d00/transformed/room-runtime-2.5.0/AndroidManifest.xml:27:13-37
+380
+381        <receiver
+381-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/bruno/.gradle/caches/transforms-3/b6a4fa9569348a64ef74c703f0a2d9e3/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+382            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+382-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/bruno/.gradle/caches/transforms-3/b6a4fa9569348a64ef74c703f0a2d9e3/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+383            android:directBootAware="false"
+383-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/bruno/.gradle/caches/transforms-3/b6a4fa9569348a64ef74c703f0a2d9e3/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+384            android:enabled="true"
+384-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/bruno/.gradle/caches/transforms-3/b6a4fa9569348a64ef74c703f0a2d9e3/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+385            android:exported="true"
+385-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/bruno/.gradle/caches/transforms-3/b6a4fa9569348a64ef74c703f0a2d9e3/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+386            android:permission="android.permission.DUMP" >
+386-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/bruno/.gradle/caches/transforms-3/b6a4fa9569348a64ef74c703f0a2d9e3/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+387            <intent-filter>
+387-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/bruno/.gradle/caches/transforms-3/b6a4fa9569348a64ef74c703f0a2d9e3/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+388                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+388-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/bruno/.gradle/caches/transforms-3/b6a4fa9569348a64ef74c703f0a2d9e3/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+388-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/bruno/.gradle/caches/transforms-3/b6a4fa9569348a64ef74c703f0a2d9e3/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+389            </intent-filter>
+390            <intent-filter>
+390-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/bruno/.gradle/caches/transforms-3/b6a4fa9569348a64ef74c703f0a2d9e3/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+391                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+391-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/bruno/.gradle/caches/transforms-3/b6a4fa9569348a64ef74c703f0a2d9e3/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+391-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/bruno/.gradle/caches/transforms-3/b6a4fa9569348a64ef74c703f0a2d9e3/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+392            </intent-filter>
+393            <intent-filter>
+393-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/bruno/.gradle/caches/transforms-3/b6a4fa9569348a64ef74c703f0a2d9e3/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+394                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+394-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/bruno/.gradle/caches/transforms-3/b6a4fa9569348a64ef74c703f0a2d9e3/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+394-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/bruno/.gradle/caches/transforms-3/b6a4fa9569348a64ef74c703f0a2d9e3/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+395            </intent-filter>
+396            <intent-filter>
+396-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/bruno/.gradle/caches/transforms-3/b6a4fa9569348a64ef74c703f0a2d9e3/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+397                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+397-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/bruno/.gradle/caches/transforms-3/b6a4fa9569348a64ef74c703f0a2d9e3/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+397-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/bruno/.gradle/caches/transforms-3/b6a4fa9569348a64ef74c703f0a2d9e3/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:25-92
+398            </intent-filter>
+399        </receiver>
+400
+401        <service
+401-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /home/bruno/.gradle/caches/transforms-3/555085e2f6e6ff6c0522d87b72b9da44/transformed/jetified-transport-backend-cct-3.1.8/AndroidManifest.xml:28:9-34:19
+402            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+402-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /home/bruno/.gradle/caches/transforms-3/555085e2f6e6ff6c0522d87b72b9da44/transformed/jetified-transport-backend-cct-3.1.8/AndroidManifest.xml:29:13-103
+403            android:exported="false" >
+403-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /home/bruno/.gradle/caches/transforms-3/555085e2f6e6ff6c0522d87b72b9da44/transformed/jetified-transport-backend-cct-3.1.8/AndroidManifest.xml:30:13-37
+404            <meta-data
+404-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /home/bruno/.gradle/caches/transforms-3/555085e2f6e6ff6c0522d87b72b9da44/transformed/jetified-transport-backend-cct-3.1.8/AndroidManifest.xml:31:13-33:39
+405                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+405-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /home/bruno/.gradle/caches/transforms-3/555085e2f6e6ff6c0522d87b72b9da44/transformed/jetified-transport-backend-cct-3.1.8/AndroidManifest.xml:32:17-94
+406                android:value="cct" />
+406-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /home/bruno/.gradle/caches/transforms-3/555085e2f6e6ff6c0522d87b72b9da44/transformed/jetified-transport-backend-cct-3.1.8/AndroidManifest.xml:33:17-36
+407        </service>
+408        <service
+408-->[com.google.android.datatransport:transport-runtime:3.1.8] /home/bruno/.gradle/caches/transforms-3/4ebe84886ae86b9878d2f1504fa5de86/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:26:9-30:19
+409            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+409-->[com.google.android.datatransport:transport-runtime:3.1.8] /home/bruno/.gradle/caches/transforms-3/4ebe84886ae86b9878d2f1504fa5de86/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:27:13-117
+410            android:exported="false"
+410-->[com.google.android.datatransport:transport-runtime:3.1.8] /home/bruno/.gradle/caches/transforms-3/4ebe84886ae86b9878d2f1504fa5de86/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:28:13-37
+411            android:permission="android.permission.BIND_JOB_SERVICE" >
+411-->[com.google.android.datatransport:transport-runtime:3.1.8] /home/bruno/.gradle/caches/transforms-3/4ebe84886ae86b9878d2f1504fa5de86/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:29:13-69
+412        </service>
+413
+414        <receiver
+414-->[com.google.android.datatransport:transport-runtime:3.1.8] /home/bruno/.gradle/caches/transforms-3/4ebe84886ae86b9878d2f1504fa5de86/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:32:9-34:40
+415            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+415-->[com.google.android.datatransport:transport-runtime:3.1.8] /home/bruno/.gradle/caches/transforms-3/4ebe84886ae86b9878d2f1504fa5de86/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:33:13-132
+416            android:exported="false" />
+416-->[com.google.android.datatransport:transport-runtime:3.1.8] /home/bruno/.gradle/caches/transforms-3/4ebe84886ae86b9878d2f1504fa5de86/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:34:13-37
+417    </application>
+418
+419</manifest>

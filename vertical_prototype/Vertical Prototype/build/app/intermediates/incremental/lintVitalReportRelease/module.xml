@@ -1,0 +1,18 @@
+<lint-module
+    format="1"
+    dir="/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/android/app"
+    name=":app"
+    type="APP"
+    maven="android:app:"
+    gradle="7.3.0"
+    buildFolder="/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/app"
+    bootClassPath="/home/bruno/Android/Sdk/platforms/android-34/android.jar:/home/bruno/Android/Sdk/build-tools/30.0.3/core-lambda-stubs.jar"
+    javaSourceLevel="1.8"
+    compileTarget="android-34">
+  <lintOptions
+      abortOnError="true"
+      absolutePaths="true"
+      checkReleaseBuilds="true"
+      explainIssues="true"/>
+  <variant name="release"/>
+</lint-module>
