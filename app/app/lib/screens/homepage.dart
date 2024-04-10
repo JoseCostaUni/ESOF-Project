@@ -1,12 +1,9 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
+
+
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({super.key, required this.title});
   final String title;
 
   @override
@@ -21,7 +18,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Search Event',
@@ -32,29 +29,31 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () {},
                 ),
                 enabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
+                  borderSide: BorderSide(color:Color.fromARGB(255, 202, 178, 172)),
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                 ),
                 focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
+                  borderSide: BorderSide(color: Color.fromARGB(255, 202, 178, 172)),
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                
                 ),
                 filled: true,
-                fillColor: Colors.white,
+                fillColor: const Color.fromARGB(255, 213, 177, 168),
               ),
               style: const TextStyle(color: Colors.blue),
+              //elevation: 2,
             ),
           ),
         ],
       ),
      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20), // Definindo o raio de borda
           child: BottomAppBar(
             color: const Color.fromARGB(255, 202, 178, 172),
             shape: const CircularNotchedRectangle(),
-            elevation: 0,
+            shadowColor: Colors.black54,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
