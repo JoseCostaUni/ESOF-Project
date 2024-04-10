@@ -1,3 +1,4 @@
+import 'package:app/screens/homepage.dart';
 import 'package:app/screens/signuppage.dart';
 import 'package:flutter/material.dart';
 
@@ -147,7 +148,11 @@ class _LoginPageState extends State<LoginPage> {
               width: 360,
               child: ElevatedButton(
                 
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (_) => const HomePage(title:'home')));
+                },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 224, 167, 153))
                 ),

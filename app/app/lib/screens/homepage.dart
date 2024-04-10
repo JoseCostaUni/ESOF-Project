@@ -1,16 +1,16 @@
+import 'package:app/screens/createevent.dart';
+import 'package:app/screens/profile.dart';
 import 'package:flutter/material.dart';
 
-
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key, required this.title});
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,13 +29,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () {},
                 ),
                 enabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color:Color.fromARGB(255, 202, 178, 172)),
+                  borderSide:
+                      BorderSide(color: Color.fromARGB(255, 202, 178, 172)),
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                 ),
                 focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Color.fromARGB(255, 202, 178, 172)),
+                  borderSide:
+                      BorderSide(color: Color.fromARGB(255, 202, 178, 172)),
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                
                 ),
                 filled: true,
                 fillColor: const Color.fromARGB(255, 213, 177, 168),
@@ -46,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-     bottomNavigationBar: Padding(
+      bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20), // Definindo o raio de borda
@@ -63,9 +64,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () {},
                 ),
                 IconButton(
-                  icon: const Icon(Icons.search),
+                  icon: const Icon(Icons.add_circle_outline),
                   color: Colors.white,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => const CreateEvent()));
+                  },
                 ),
                 IconButton(
                   icon: const Icon(Icons.notifications),
@@ -75,7 +79,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 IconButton(
                   icon: const Icon(Icons.person),
                   color: Colors.white,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(
+                        builder: (_) => const MyProfilePage(title: "profile")));
+
+                  },
                 ),
               ],
             ),

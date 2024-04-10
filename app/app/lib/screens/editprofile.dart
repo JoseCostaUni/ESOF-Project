@@ -2,14 +2,14 @@ import 'package:app/screens/homepage.dart';
 import 'package:app/screens/profile.dart';
 import 'package:flutter/material.dart';
 
-class CreateEvent extends StatefulWidget {
-  const CreateEvent({super.key});
+class EditProfile extends StatefulWidget {
+  const EditProfile({super.key});
 
   @override
-  State<CreateEvent> createState() => _CreateEventState();
+  State<EditProfile> createState() => _EditProfileState();
 }
 
-class _CreateEventState extends State<CreateEvent> {
+class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +35,7 @@ class _CreateEventState extends State<CreateEvent> {
                   ),
                   const SizedBox(width: 10),
                   const Text(
-                    "Create Event",
+                    "Edit Profile",
                     style: TextStyle(fontSize: 20),
                   ),
                 ],
@@ -59,42 +59,35 @@ class _CreateEventState extends State<CreateEvent> {
                       const SizedBox(height: 20),
                       const TextField(
                         decoration: InputDecoration(
-                          hintText: 'Event Title',
+                          hintText: 'Change Username',
                           prefixIcon: Icon(Icons.text_fields),
                         ),
                       ),
                       const SizedBox(height: 10),
                       const TextField(
                         decoration: InputDecoration(
-                          hintText: 'Date and time',
+                          hintText: 'Change Name',
                           prefixIcon: Icon(Icons.text_fields),
                         ),
                       ),
                       const SizedBox(height: 10),
                       const TextField(
                         decoration: InputDecoration(
-                          hintText: 'Location',
+                          hintText: 'New e-mail',
                           prefixIcon: Icon(Icons.text_fields),
                         ),
                       ),
                       const SizedBox(height: 10),
                       const TextField(
                         decoration: InputDecoration(
-                          hintText: 'Attendance limit',
+                          hintText: 'Change Profile Picture',
                           prefixIcon: Icon(Icons.text_fields),
                         ),
                       ),
                       const SizedBox(height: 10),
                       const TextField(
                         decoration: InputDecoration(
-                          hintText: 'Upload image',
-                          prefixIcon: Icon(Icons.text_fields),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      const TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Events Description',
+                          hintText: 'New Description',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.black),
                             borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -107,13 +100,20 @@ class _CreateEventState extends State<CreateEvent> {
                       ),
                       const SizedBox(height: 20),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           ElevatedButton(
+                            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                             onPressed: () {
-                              // Adicione aqui a lógica para criar o evento
+                              Navigator.pop(context); // Voltar à tela anterior
                             },
-                            child: const Text("Create Event"),
+                            child: const Text("Cancel"),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              // Adicione aqui a lógica para editar o perfil
+                            },
+                            child: const Text("Edit"),
                           ),
                         ],
                       ),
@@ -142,8 +142,7 @@ class _CreateEventState extends State<CreateEvent> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (_) => const HomePage(title: "Home")),
+                      MaterialPageRoute(builder: (_) => const HomePage(title: "Home")),
                     );
                   },
                 ),
@@ -151,7 +150,7 @@ class _CreateEventState extends State<CreateEvent> {
                   icon: const Icon(Icons.add_circle_outline),
                   color: Colors.white,
                   onPressed: () {
-                    
+                    // Adicione aqui a lógica para criar um evento
                   },
                 ),
                 IconButton(
@@ -164,10 +163,9 @@ class _CreateEventState extends State<CreateEvent> {
                   color: Colors.white,
                   onPressed: () {
                     Navigator.push(
-                      context, 
-                      MaterialPageRoute(
-                        builder: (_) => const MyProfilePage(title: "profile")));
-
+                      context,
+                      MaterialPageRoute(builder: (_) => const MyProfilePage(title: "profile")),
+                    );
                   },
                 ),
               ],
