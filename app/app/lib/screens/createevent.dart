@@ -25,11 +25,8 @@ class _CreateEventState extends State<CreateEvent> {
                   IconButton(
                     icon: const Icon(Icons.arrow_back),
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const HomePage(title: "home"),
-                        ),
+                      Navigator.pop(
+                        context
                       );
                     },
                   ),

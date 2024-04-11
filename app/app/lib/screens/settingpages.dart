@@ -92,6 +92,13 @@ class _SettingPageState extends State<SettingsPage> {
               // Implement your logic here
             },
           ),
+          ListTile(
+            title: const Text('About'),
+            leading: const Icon(Icons.info),
+            onTap: () {
+              // Implement your logic here
+            },
+          ),
           const Divider(color: Colors.black,indent: 20, endIndent: 20,),
           const SizedBox(height: 20),
           Padding(

@@ -109,7 +109,7 @@ class _EditProfileState extends State<EditProfile> {
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                             onPressed: () {
-                              Navigator.pop(context); // Voltar à tela anterior
+                              Navigator.pop(context); 
                             },
                             child: const Text("Cancel"),
                           ),
