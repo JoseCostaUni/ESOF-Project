@@ -14,6 +14,7 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   File? _image;
+  bool selected = false;
 
   Future getImage() async {
     final pickedFile =
@@ -87,6 +88,8 @@ class _EditProfileState extends State<EditProfile> {
                       ),
                       const SizedBox(height: 10),
                       const TextField(
+                        maxLines: null,
+                        maxLength: 100,
                         decoration: InputDecoration(
                           hintText: 'New Description',
                           border: OutlineInputBorder(
