@@ -1,3 +1,4 @@
+import 'package:app/screens/blocked_page.dart';
 import 'package:app/screens/createevent.dart';
 import 'package:app/screens/profile.dart';
 import 'package:flutter/material.dart';
@@ -89,8 +90,28 @@ class _SettingPageState extends State<SettingsPage> {
             leading: const Icon(Icons.block),
             trailing: const Icon(Icons.arrow_forward_ios),
             onTap: () {
-              // Implement your logic here
-            },
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) => const BlockedPage(),
+                fullscreenDialog: true,
+                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                  var begin = const Offset(0.0, 1.0);
+                  var end = Offset.zero;
+                  var curve = Curves.ease;
+
+                  var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+                  var offsetAnimation = animation.drive(tween);
+
+                  return SlideTransition(
+                    position: offsetAnimation,
+                    child: child,
+                  );
+                },
+              ),
+            );
+          },
           ),
           ListTile(
             title: const Text('About'),
@@ -99,7 +120,11 @@ class _SettingPageState extends State<SettingsPage> {
               // Implement your logic here
             },
           ),
-          const Divider(color: Colors.black,indent: 20, endIndent: 20,),
+          const Divider(
+            color: Colors.black,
+            indent: 20,
+            endIndent: 20,
+          ),
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -162,11 +187,10 @@ class _SettingPageState extends State<SettingsPage> {
                   color: Colors.white,
                   onPressed: () {
                     Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const MyProfilePage(title: "profile")
-                      )
-                    );
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) =>
+                                const MyProfilePage(title: "profile")));
                   },
                 ),
               ],
