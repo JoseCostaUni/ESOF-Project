@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:app/screens/homepage.dart';
 import 'package:app/screens/profile.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -10,6 +13,19 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+  File? _image;
+
+  Future getImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,10 +67,9 @@ class _EditProfileState extends State<EditProfile> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const CircleAvatar(
-                        backgroundColor: Colors.blue,
-                        radius: 30,
-                        child: Icon(Icons.add_a_photo, color: Colors.white),
+                      GestureDetector(
+                        onTap: getImage,
+                        child: CircleAvatar(radius: 60, backgroundImage: _image != null ? FileImage(_image!) : null, child: _image == null ? const Icon(Icons.add_a_photo,size: 40,color: Colors.white70,) : null),
                       ),
                       const SizedBox(height: 20),
                       const TextField(
@@ -67,20 +82,6 @@ class _EditProfileState extends State<EditProfile> {
                       const TextField(
                         decoration: InputDecoration(
                           hintText: 'Change Name',
-                          prefixIcon: Icon(Icons.text_fields),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      const TextField(
-                        decoration: InputDecoration(
-                          hintText: 'New e-mail',
-                          prefixIcon: Icon(Icons.text_fields),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      const TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Change Profile Picture',
                           prefixIcon: Icon(Icons.text_fields),
                         ),
                       ),

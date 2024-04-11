@@ -218,7 +218,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
               icon: const Icon(Icons.settings),
               onPressed: () {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => SettingsPage()));
+                    context, MaterialPageRoute(builder: (_) => const SettingsPage()));
               },
             ),
           ),
