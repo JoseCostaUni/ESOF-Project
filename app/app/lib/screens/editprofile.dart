@@ -1,12 +1,16 @@
 import 'dart:io';
 
 import 'package:app/screens/homepage.dart';
-import 'package:app/screens/profile.dart';
+import 'profile.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+//Mandar para a internet
 
 class EditProfile extends StatefulWidget {
-  const EditProfile({super.key});
+  const EditProfile({Key? key}) : super(key: key);
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -14,17 +18,38 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   File? _image;
-  bool selected = false;
 
-  Future getImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+  @override
+  void initState() {
+    super.initState();
+    _loadImage();
+  }
 
-    setState(() {
-      if (pickedFile != null) {
+  Future<void> _loadImage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final imagePath = prefs.getString('profile_image');
+
+    if (imagePath != null) {
+      setState(() {
+        _image = File(imagePath);
+      });
+    }
+  }
+
+  Future getImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
         _image = File(pickedFile.path);
-      }
-    });
+      });
+    }
+  }
+
+  Future<void> _saveImage() async {
+    if (_image != null) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('profile_image', _image!.path);
+    }
   }
 
   @override
@@ -65,65 +90,94 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
                     children: [
-                      GestureDetector(
-                        onTap: getImage,
-                        child: CircleAvatar(radius: 60, backgroundImage: _image != null ? FileImage(_image!) : null, child: _image == null ? const Icon(Icons.add_a_photo,size: 40,color: Colors.white70,) : null),
-                      ),
-                      const SizedBox(height: 20),
-                      const TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Change Username',
-                          prefixIcon: Icon(Icons.text_fields),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      const TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Change Name',
-                          prefixIcon: Icon(Icons.text_fields),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      const TextField(
-                        maxLines: null,
-                        maxLength: 100,
-                        decoration: InputDecoration(
-                          hintText: 'New Description',
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      // Column for the image
+                      Column(
                         children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                            onPressed: () {
-                              Navigator.pop(context); // Voltar à tela anterior
-                            },
-                            child: const Text("Cancel"),
+                          CircleAvatar(
+                            radius: 60,
+                            backgroundImage: _image != null
+                                ? FileImage(_image!)
+                                : null,
                           ),
-                          ElevatedButton(
-                            onPressed: () {
-                              // Adicione aqui a lógica para editar o perfil
-                            },
-                            child: const Text("Edit"),
+                        ],
+                      ),
+                      const SizedBox(width: 20),
+                      // Column for the options icons
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.photo),
+                            onPressed: () => getImage(ImageSource.gallery),
+                          ),
+                          const SizedBox(height: 10),
+                          IconButton(
+                            icon: const Icon(Icons.camera_alt),
+                            onPressed: () => getImage(ImageSource.camera),
                           ),
                         ],
                       ),
                     ],
                   ),
                 ),
+              ),
+              const SizedBox(height: 20),
+              const TextField(
+                decoration: InputDecoration(
+                  hintText: 'Change Username',
+                  prefixIcon: Icon(Icons.text_fields),
+                ),
+              ),
+              const SizedBox(height: 10),
+              const TextField(
+                decoration: InputDecoration(
+                  hintText: 'Change Name',
+                  prefixIcon: Icon(Icons.text_fields),
+                ),
+              ),
+              const SizedBox(height: 10),
+              const TextField(
+                maxLines: null,
+                maxLength: 100,
+                decoration: InputDecoration(
+                  hintText: 'New Description',
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red),
+                    onPressed: () {
+                      Navigator.pop(context); // Voltar à tela anterior
+                    },
+                    child: const Text("Cancel"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      _saveImage();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const MyProfilePage(title: "Profile"),
+                        ),
+                      );
+                    },
+                    child: const Text("Save"),
+                  ),
+                ],
               ),
             ],
           ),
@@ -146,7 +200,8 @@ class _EditProfileState extends State<EditProfile> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const HomePage(title: "Home")),
+                      MaterialPageRoute(
+                          builder: (_) => const HomePage(title: "Home")),
                     );
                   },
                 ),
@@ -154,13 +209,15 @@ class _EditProfileState extends State<EditProfile> {
                   icon: const Icon(Icons.add_circle_outline),
                   color: Colors.white,
                   onPressed: () {
-                    // Adicione aqui a lógica para criar um evento
+                    // Add logic to create an event
                   },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.notifications),
+                  icon: const Icon(Icons.message),
                   color: Colors.white,
-                  onPressed: () {},
+                  onPressed: () {
+                    // Add logic for messages
+                  },
                 ),
                 IconButton(
                   icon: const Icon(Icons.person),
@@ -168,7 +225,8 @@ class _EditProfileState extends State<EditProfile> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const MyProfilePage(title: "profile")),
+                      MaterialPageRoute(
+                          builder: (_) => const MyProfilePage(title: "profile")),
                     );
                   },
                 ),

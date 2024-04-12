@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.notifications),
+                  icon: const Icon(Icons.message),
                   color: Colors.white,
                   onPressed: () {},
                 ),

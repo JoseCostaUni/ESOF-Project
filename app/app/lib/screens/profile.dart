@@ -3,8 +3,8 @@ import 'package:app/screens/editprofile.dart';
 import 'package:app/screens/homepage.dart';
 import 'package:app/screens/settingpages.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
 
 class MyProfilePage extends StatefulWidget {
   const MyProfilePage({super.key, required this.title});
@@ -17,16 +17,25 @@ class MyProfilePage extends StatefulWidget {
 class _MyProfilePageState extends State<MyProfilePage> {
   File? _image;
 
-  Future getImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      }
-    });
+  @override
+  void initState() {
+    super.initState();
+    _loadImage();
+    
   }
+
+  Future<void> _loadImage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final imagePath = prefs.getString('profile_image');
+
+    if (imagePath != null) {
+      setState(() {
+        _image = File(imagePath);
+      });
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -42,18 +51,16 @@ class _MyProfilePageState extends State<MyProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    GestureDetector(
-                      onTap: getImage,
-                      child: CircleAvatar(
+                    if (_image != null)
+                      CircleAvatar(
                         radius: 60,
-                        backgroundImage:
-                            _image != null ? FileImage(_image!) : null,
-                        child: _image == null
-                            ? const Icon(Icons.add_a_photo,
-                                size: 40, color: Colors.white)
-                            : null,
+                        backgroundImage: FileImage(_image!),
                       ),
-                    ),
+                    if(_image == null)
+                      const CircleAvatar(
+                        radius: 60,
+                        backgroundColor: Color.fromARGB(239, 255, 228, 225),
+                      ), 
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -255,7 +262,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                   },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.notifications),
+                  icon: const Icon(Icons.message),
                   color: Colors.white,
                   onPressed: () {},
                 ),

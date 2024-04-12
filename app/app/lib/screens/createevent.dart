@@ -155,7 +155,7 @@ class _CreateEventState extends State<CreateEvent> {
                   },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.notifications),
+                  icon: const Icon(Icons.message),
                   color: Colors.white,
                   onPressed: () {},
                 ),
