@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
+import '';
 
 class MyProfilePage extends StatefulWidget {
   const MyProfilePage({super.key, required this.title, required this.username});
@@ -23,26 +24,26 @@ class _MyProfilePageState extends State<MyProfilePage> {
   FirebaseAuthService _user = FirebaseAuthService();
 
   String? username;
+  List<String> docid = [];
 
-  Future<void> _loadUserName() async {
-    String? userName = await _user.getcurrentUser();
-    print("Username: $userName");
-    setState(() {
-      username = userName ??
-          'Default Username'; // Usar um valor padrão se userName for nulo
-    });
+  Future getdocid() async {
+    await FirebaseFirestore.instance.collection('users').get().then(
+          (snapshot) => snapshot.docs.forEach((element) {
+            print(element.reference);
+            docid.add(element.reference.id);
+          }),
+        );
   }
 
   File? _image;
   Future<void> _loadData() async {
-    await _loadUserName();
     await _loadImage();
   }
 
   @override
   void initState() {
     super.initState();
-    _loadData();
+     _loadImage();
   }
 
   Future<void> _loadImage() async {
@@ -56,6 +57,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     }
   }
 
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,12 +84,11 @@ class _MyProfilePageState extends State<MyProfilePage> {
                       ),
                   ],
                 ),
-                const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 25),
                   child: Text(
-                    widget.username, // Fazer a ligação à base de dados
-                    style: const TextStyle(fontSize: 16, color: Colors.grey),
+                    'user', // Fazer a ligação à base de dados
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -236,6 +237,29 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 ),
               ],
             ),
+          ),
+          FutureBuilder(
+            future: getdocid(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator(); // or some other loading indicator
+              } else {
+                if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return Expanded(
+                    child: ListView.builder(
+                      itemCount: docid.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(docid[index]),
+                        );
+                      },
+                    ),
+                  );
+                }
+              }
+            },
           ),
           Positioned(
             top: 20,

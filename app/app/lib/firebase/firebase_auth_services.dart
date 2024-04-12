@@ -37,13 +37,5 @@ class FirebaseAuthService {
     }
   }
 
-  Future<String?> getcurrentUser() async {
-    try {
-      User? name = _auth.currentUser;
-      return name?.displayName;
-    } catch (e) {
-      print("no name: $e");
-      return null;
-    }
-  }
+  
 }
