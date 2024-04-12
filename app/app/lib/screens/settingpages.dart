@@ -1,6 +1,8 @@
 import 'package:app/screens/blocked_page.dart';
 import 'package:app/screens/createevent.dart';
+import 'package:app/screens/login.dart';
 import 'package:app/screens/profile.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -90,28 +92,31 @@ class _SettingPageState extends State<SettingsPage> {
             leading: const Icon(Icons.block),
             trailing: const Icon(Icons.arrow_forward_ios),
             onTap: () {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) => const BlockedPage(),
-                fullscreenDialog: true,
-                transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                  var begin = const Offset(0.0, 1.0);
-                  var end = Offset.zero;
-                  var curve = Curves.ease;
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      const BlockedPage(),
+                  fullscreenDialog: true,
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    var begin = const Offset(0.0, 1.0);
+                    var end = Offset.zero;
+                    var curve = Curves.ease;
 
-                  var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                    var tween = Tween(begin: begin, end: end)
+                        .chain(CurveTween(curve: curve));
 
-                  var offsetAnimation = animation.drive(tween);
+                    var offsetAnimation = animation.drive(tween);
 
-                  return SlideTransition(
-                    position: offsetAnimation,
-                    child: child,
-                  );
-                },
-              ),
-            );
-          },
+                    return SlideTransition(
+                      position: offsetAnimation,
+                      child: child,
+                    );
+                  },
+                ),
+              );
+            },
           ),
           ListTile(
             title: const Text('About'),
@@ -132,7 +137,11 @@ class _SettingPageState extends State<SettingsPage> {
               width: 150,
               child: ElevatedButton(
                 onPressed: () {
-                  // Implement your logic here
+                  FirebaseAuth.instance.signOut();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const LoginPage())
+                  );
                 },
                 child: const Text('Log Out'),
               ),
@@ -190,7 +199,7 @@ class _SettingPageState extends State<SettingsPage> {
                         context,
                         MaterialPageRoute(
                             builder: (_) =>
-                                const MyProfilePage(title: "profile")));
+                                const MyProfilePage(title: "profile", username: '',)));
                   },
                 ),
               ],

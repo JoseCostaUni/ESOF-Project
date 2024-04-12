@@ -82,7 +82,7 @@ class _EventSearchState extends State<EventSearch> {
                     Navigator.push(
                       context, 
                       MaterialPageRoute(
-                        builder: (_) => const MyProfilePage(title: "profile")));
+                        builder: (_) => const MyProfilePage(title: "profile", username: '',)));
 
                   },
                 ),

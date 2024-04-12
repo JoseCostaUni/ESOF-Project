@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const MyProfilePage(title: "profile"),
+                        builder: (_) => const MyProfilePage(title: "profile", username: '',),
                       ),
                     );
                   },

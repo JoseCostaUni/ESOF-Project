@@ -1,15 +1,29 @@
+import 'package:app/firebase/firebase_auth_services.dart';
 import 'package:app/screens/homepage.dart';
 import 'package:app/screens/signuppage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({Key? key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final FirebaseAuthService _auth = FirebaseAuthService();
+
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-             const Padding(
+            const Padding(
               padding: EdgeInsets.only(top: 60.0, right: 180.0),
               child: Text(
                 'Help Buddies',
@@ -55,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(width: 20.0),
                   GestureDetector(
-                   onTap: () {
+                    onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (_) => const SignUp()),
@@ -70,6 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(width: 20.0),
+                  const SizedBox(width: 20.0),
                   const Expanded(child: SizedBox()),
                 ],
               ),
@@ -83,11 +98,12 @@ class _LoginPageState extends State<LoginPage> {
                 top: 20.0,
               ),
               child: Material(
-                elevation: 3, 
+                elevation: 3,
                 borderRadius: BorderRadius.circular(10),
                 color: const Color.fromARGB(255, 224, 196, 188),
-                child: const TextField(
-                  decoration: InputDecoration(
+                child: TextField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black),
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -110,12 +126,13 @@ class _LoginPageState extends State<LoginPage> {
                 bottom: 20,
               ),
               child: Material(
-                elevation: 3, 
+                elevation: 3,
                 borderRadius: BorderRadius.circular(10),
                 color: const Color.fromARGB(255, 224, 196, 188),
-                child: const TextField(
+                child: TextField(
+                  controller: _passwordController,
                   obscureText: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black),
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -147,15 +164,9 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               width: 360,
               child: ElevatedButton(
-                
-                onPressed: () {
-                  Navigator.push(
-                    context, 
-                    MaterialPageRoute(builder: (_) => const HomePage(title:'home')));
-                },
+                onPressed: _signIn,
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 224, 167, 153))
-                ),
+                    backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 224, 167, 153))),
                 child: const Text(
                   'Login',
                   style: TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: 15.0),
@@ -189,5 +200,17 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+  void _signIn() async {
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    User? user = await _auth.signInWithEmailAndPassword(email, password);
+
+    if (user != null) {
+      print("User is successfully signedIn");
+      Navigator.push(context,
+          MaterialPageRoute(builder: (_) => const HomePage(title: "home")));
+    }
   }
 }

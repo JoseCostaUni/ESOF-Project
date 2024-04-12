@@ -168,7 +168,7 @@ class _EditProfileState extends State<EditProfile> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const MyProfilePage(title: "profile")),
+                      MaterialPageRoute(builder: (_) => const MyProfilePage(title: "profile", username: '',)),
                     );
                   },
                 ),

@@ -1,5 +1,7 @@
 import 'package:app/screens/homepage.dart';
 import 'package:app/screens/profile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class CreateEvent extends StatefulWidget {
@@ -25,9 +27,7 @@ class _CreateEventState extends State<CreateEvent> {
                   IconButton(
                     icon: const Icon(Icons.arrow_back),
                     onPressed: () {
-                      Navigator.pop(
-                        context
-                      );
+                      Navigator.pop(context);
                     },
                   ),
                   const SizedBox(width: 10),
@@ -94,11 +94,13 @@ class _CreateEventState extends State<CreateEvent> {
                           hintText: 'Events Description',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.black),
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.black),
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
                           ),
                         ),
                       ),
@@ -107,8 +109,23 @@ class _CreateEventState extends State<CreateEvent> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           ElevatedButton(
-                            onPressed: () {
-                              // Adicione aqui a lógica para criar o evento
+                            onPressed: () async {
+                              Map<String, dynamic> eventData = {
+                                'title': 'Event Title',
+                                'dateTime': 'Date and Time',
+                                'location': 'Location',
+                                'attendanceLimit': 'Attendance Limit',
+                                'image': 'Image URL',
+                                'description': 'Event Description',
+                              };
+                              try {
+                                await FirebaseFirestore.instance
+                                    .collection('events')
+                                    .add(eventData);
+                                Navigator.pop(context);
+                              } catch (e) {
+                                print('Error creating event: $e');
+                              }
                             },
                             child: const Text("Create Event"),
                           ),
@@ -147,9 +164,7 @@ class _CreateEventState extends State<CreateEvent> {
                 IconButton(
                   icon: const Icon(Icons.add_circle_outline),
                   color: Colors.white,
-                  onPressed: () {
-                    
-                  },
+                  onPressed: () {},
                 ),
                 IconButton(
                   icon: const Icon(Icons.notifications),
@@ -161,10 +176,12 @@ class _CreateEventState extends State<CreateEvent> {
                   color: Colors.white,
                   onPressed: () {
                     Navigator.push(
-                      context, 
-                      MaterialPageRoute(
-                        builder: (_) => const MyProfilePage(title: "profile")));
-
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const MyProfilePage(
+                                  title: "profile",
+                                  username: '',
+                                )));
                   },
                 ),
               ],

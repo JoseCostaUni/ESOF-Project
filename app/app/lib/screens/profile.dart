@@ -1,3 +1,4 @@
+import 'package:app/firebase/firebase_auth_services.dart';
 import 'package:app/screens/createevent.dart';
 import 'package:app/screens/editprofile.dart';
 import 'package:app/screens/homepage.dart';
@@ -7,14 +8,31 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
 class MyProfilePage extends StatefulWidget {
-  const MyProfilePage({super.key, required this.title});
+  const MyProfilePage(
+      {super.key, required this.title,  required this.username});
   final String title;
-
+  final String username;
   @override
   State<MyProfilePage> createState() => _MyProfilePageState();
 }
 
 class _MyProfilePageState extends State<MyProfilePage> {
+  FirebaseAuthService _user = FirebaseAuthService();
+
+  String? username;
+  @override
+  void initState() {
+    _loadUserName();
+  }
+  Future<void> _loadUserName() async {
+    String? userName = await _user.getcurrentUser();
+    print("Username: $userName");
+    setState(() {
+      username = userName ?? 'Default Username'; // Usar um valor padrão se userName for nulo
+    });
+  }
+
+
   File? _image;
 
   Future getImage() async {
@@ -57,10 +75,10 @@ class _MyProfilePageState extends State<MyProfilePage> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25),
                   child: Text(
-                    '@guebuzathegoat', // Fazer a ligação à base de dados
+                    widget.username ?? '', // Fazer a ligação à base de dados
                     style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                 ),
@@ -217,8 +235,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
             child: IconButton(
               icon: const Icon(Icons.settings),
               onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => const SettingsPage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const SettingsPage()));
               },
             ),
           ),
