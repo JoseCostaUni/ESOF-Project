@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseAuthService {
@@ -13,6 +14,15 @@ class FirebaseAuthService {
       print("Error during sign up: $e");
       return null;
     }
+    //add user details
+  }
+
+  Future adduserdetails(String name, String surname, String email) async {
+    await FirebaseFirestore.instance.collection('users').add({
+      'name': name,
+      'surname': surname,
+      'email': email,
+    });
   }
 
   Future<User?> signInWithEmailAndPassword(
@@ -29,12 +39,11 @@ class FirebaseAuthService {
 
   Future<String?> getcurrentUser() async {
     try {
-      User? name =  _auth.currentUser;
+      User? name = _auth.currentUser;
       return name?.displayName;
     } catch (e) {
       print("no name: $e");
       return null;
     }
   }
-
 }

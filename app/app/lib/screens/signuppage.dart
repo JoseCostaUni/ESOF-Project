@@ -183,6 +183,7 @@ class _SignUp extends State<SignUp> {
     if (user != null) {
       print("User is successfully created");
       if (name.isNotEmpty) {
+        await _auth.adduserdetails(name, surname, email);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -198,4 +199,5 @@ class _SignUp extends State<SignUp> {
       }
     }
   }
+
 }
