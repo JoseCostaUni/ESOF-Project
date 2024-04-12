@@ -8,13 +8,13 @@ class CustomBottomNavigationBar extends StatefulWidget {
   final Function(int) onTap;
 
   const CustomBottomNavigationBar({
-    Key? key,
+    super.key,
     required this.currentIndex,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
-  _CustomBottomNavigationBarState createState() =>
+  State<CustomBottomNavigationBar> createState() =>
       _CustomBottomNavigationBarState();
 }
 
@@ -36,42 +36,55 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 icon: const Icon(Icons.home),
                 color: widget.currentIndex == 0 ? Colors.white : Colors.grey,
                 onPressed: () {
-                  widget.onTap(0);
-                  Navigator.push(
+                  if (widget.currentIndex != 0) {
+                    widget.onTap(0);
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (_) => const HomePage(title: "")));
+                        builder: (_) => const HomePage(title: ""),
+                      ),
+                    );
+                  }
                 },
               ),
               IconButton(
                 icon: const Icon(Icons.add_circle_outline),
                 color: widget.currentIndex == 1 ? Colors.white : Colors.grey,
-                disabledColor: Colors.white,
                 onPressed: () {
-                  widget.onTap(1);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const CreateEvent()),
-                  );
+                  if (widget.currentIndex != 1) {
+                    widget.onTap(1);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const CreateEvent()),
+                    );
+                  }
                 },
               ),
               IconButton(
-                  icon: const Icon(Icons.message),
-                  color: widget.currentIndex == 2 ? Colors.white : Colors.grey,
-                  onPressed: () {}),
+                icon: const Icon(Icons.message),
+                color: widget.currentIndex == 2 ? Colors.white : Colors.grey,
+                onPressed: () {
+                  if (widget.currentIndex != 2) {
+                    widget.onTap(2);
+                  }
+                },
+              ),
               IconButton(
                 icon: const Icon(Icons.person),
                 color: widget.currentIndex == 3 ? Colors.white : Colors.grey,
                 onPressed: () {
-                  widget.onTap(3);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
+                  if (widget.currentIndex != 3) {
+                    widget.onTap(3);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
                         builder: (_) => const MyProfilePage(
-                              title: '',
-                              username: '',
-                            )),
-                  );
+                          title: '',
+                          username: '',
+                        ),
+                      ),
+                    );
+                  }
                 },
               ),
             ],

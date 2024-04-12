@@ -1,15 +1,16 @@
+import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/firebase/firebase_auth_services.dart';
 import 'package:app/screens/createevent.dart';
 import 'package:app/screens/editprofile.dart';
 import 'package:app/screens/homepage.dart';
 import 'package:app/screens/settingpages.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 
 class MyProfilePage extends StatefulWidget {
-  const MyProfilePage(
-      {super.key, required this.title,  required this.username});
+  const MyProfilePage({super.key, required this.title, required this.username});
   final String title;
   final String username;
   @override
@@ -17,18 +18,20 @@ class MyProfilePage extends StatefulWidget {
 }
 
 class _MyProfilePageState extends State<MyProfilePage> {
+  int _currentIndex = 3;
+
   FirebaseAuthService _user = FirebaseAuthService();
 
   String? username;
-  
+
   Future<void> _loadUserName() async {
     String? userName = await _user.getcurrentUser();
     print("Username: $userName");
     setState(() {
-      username = userName ?? 'Default Username'; // Usar um valor padrão se userName for nulo
+      username = userName ??
+          'Default Username'; // Usar um valor padrão se userName for nulo
     });
   }
-
 
   File? _image;
   Future<void> _loadData() async {
@@ -40,7 +43,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
   void initState() {
     super.initState();
     _loadData();
-    
   }
 
   Future<void> _loadImage() async {
@@ -53,8 +55,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
       });
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -75,19 +75,19 @@ class _MyProfilePageState extends State<MyProfilePage> {
                         radius: 60,
                         backgroundImage: FileImage(_image!),
                       ),
-                    if(_image == null)
+                    if (_image == null)
                       const CircleAvatar(
                         radius: 60,
                         backgroundColor: Color.fromARGB(239, 255, 228, 225),
-                      ), 
+                      ),
                   ],
                 ),
                 const SizedBox(height: 20),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25),
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: Text(
-                    widget.username ?? '', // Fazer a ligação à base de dados
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                    widget.username, // Fazer a ligação à base de dados
+                    style: const TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -250,50 +250,13 @@ class _MyProfilePageState extends State<MyProfilePage> {
           ),
         ],
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20), // Definindo o raio de borda
-          child: BottomAppBar(
-            color: const Color.fromARGB(255, 202, 178, 172),
-            shape: const CircularNotchedRectangle(),
-            shadowColor: Colors.black54,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.home),
-                  color: Colors.white,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => const HomePage(title: "Home")),
-                    );
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.add_circle_outline),
-                  color: Colors.white,
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => const CreateEvent()));
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.message),
-                  color: Colors.white,
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.person),
-                  color: Colors.white,
-                  onPressed: () {},
-                ),
-              ],
-            ),
-          ),
-        ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
       ),
     );
   }

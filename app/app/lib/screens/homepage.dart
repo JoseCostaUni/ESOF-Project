@@ -1,3 +1,4 @@
+import 'package:app/features/bottomappnavigator.dart';
 import 'package:flutter/material.dart';
 import 'package:app/screens/createevent.dart';
 import 'package:app/screens/profile.dart';
@@ -12,6 +13,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,53 +56,13 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: BottomAppBar(
-            color: const Color.fromARGB(255, 202, 178, 172),
-            shape: const CircularNotchedRectangle(),
-            shadowColor: Colors.black54,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.home),
-                  color: Colors.white,
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.add_circle_outline),
-                  color: Colors.white,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const CreateEvent()),
-                    );
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.message),
-                  color: Colors.white,
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.person),
-                  color: Colors.white,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const MyProfilePage(title: "profile", username: '',),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
       ),
     );
   }
