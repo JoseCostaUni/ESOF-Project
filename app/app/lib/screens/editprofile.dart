@@ -1,12 +1,12 @@
 import 'dart:io';
-
-import 'package:app/screens/homepage.dart';
-import 'package:app/screens/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'profile.dart';
+import 'package:app/screens/homepage.dart';
 
 class EditProfile extends StatefulWidget {
-  const EditProfile({super.key});
+  const EditProfile({Key? key}) : super(key: key);
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -14,17 +14,44 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   File? _image;
-  bool selected = false;
 
-  Future getImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+  @override
+  void initState() {
+    super.initState();
+    _loadImage();
+  }
 
-    setState(() {
-      if (pickedFile != null) {
+  Future<void> _loadImage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final imagePath = prefs.getString('profile_image');
+
+    if (imagePath != null) {
+      setState(() {
+        _image = File(imagePath);
+      });
+    }
+  }
+
+  Future<void> getImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
         _image = File(pickedFile.path);
-      }
+      });
+    }
+  }
+
+  Future<void> _removeImage() async {
+    setState(() {
+      _image = null;
     });
+  }
+
+  Future<void> _saveImage() async {
+    if (_image != null) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('profile_image', _image!.path);
+    }
   }
 
   @override
@@ -42,12 +69,7 @@ class _EditProfileState extends State<EditProfile> {
                   IconButton(
                     icon: const Icon(Icons.arrow_back),
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const HomePage(title: "home"),
-                        ),
-                      );
+                      Navigator.pop(context);
                     },
                   ),
                   const SizedBox(width: 10),
@@ -68,29 +90,60 @@ class _EditProfileState extends State<EditProfile> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      GestureDetector(
-                        onTap: getImage,
-                        child: CircleAvatar(radius: 60, backgroundImage: _image != null ? FileImage(_image!) : null, child: _image == null ? const Icon(Icons.add_a_photo,size: 40,color: Colors.white70,) : null),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [
+                              CircleAvatar(
+                                radius: 60,
+                                backgroundImage: _image != null
+                                    ? FileImage(_image!)
+                                    : null,
+                              ),
+                              InkWell(
+                                onTap: _removeImage,
+                                child: const Text(
+                                  "Remove",
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.photo),
+                                    onPressed: () => getImage(ImageSource.gallery),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  IconButton(
+                                    icon: const Icon(Icons.camera_alt),
+                                    onPressed: () => getImage(ImageSource.camera),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 20),
-                      const TextField(
-                        decoration: InputDecoration(
+                      TextField(
+                        decoration: const InputDecoration(
                           hintText: 'Change Username',
                           prefixIcon: Icon(Icons.text_fields),
                         ),
                       ),
                       const SizedBox(height: 10),
-                      const TextField(
-                        decoration: InputDecoration(
+                      TextField(
+                        decoration: const InputDecoration(
                           hintText: 'Change Name',
                           prefixIcon: Icon(Icons.text_fields),
                         ),
                       ),
                       const SizedBox(height: 10),
-                      const TextField(
+                      TextField(
                         maxLines: null,
                         maxLength: 100,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'New Description',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.black),
@@ -109,15 +162,21 @@ class _EditProfileState extends State<EditProfile> {
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                             onPressed: () {
-                              Navigator.pop(context); 
+                              Navigator.pop(context);
                             },
                             child: const Text("Cancel"),
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              // Adicione aqui a lógica para editar o perfil
+                              _saveImage();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const MyProfilePage(title: "Profile", username: '',),
+                                ),
+                              );
                             },
-                            child: const Text("Edit"),
+                            child: const Text("Save"),
                           ),
                         ],
                       ),
@@ -146,7 +205,8 @@ class _EditProfileState extends State<EditProfile> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const HomePage(title: "Home")),
+                      MaterialPageRoute(
+                          builder: (_) => const HomePage(title: "Home")),
                     );
                   },
                 ),
@@ -154,13 +214,15 @@ class _EditProfileState extends State<EditProfile> {
                   icon: const Icon(Icons.add_circle_outline),
                   color: Colors.white,
                   onPressed: () {
-                    // Adicione aqui a lógica para criar um evento
+                    // Add logic to create an event
                   },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.notifications),
+                  icon: const Icon(Icons.message),
                   color: Colors.white,
-                  onPressed: () {},
+                  onPressed: () {
+                    // Add logic for messages
+                  },
                 ),
                 IconButton(
                   icon: const Icon(Icons.person),
@@ -168,7 +230,8 @@ class _EditProfileState extends State<EditProfile> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const MyProfilePage(title: "profile", username: '',)),
+                      MaterialPageRoute(
+                          builder: (_) => const MyProfilePage(title: "Profile", username: '',)),
                     );
                   },
                 ),

@@ -71,7 +71,7 @@ class _EventSearchState extends State<EventSearch> {
                   },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.notifications),
+                  icon: const Icon(Icons.message),
                   color: Colors.white,
                   onPressed: () {},
                 ),
