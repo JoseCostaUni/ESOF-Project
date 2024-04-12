@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:app/screens/createevent.dart';
 import 'package:app/screens/homepage.dart';
@@ -8,18 +6,15 @@ import 'package:app/screens/profile.dart';
 class CustomBottomNavigationBar extends StatefulWidget {
   final int currentIndex;
   final Function(int) onTap;
-  final File? profileImage;
-  final Function(File?) updateProfileImage; 
+
   const CustomBottomNavigationBar({
-    super.key,
+    Key? key,
     required this.currentIndex,
     required this.onTap,
-    required this.updateProfileImage,
-    this.profileImage,
-  });
+  }) : super(key: key);
 
   @override
-  State<CustomBottomNavigationBar> createState() =>
+  _CustomBottomNavigationBarState createState() =>
       _CustomBottomNavigationBarState();
 }
 
@@ -42,6 +37,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 color: widget.currentIndex == 0 ? Colors.white : Colors.grey,
                 onPressed: () {
                   widget.onTap(0);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const HomePage(title: "")));
                 },
               ),
               IconButton(
@@ -61,7 +60,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                   color: widget.currentIndex == 2 ? Colors.white : Colors.grey,
                   onPressed: () {}),
               IconButton(
-                icon: widget.profileImage != null ? CircleAvatar( backgroundImage: FileImage(widget.profileImage!),)  : const Icon(Icons.person),
+                icon: const Icon(Icons.person),
                 color: widget.currentIndex == 3 ? Colors.white : Colors.grey,
                 onPressed: () {
                   widget.onTap(3);
