@@ -1,7 +1,5 @@
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:flutter/material.dart';
-import 'package:app/screens/createevent.dart';
-import 'package:app/screens/profile.dart';
 import 'package:app/screens/eventsearch.dart';
 
 class HomePage extends StatefulWidget {

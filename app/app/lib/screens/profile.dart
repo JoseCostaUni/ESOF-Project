@@ -1,8 +1,6 @@
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/firebase/firebase_auth_services.dart';
-import 'package:app/screens/createevent.dart';
 import 'package:app/screens/editprofile.dart';
-import 'package:app/screens/homepage.dart';
 import 'package:app/screens/settingpages.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -26,9 +24,10 @@ class _MyProfilePageState extends State<MyProfilePage> {
   List<String> docid = [];
 
   Future getdocid() async {
+    docid.clear();
     await FirebaseFirestore.instance.collection('users').get().then(
           (snapshot) => snapshot.docs.forEach((element) {
-            // print(element.reference);
+            print(element.reference);
             docid.add(element.reference.id);
           }),
         );
@@ -42,7 +41,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
   @override
   void initState() {
     super.initState();
-     _loadImage();
+    _loadImage();
+    getdocid();
   }
 
   Future<void> _loadImage() async {
@@ -56,12 +56,12 @@ class _MyProfilePageState extends State<MyProfilePage> {
     }
   }
 
- 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(239, 255, 228, 225),
-      body: Stack(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SingleChildScrollView(
             child: Column(
@@ -70,20 +70,20 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                      ClipOval(
-                        child: SizedBox(
-                          width: 120,
-                          height: 120,
-                          child: _image != null 
-                          ? Image.file(
-                            _image!,
-                            fit: BoxFit.cover,
-                            )
-                          : Container(
-                            color: const Color.fromARGB(239, 255, 228, 225),
-                          )
-                        )
+                    ClipOval(
+                      child: SizedBox(
+                        width: 120,
+                        height: 120,
+                        child: _image != null
+                            ? Image.file(
+                                _image!,
+                                fit: BoxFit.cover,
+                              )
+                            : Container(
+                                color: const Color.fromARGB(239, 255, 228, 225),
+                              ),
                       ),
+                    ),
                   ],
                 ),
                 const Padding(
@@ -240,41 +240,35 @@ class _MyProfilePageState extends State<MyProfilePage> {
               ],
             ),
           ),
-          // FutureBuilder(
-          //   future: getdocid(),
-          //   builder: (context, snapshot) {
-          //     if (snapshot.connectionState == ConnectionState.waiting) {
-          //       return CircularProgressIndicator(); // or some other loading indicator
-          //     } else {
-          //       if (snapshot.hasError) {
-          //         return Text('Error: ${snapshot.error}');
-          //       } else {
-          //         return Expanded(
-          //           child: ListView.builder(
-          //             itemCount: docid.length,
-          //             itemBuilder: (context, index) {
-          //               return ListTile(
-          //                 title: Text(docid[index]),
-          //               );
-          //             },
-          //           ),
-          //         );
-          //       }
-          //     }
-          //   },
-          // ),
-          Positioned(
-            top: 20,
-            right: 20,
-            child: IconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const SettingsPage()));
+          Expanded(
+            child: FutureBuilder(
+              future: getdocid(),
+              builder: (context, snapshot) {
+                return ListView.builder(
+                  itemCount: docid.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(docid[index]),
+                    );
+                  },
+                );
               },
             ),
           ),
         ],
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(top: 16.0, right: 16.0),
+        child: Align(
+          alignment: Alignment.topRight,
+          child: IconButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const SettingsPage()));
+            },
+            icon: Icon(Icons.settings),
+          ),
+        ),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _currentIndex,
