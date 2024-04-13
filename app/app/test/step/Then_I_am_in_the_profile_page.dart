@@ -3,11 +3,10 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:gherkin/gherkin.dart';
 import 'dart:async';
 
-StepDefinitionGeneric BeingOntheSignUpPage() {
-  return given<FlutterWorld>(
+StepDefinitionGeneric BeingOntheProfilePage() {
+  return then<FlutterWorld>(
     'I am on the profile page',
     (context) async {
-      // Assuming there's a button to navigate to the sign-up page with key 'signupButton'
       final signUpButton = find.byValueKey('Next');
       final insertEmailLabel = find.byValueKey('Email');
       final insertNameLabel = find.byValueKey('Name');
