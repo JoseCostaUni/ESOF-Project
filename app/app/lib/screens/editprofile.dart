@@ -4,9 +4,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'profile.dart';
 import 'package:app/screens/homepage.dart';
+import 'package:image_cropper/image_cropper.dart';
+
 
 class EditProfile extends StatefulWidget {
-  const EditProfile({Key? key}) : super(key: key);
+  const EditProfile({super.key});
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -32,12 +34,61 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
+  Future<void> _cropImage() async {
+  if (_image != null) {
+    final croppedFile = await ImageCropper().cropImage(
+      sourcePath: _image!.path,
+      aspectRatioPresets: Platform.isAndroid 
+       ? [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio16x9
+        ] : 
+        [
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio5x3,
+          CropAspectRatioPreset.ratio5x4,
+          CropAspectRatioPreset.ratio7x5,
+          CropAspectRatioPreset.ratio16x9
+        ],
+        uiSettings: [
+        AndroidUiSettings(
+            toolbarTitle: 'Resize your image',
+            toolbarColor: const Color.fromARGB(255, 202, 178, 172),
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        IOSUiSettings(
+          title: 'Cropper',
+        ),
+        WebUiSettings(
+          context: context,
+        ),
+      ],
+    );
+
+    if (croppedFile != null) {
+      setState(() {
+        _image = File(croppedFile.path!);
+      });
+    }
+  }
+}
+
+
+
   Future<void> getImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
     if (pickedFile != null) {
       setState(() {
         _image = File(pickedFile.path);
       });
+      await _cropImage();
     }
   }
 
@@ -45,6 +96,8 @@ class _EditProfileState extends State<EditProfile> {
     setState(() {
       _image = null;
     });
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('profile_image');
   }
 
   Future<void> _saveImage() async {
@@ -95,11 +148,19 @@ class _EditProfileState extends State<EditProfile> {
                         children: [
                           Column(
                             children: [
-                              CircleAvatar(
-                                radius: 60,
-                                backgroundImage: _image != null
-                                    ? FileImage(_image!)
-                                    : null,
+                              ClipOval(
+                                child: SizedBox(
+                                  width: 120,
+                                  height: 120,
+                                  child: _image != null 
+                                  ? Image.file(
+                                    _image!,
+                                    fit: BoxFit.cover,
+                                    )
+                                  : Container(
+                                    color: Colors.grey[200],
+                                  )
+                                )
                               ),
                               InkWell(
                                 onTap: _removeImage,
@@ -126,24 +187,24 @@ class _EditProfileState extends State<EditProfile> {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      TextField(
-                        decoration: const InputDecoration(
+                      const TextField(
+                        decoration: InputDecoration(
                           hintText: 'Change Username',
                           prefixIcon: Icon(Icons.text_fields),
                         ),
                       ),
                       const SizedBox(height: 10),
-                      TextField(
-                        decoration: const InputDecoration(
+                      const TextField(
+                        decoration: InputDecoration(
                           hintText: 'Change Name',
                           prefixIcon: Icon(Icons.text_fields),
                         ),
                       ),
                       const SizedBox(height: 10),
-                      TextField(
+                      const TextField(
                         maxLines: null,
                         maxLength: 100,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           hintText: 'New Description',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.black),

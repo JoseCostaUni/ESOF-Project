@@ -8,7 +8,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
-import '';
 
 class MyProfilePage extends StatefulWidget {
   const MyProfilePage({super.key, required this.title, required this.username});
@@ -29,7 +28,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
   Future getdocid() async {
     await FirebaseFirestore.instance.collection('users').get().then(
           (snapshot) => snapshot.docs.forEach((element) {
-            print(element.reference);
+            // print(element.reference);
             docid.add(element.reference.id);
           }),
         );
@@ -70,17 +69,20 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 const SizedBox(height: 30),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    if (_image != null)
-                      CircleAvatar(
-                        radius: 60,
-                        backgroundImage: FileImage(_image!),
-                      ),
-                    if (_image == null)
-                      const CircleAvatar(
-                        radius: 60,
-                        backgroundColor: Color.fromARGB(239, 255, 228, 225),
+                      ClipOval(
+                        child: SizedBox(
+                          width: 120,
+                          height: 120,
+                          child: _image != null 
+                          ? Image.file(
+                            _image!,
+                            fit: BoxFit.cover,
+                            )
+                          : Container(
+                            color: const Color.fromARGB(239, 255, 228, 225),
+                          )
+                        )
                       ),
                   ],
                 ),
@@ -238,29 +240,29 @@ class _MyProfilePageState extends State<MyProfilePage> {
               ],
             ),
           ),
-          FutureBuilder(
-            future: getdocid(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator(); // or some other loading indicator
-              } else {
-                if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  return Expanded(
-                    child: ListView.builder(
-                      itemCount: docid.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(docid[index]),
-                        );
-                      },
-                    ),
-                  );
-                }
-              }
-            },
-          ),
+          // FutureBuilder(
+          //   future: getdocid(),
+          //   builder: (context, snapshot) {
+          //     if (snapshot.connectionState == ConnectionState.waiting) {
+          //       return CircularProgressIndicator(); // or some other loading indicator
+          //     } else {
+          //       if (snapshot.hasError) {
+          //         return Text('Error: ${snapshot.error}');
+          //       } else {
+          //         return Expanded(
+          //           child: ListView.builder(
+          //             itemCount: docid.length,
+          //             itemBuilder: (context, index) {
+          //               return ListTile(
+          //                 title: Text(docid[index]),
+          //               );
+          //             },
+          //           ),
+          //         );
+          //       }
+          //     }
+          //   },
+          // ),
           Positioned(
             top: 20,
             right: 20,
