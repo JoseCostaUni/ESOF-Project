@@ -2,7 +2,7 @@ import 'package:flutter_gherkin/flutter_gherkin.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:gherkin/gherkin.dart';
 
-StepDefinitionGeneric enterName(String email) {
+StepDefinitionGeneric EnterEmail(String email) {
   return given<FlutterWorld>(
     'I enter the name "$email"',
     (context) async {

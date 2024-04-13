@@ -1,0 +1,20 @@
+# This is a generated file; do not edit or check into version control.
+awesome_notifications=/home/dsl/.pub-cache/hosted/pub.dev/awesome_notifications-0.9.3+1/
+cloud_firestore=/home/dsl/.pub-cache/hosted/pub.dev/cloud_firestore-4.16.0/
+cloud_firestore_web=/home/dsl/.pub-cache/hosted/pub.dev/cloud_firestore_web-3.11.0/
+firebase_auth=/home/dsl/.pub-cache/hosted/pub.dev/firebase_auth-4.17.9/
+firebase_auth_web=/home/dsl/.pub-cache/hosted/pub.dev/firebase_auth_web-5.10.0/
+firebase_core=/home/dsl/.pub-cache/hosted/pub.dev/firebase_core-2.28.0/
+firebase_core_web=/home/dsl/.pub-cache/hosted/pub.dev/firebase_core_web-2.14.0/
+firebase_database=/home/dsl/.pub-cache/hosted/pub.dev/firebase_database-10.4.10/
+firebase_database_web=/home/dsl/.pub-cache/hosted/pub.dev/firebase_database_web-0.2.3+26/
+firebase_messaging=/home/dsl/.pub-cache/hosted/pub.dev/firebase_messaging-14.7.20/
+firebase_messaging_web=/home/dsl/.pub-cache/hosted/pub.dev/firebase_messaging_web-3.7.0/
+flutter_local_notifications=/home/dsl/.pub-cache/hosted/pub.dev/flutter_local_notifications-17.0.0/
+flutter_plugin_android_lifecycle=/home/dsl/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.17/
+google_maps_flutter=/home/dsl/.pub-cache/hosted/pub.dev/google_maps_flutter-2.6.0/
+google_maps_flutter_android=/home/dsl/.pub-cache/hosted/pub.dev/google_maps_flutter_android-2.7.0/
+google_maps_flutter_ios=/home/dsl/.pub-cache/hosted/pub.dev/google_maps_flutter_ios-2.5.0/
+google_maps_flutter_web=/home/dsl/.pub-cache/hosted/pub.dev/google_maps_flutter_web-0.5.6+2/
+location=/home/dsl/.pub-cache/hosted/pub.dev/location-5.0.3/
+location_web=/home/dsl/.pub-cache/hosted/pub.dev/location_web-4.2.0/
