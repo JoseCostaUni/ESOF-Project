@@ -89,6 +89,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25),
                   child: Text(
+                    key: const ValueKey('username'),
                     'user', // Fazer a ligação à base de dados
                     style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
@@ -119,6 +120,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                     Padding(
                       padding: EdgeInsets.only(right: 70, left: 10),
                       child: Text(
+                        key: const ValueKey('participations'),
                         'Participations', // Fazer a ligação à base de dados
                         style: TextStyle(fontSize: 16, color: Colors.grey),
                       ),
@@ -138,6 +140,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                     Padding(
                       padding: const EdgeInsets.only(right: 50, left: 10),
                       child: ElevatedButton(
+                        key: const ValueKey('edit_profile'),
                         onPressed: () {
                           Navigator.push(
                               context,

@@ -2,7 +2,7 @@ Feature: User Sign Up
   Tests the sign-up functionality of the application
 
   Background: Set up sign-up form
-    Given I am on the sign-up page
+    Given the user is on the sign-up page
 
   Scenario: Fill and submit sign-up form
     Given the user enters their name "John"
@@ -20,7 +20,7 @@ Feature: User Sign Up
     And the user enters their password "password456"
     When the user submits the sign-up form
     Then an error message should be displayed
-
+  
   Scenario: Sign up with missing information
     Given the user does not enter their name
     And the user enters their surname "Doe"
