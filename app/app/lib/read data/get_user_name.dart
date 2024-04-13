@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+/*
 class getusername extends StatelessWidget {
   final String documentId;
 
@@ -19,3 +19,4 @@ class getusername extends StatelessWidget {
     }), future: null,);
   }
 }
+*/

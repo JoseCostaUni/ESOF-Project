@@ -43,6 +43,7 @@ class _SignUp extends State<SignUp> {
             Padding(
               padding: const EdgeInsets.only(left: 30.0),
               child: Row(
+                key: const ValueKey('Signin'),
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   GestureDetector(
@@ -81,6 +82,7 @@ class _SignUp extends State<SignUp> {
               padding: const EdgeInsets.only(
                   left: 15.0, right: 15.0, bottom: 20.0, top: 20.0),
               child: TextField(
+                key: const ValueKey('Name'),
                 controller: _nameController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -99,6 +101,7 @@ class _SignUp extends State<SignUp> {
               padding:
                   const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 20.0),
               child: TextField(
+                key: const ValueKey('Surname'),
                 controller: _surnameController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -117,6 +120,7 @@ class _SignUp extends State<SignUp> {
               padding:
                   const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 20.0),
               child: TextField(
+                key: const ValueKey('Email'),
                 controller: _emailController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -135,6 +139,7 @@ class _SignUp extends State<SignUp> {
               padding:
                   const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 20.0),
               child: TextField(
+                key: const ValueKey('Password'),
                 controller: _passwordController,
                 obscureText: true,
                 decoration: const InputDecoration(
@@ -153,6 +158,7 @@ class _SignUp extends State<SignUp> {
             SizedBox(
               width: 360,
               child: ElevatedButton(
+                key: const ValueKey('Next'),
                 onPressed: _signup,
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
@@ -199,5 +205,4 @@ class _SignUp extends State<SignUp> {
       }
     }
   }
-
 }
