@@ -7,31 +7,19 @@ StepDefinitionGeneric BeingOntheProfilePage() {
   return then<FlutterWorld>(
     'I am on the profile page',
     (context) async {
-      final signUpButton = find.byValueKey('Next');
-      final insertEmailLabel = find.byValueKey('Email');
-      final insertNameLabel = find.byValueKey('Name');
-      final insertPassWordLabel = find.byValueKey('Password');
+      // Assuming there's a button to navigate to the sign-up page with key 'signupButton'
+      final editProfile = find.byValueKey('edit_profile');
 
-      final signUpButtonPresent = await FlutterDriverUtils.isPresent(
-          context.world.driver, signUpButton);
-      final insertEmailLabelPresent = await FlutterDriverUtils.isPresent(
-          context.world.driver, insertEmailLabel);
-      final insertNameLabelPresent = await FlutterDriverUtils.isPresent(
-          context.world.driver, insertNameLabel);
-      final insertPassWordLabelPresent = await FlutterDriverUtils.isPresent(
-          context.world.driver, insertPassWordLabel);
+      final editProfilebutton =
+          await FlutterDriverUtils.isPresent(context.world.driver, editProfile);
 
       final completer = Completer<void>();
 
-      if (signUpButtonPresent &&
-          insertEmailLabelPresent &&
-          insertNameLabelPresent &&
-          insertPassWordLabelPresent) {
+      if (editProfilebutton) {
         completer.complete();
       } else {
         completer.completeError('Not all elements are present');
       }
-
       return completer.future;
     },
   );

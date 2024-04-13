@@ -12,7 +12,7 @@ import 'step/Then_I_am_in_the_profile_page.dart';
 
 Future<void> main() async {
   final config = FlutterTestConfiguration()
-    ..features = [Glob(r"test/features/signup.feature")]
+    ..features = [Glob(r"features/signup.feature")]
     ..reporters = [
       ProgressReporter(),
       TestRunSummaryReporter(),
