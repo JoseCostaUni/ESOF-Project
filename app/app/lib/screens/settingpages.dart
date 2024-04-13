@@ -3,6 +3,7 @@ import 'package:app/screens/createevent.dart';
 import 'package:app/screens/login.dart';
 import 'package:app/screens/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -13,6 +14,12 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingsPage> {
+  Future<void> _removeLogIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('user_email');
+    await prefs.remove('user_password');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,6 +145,7 @@ class _SettingPageState extends State<SettingsPage> {
               child: ElevatedButton(
                 onPressed: () {
                   FirebaseAuth.instance.signOut();
+                  _removeLogIn();
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const LoginPage())
