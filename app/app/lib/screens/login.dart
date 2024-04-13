@@ -1,11 +1,12 @@
 import 'package:app/firebase/firebase_auth_services.dart';
 import 'package:app/screens/homepage.dart';
 import 'package:app/screens/signuppage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -14,14 +15,35 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final FirebaseAuthService _auth = FirebaseAuthService();
 
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _autoLogin();
+  }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _autoLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    final email = prefs.getString('user_email');
+    final password = prefs.getString('user_password');
+
+    if (email != null && password != null) {
+        final user = await _auth.signInWithEmailAndPassword(email, password);
+        if (user != null) {
+          // ignore: use_build_context_synchronously
+          Navigator.pushReplacement(context,MaterialPageRoute(builder: (_) => const HomePage(title: "home")),
+          );
+        }
+    }
   }
 
   @override
@@ -208,9 +230,12 @@ class _LoginPageState extends State<LoginPage> {
     User? user = await _auth.signInWithEmailAndPassword(email, password);
 
     if (user != null) {
-      print("User is successfully signedIn");
-      Navigator.push(context,
-          MaterialPageRoute(builder: (_) => const HomePage(title: "home")));
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user_email', email);
+      await prefs.setString('user_password', password);
+      // ignore: use_build_context_synchronously
+      Navigator.push(context,MaterialPageRoute(builder: (_) => const HomePage(title: "home")));
     }
   }
 }
