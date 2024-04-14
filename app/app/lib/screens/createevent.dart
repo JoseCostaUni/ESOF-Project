@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:app/features/bottomappnavigator.dart';
-import 'package:app/read%20data/firestore_read_event.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,24 +17,57 @@ class CreateEvent extends StatefulWidget {
 
 class _CreateEventState extends State<CreateEvent> {
   int _currentIndex = 1;
-  final FirestoreReadData _firestoreReadData = FirestoreReadData();
-  File? ___image;
+ final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
+  final TextEditingController _attendanceLimitsController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  File? __image;
   void PostEvent() {}
   Future<void> _loadImage() async {
     final prefs = await SharedPreferences.getInstance();
-    final imagePath = prefs.getString('profile__image');
+    final imagePath = prefs.getString('profile_image');
 
     if (imagePath != null) {
       setState(() {
-        ___image = File(imagePath);
+        __image = File(imagePath);
       });
     }
   }
 
+  
+   Future<void> _createEvent() async {
+    if (_titleController.text.isEmpty ||
+      _dateController.text.isEmpty ||
+      _locationController.text.isEmpty ||
+      _attendanceLimitsController.text.isEmpty ||
+      _descriptionController.text.isEmpty) {
+        return;
+    }
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        await FirebaseFirestore.instance.collection("event").add({
+          "title": _titleController.text,
+          "dateTime": _dateController.text,
+          "location": _locationController.text,
+          "attendanceLimit": _attendanceLimitsController.text,
+          "description": _descriptionController.text,
+        });
+        Navigator.pop(context);
+      } catch (e) {
+        print('Error creating event: $e');
+        // Handle error (show a snackbar, dialog, etc.)
+      }
+    } else {
+      // Handle case when user is not logged in
+    }
+  }
+
   Future<void> _cropImage() async {
-    if (___image != null) {
+    if (__image != null) {
       final croppedFile = await ImageCropper().cropImage(
-        sourcePath: ___image!.path,
+        sourcePath: __image!.path,
         aspectRatioPresets: Platform.isAndroid
             ? [
                 CropAspectRatioPreset.square,
@@ -72,7 +105,7 @@ class _CreateEventState extends State<CreateEvent> {
 
       if (croppedFile != null) {
         setState(() {
-          ___image = File(croppedFile.path);
+          __image = File(croppedFile.path);
         });
       }
     }
@@ -82,7 +115,7 @@ class _CreateEventState extends State<CreateEvent> {
     final pickedFile = await ImagePicker().pickImage(source: source);
     if (pickedFile != null) {
       setState(() {
-        ___image = File(pickedFile.path);
+        __image = File(pickedFile.path);
       });
       await _cropImage();
     }
@@ -90,20 +123,20 @@ class _CreateEventState extends State<CreateEvent> {
 
   Future<void> _removeImage() async {
     setState(() {
-      ___image = null;
+      __image = null;
     });
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('profile__image');
+    await prefs.remove('profile_image');
   }
 
   Future<void> _saveImage() async {
-    if (___image != null) {
+    if (__image != null) {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('profile__image', ___image!.path);
+      await prefs.setString('profile_image', __image!.path);
     }
   }
 
-  @override
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 253, 241, 238),
@@ -143,9 +176,9 @@ class _CreateEventState extends State<CreateEvent> {
                         child: SizedBox(
                           width: 120,
                           height: 120,
-                          child: ___image != null
+                          child: __image != null
                               ? Image.file(
-                                  ___image!,
+                                  __image!,
                                   fit: BoxFit.cover,
                                 )
                               : Container(
@@ -174,36 +207,41 @@ class _CreateEventState extends State<CreateEvent> {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      const TextField(
-                        decoration: InputDecoration(
+                      TextField(
+                        controller: _titleController,
+                        decoration: const InputDecoration(
                           hintText: 'Event Title',
                           prefixIcon: Icon(Icons.text_fields),
                         ),
                       ),
                       const SizedBox(height: 10),
-                      const TextField(
-                        decoration: InputDecoration(
+                      TextField(
+                        controller: _dateController,
+                        decoration: const InputDecoration(
                           hintText: 'Date and time',
                           prefixIcon: Icon(Icons.text_fields),
                         ),
                       ),
                       const SizedBox(height: 10),
-                      const TextField(
-                        decoration: InputDecoration(
+                      TextField(
+                        controller: _locationController,
+                        decoration: const InputDecoration(
                           hintText: 'Location',
                           prefixIcon: Icon(Icons.text_fields),
                         ),
                       ),
                       const SizedBox(height: 10),
-                      const TextField(
-                        decoration: InputDecoration(
+                      TextField(
+                        controller: _attendanceLimitsController,
+                        decoration: const InputDecoration(
                           hintText: 'Attendance limit',
                           prefixIcon: Icon(Icons.text_fields),
                         ),
                       ),
                       const SizedBox(height: 10),
-                      const TextField(
-                        decoration: InputDecoration(
+                      TextField(
+                        controller: _descriptionController,
+                        decoration: const InputDecoration(
                           hintText: 'Events Description',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.black),
@@ -222,24 +260,7 @@ class _CreateEventState extends State<CreateEvent> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           ElevatedButton(
-                            onPressed: () async {
-                              Map<String, dynamic> eventData = {
-                                'title': 'Event Title',
-                                'dateTime': 'Date and Time',
-                                'location': 'Location',
-                                'attendanceLimit': 'Attendance Limit',
-                                'image': 'Image URL',
-                                'description': 'Event Description',
-                              };
-                              try {
-                                await FirebaseFirestore.instance
-                                    .collection('events')
-                                    .add(eventData);
-                                Navigator.pop(context);
-                              } catch (e) {
-                                print('Error creating event: $e');
-                              }
-                            },
+                            onPressed: _createEvent,
                             child: const Text("Create Event"),
                           ),
                         ],

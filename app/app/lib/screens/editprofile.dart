@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:app/read%20data/firestore_read_changes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +21,6 @@ class _EditProfileState extends State<EditProfile> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final FirestoreReadData _description = FirestoreReadData();
   void initState() {
     super.initState();
     _loadImage();

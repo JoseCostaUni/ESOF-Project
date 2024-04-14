@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:app/features/bottomappnavigator.dart';
-import 'package:app/read%20data/firestore_read_changes.dart';
 import 'package:app/screens/editprofile.dart';
 import 'package:app/screens/settingpages.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -74,7 +73,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
     }
   }
 
-  final FirestoreReadData _description = FirestoreReadData();
 
   final User? _currentuser = FirebaseAuth.instance.currentUser;
   Future<DocumentSnapshot<Map<String, dynamic>>> getuserdetails() async {
