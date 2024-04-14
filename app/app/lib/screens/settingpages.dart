@@ -1,9 +1,12 @@
 import 'package:app/features/bottomappnavigator.dart';
+import 'package:app/screens/about.dart';
 import 'package:app/screens/blocked_page.dart';
 import 'package:app/screens/login.dart';
+import 'package:app/screens/notifications_settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:app/screens/blocked_page.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key});
@@ -18,6 +21,7 @@ class _SettingPageState extends State<SettingsPage> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('user_email');
     await prefs.remove('user_password');
+    await prefs.remove('profile_image');
   }
 
   @override
@@ -67,7 +71,30 @@ class _SettingPageState extends State<SettingsPage> {
             leading: const Icon(Icons.notifications),
             trailing: const Icon(Icons.arrow_forward_ios),
             onTap: () {
-              // Implement your logic here
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      const NotificationsPage(),
+                  fullscreenDialog: true,
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    var begin = const Offset(0.0, 1.0);
+                    var end = Offset.zero;
+                    var curve = Curves.ease;
+
+                    var tween = Tween(begin: begin, end: end)
+                        .chain(CurveTween(curve: curve));
+
+                    var offsetAnimation = animation.drive(tween);
+
+                    return SlideTransition(
+                      position: offsetAnimation,
+                      child: child,
+                    );
+                  },
+                ),
+              );
             },
           ),
           ListTile(
@@ -106,7 +133,30 @@ class _SettingPageState extends State<SettingsPage> {
             title: const Text('About'),
             leading: const Icon(Icons.info),
             onTap: () {
-              // Implement your logic here
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      const AboutPage(),
+                  fullscreenDialog: true,
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    var begin = const Offset(0.0, 1.0);
+                    var end = Offset.zero;
+                    var curve = Curves.ease;
+
+                    var tween = Tween(begin: begin, end: end)
+                        .chain(CurveTween(curve: curve));
+
+                    var offsetAnimation = animation.drive(tween);
+
+                    return SlideTransition(
+                      position: offsetAnimation,
+                      child: child,
+                    );
+                  },
+                ),
+              );
             },
           ),
           const Divider(
