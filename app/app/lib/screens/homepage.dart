@@ -20,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   Map<String, dynamic>? _createdEvent;
 
   Future<void> getEventsId() async {
+    eventsID.clear();
     await FirebaseFirestore.instance
         .collection('event')
         .get()
@@ -27,7 +28,6 @@ class _HomePageState extends State<HomePage> {
               print(element.reference);
               eventsID.add(element.reference.id);
             }));
-   
   }
 
   @override
@@ -53,15 +53,19 @@ class _HomePageState extends State<HomePage> {
                   itemCount: eventsID.length,
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Card(
-                        elevation: 20,
-                        child: ListTile(
-                          title: GetEvents(documentId:eventsID[index] ),
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          // Ação ao clicar no cartão
+                          print('Clicou no evento ${eventsID[index]}');
+                        },
+                        child: Card(
+                          elevation: 4,
+                          child: ListTile(
+                            title: GetEvents(documentId: eventsID[index]),
+                          ),
                         ),
-                        
                       ),
-                      
                     );
                   },
                 );

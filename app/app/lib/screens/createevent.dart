@@ -2,6 +2,7 @@ import 'dart:io';
 
 
 import 'package:app/features/bottomappnavigator.dart';
+import 'package:app/screens/homepage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +57,7 @@ class _CreateEventState extends State<CreateEvent> {
           "attendanceLimit": _attendanceLimitsController.text,
           "description": _descriptionController.text,
         });
-        Navigator.pop(context);
+        Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const HomePage(title: 'Home')));
       } catch (e) {
         print('Error creating event: $e');
         // Handle error (show a snackbar, dialog, etc.)
