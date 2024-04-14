@@ -3,7 +3,6 @@ import 'package:app/read%20data/firestore_read_changes.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:test/test.dart';
 import 'profile.dart';
 import 'package:app/screens/homepage.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -87,7 +86,7 @@ class _EditProfileState extends State<EditProfile> {
 
       if (croppedFile != null) {
         setState(() {
-          _image = File(croppedFile.path!);
+          _image = File(croppedFile.path);
         });
       }
     }

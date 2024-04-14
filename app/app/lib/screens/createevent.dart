@@ -17,18 +17,15 @@ class CreateEvent extends StatefulWidget {
 
 class _CreateEventState extends State<CreateEvent> {
   int _currentIndex = 1;
-  File? _image;
-
-  void PostEvent() {
-    
-  }
+  File? __image;
+  void PostEvent() {}
   Future<void> _loadImage() async {
     final prefs = await SharedPreferences.getInstance();
     final imagePath = prefs.getString('profile_image');
 
     if (imagePath != null) {
       setState(() {
-        _image = File(imagePath);
+        __image = File(imagePath);
       });
     }
   }
