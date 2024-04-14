@@ -1,7 +1,6 @@
+import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/screens/blocked_page.dart';
-import 'package:app/screens/createevent.dart';
 import 'package:app/screens/login.dart';
-import 'package:app/screens/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +13,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingsPage> {
+  int _currentIndex = 3;
   Future<void> _removeLogIn() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('user_email');
@@ -28,39 +28,16 @@ class _SettingPageState extends State<SettingsPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(0.0),
             child: Row(
               children: [
                 IconButton(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  iconSize: 40,
                   icon: const Icon(Icons.arrow_back),
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                ),
-                const Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search Event',
-                        hintStyle: TextStyle(color: Colors.black),
-                        prefixIcon: Icon(Icons.search, color: Colors.black),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color.fromARGB(255, 202, 178, 172)),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color.fromARGB(255, 202, 178, 172)),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        filled: true,
-                        fillColor: Color.fromARGB(255, 213, 177, 168),
-                      ),
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                  ),
                 ),
               ],
             ),
@@ -146,10 +123,8 @@ class _SettingPageState extends State<SettingsPage> {
                 onPressed: () {
                   FirebaseAuth.instance.signOut();
                   _removeLogIn();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const LoginPage())
-                  );
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => const LoginPage()));
                 },
                 child: const Text('Log Out'),
               ),
@@ -170,51 +145,15 @@ class _SettingPageState extends State<SettingsPage> {
           ),
         ],
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20), // Definindo o raio de borda
-          child: BottomAppBar(
-            color: const Color.fromARGB(255, 202, 178, 172),
-            shape: const CircularNotchedRectangle(),
-            shadowColor: Colors.black54,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.home),
-                  color: Colors.white,
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.add_circle_outline),
-                  color: Colors.white,
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => const CreateEvent()));
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.message),
-                  color: Colors.white,
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.person),
-                  color: Colors.white,
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) =>
-                                const MyProfilePage(title: "profile", username: '',)));
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: (index) {
+            setState(() {
+              (() {
+                _currentIndex = index;
+              });
+            });
+          }),
     );
   }
 }

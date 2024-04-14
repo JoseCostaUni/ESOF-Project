@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/read%20data/firestore_read_changes.dart';
 import 'package:app/screens/editprofile.dart';
@@ -9,7 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 
 class MyProfilePage extends StatefulWidget {
-  const MyProfilePage({Key? key, required this.title, required this.username}) : super(key: key);
+  const MyProfilePage({Key? key, required this.title, required this.username})
+      : super(key: key);
   final String title;
   final String username;
 
@@ -41,6 +44,33 @@ class _MyProfilePageState extends State<MyProfilePage> {
       setState(() {
         _image = File(imagePath);
       });
+    }
+  }
+
+  Future<String> getUsername() async {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(_currentuser!.email)
+        .get();
+    if (snapshot.exists) {
+      return snapshot.data()?['username'] ?? '';
+    } else {
+      return '';
+    }
+  }
+
+
+  Future<String> getUserDescription() async {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(_currentuser!.email)
+        .get();
+    if (snapshot.exists) {
+      return snapshot.data()?['description'] ?? '';
+    } else {
+      return '';
     }
   }
 
@@ -101,12 +131,26 @@ class _MyProfilePageState extends State<MyProfilePage> {
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 25),
-                              child: Text(
-                                "@${user['name']}", // Fazer a ligação à base de dados
-                                style: const TextStyle(
-                                    fontSize: 20, color: Colors.grey),
-                              ),
-                            ),
+                              child: FutureBuilder<String>(
+                                future: getUsername(),
+                                builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    }
+                                    if (snapshot.hasError) {
+                                      return Text(
+                                          "Error: ${snapshot.error}");
+                                    }
+                                    String description =
+                                        snapshot.data ?? "No description";
+                                    return Padding(
+                                      padding: const EdgeInsets.all(25),
+                                      child: Text(description),
+                                    );
+                                  }),),
                             const SizedBox(height: 10),
                             const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -180,35 +224,28 @@ class _MyProfilePageState extends State<MyProfilePage> {
                             ),
                             const SizedBox(height: 10),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 25),
-                              child: StreamBuilder(
-                                stream: _description.getDescription(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25),
+                              child: FutureBuilder<String>(
+                                  future: getUserDescription(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    }
+                                    if (snapshot.hasError) {
+                                      return Text(
+                                          "Error: ${snapshot.error}");
+                                    }
+                                    String description =
+                                        snapshot.data ?? "No description";
+                                    return Padding(
+                                      padding: const EdgeInsets.all(25),
+                                      child: Text(description),
                                     );
-                                  }
-                                  final description = snapshot.data!.docs;
-
-                                  if (snapshot.data == null ||
-                                      description.isEmpty) {
-                                    return const Center(
-                                      child: Padding(
-                                        padding: EdgeInsets.all(25),
-                                        child: Text("No description"),
-                                      ),
-                                    );
-                                  }
-                                  final lastDescription = description[description.length - 1];
-                                  String message = lastDescription['description'];
-                                  return Padding(
-                                    padding: const EdgeInsets.all(25),
-                                    child: Text(message),
-                                  );
-                                },
-                              ),
+                                  }),
                             ),
                             const SizedBox(height: 15),
                             const Padding(

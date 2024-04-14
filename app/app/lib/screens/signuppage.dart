@@ -1,4 +1,3 @@
-import 'package:app/firebase/firebase_auth_services.dart';
 import 'package:app/screens/homepage.dart';
 import 'package:app/screens/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,7 +12,6 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUp extends State<SignUp> {
-  final FirebaseAuthService _auth = FirebaseAuthService();
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();

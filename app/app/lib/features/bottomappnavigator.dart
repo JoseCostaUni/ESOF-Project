@@ -1,4 +1,4 @@
-import 'package:app/screens/notification_seeting_page.dart';
+import 'package:app/screens/massage.dart';
 import 'package:flutter/material.dart';
 import 'package:app/screens/createevent.dart';
 import 'package:app/screens/homepage.dart';
@@ -69,7 +69,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                     widget.onTap(2);
                      Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const NotificationState()),
+                      MaterialPageRoute(builder: (_) => const ChatPage()),
                     );
                   }
                 },

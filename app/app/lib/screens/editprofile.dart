@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:app/read%20data/firestore_read_changes.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,22 +19,132 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   File? _image;
 
-
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final FirestoreReadData _description = FirestoreReadData();
-
-  final TextEditingController description = TextEditingController();
   void initState() {
     super.initState();
     _loadImage();
   }
 
-  void postDescription() {
-    if (_descriptionController.text.isNotEmpty) {
-      String message = _descriptionController.text;
-      _description.addDescription(message);
+  void updateName() async {
+    showDialog(
+        context: context,
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(),
+            ));
+    try {
+      User? userCredential = await FirebaseAuth.instance.currentUser;
+      Navigator.pop(context);
+
+      if (userCredential != null) {
+        updateUserDetails(userCredential);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('User Details updated suscefully'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => const MyProfilePage(title: '', username: '')));
+      }
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to update user details: $e'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
     }
-    description.clear();
+  }
+
+  void updateDescription() async {
+    showDialog(
+        context: context,
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(),
+            ));
+    try {
+      User? userCredential = await FirebaseAuth.instance.currentUser;
+      Navigator.pop(context);
+
+      if (userCredential != null) {
+        updateUserDetails(userCredential);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('User Details updated suscefully'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => const MyProfilePage(title: '', username: '')));
+      }
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to update user details: $e'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
+  void updateusername() async {
+    showDialog(
+        context: context,
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(),
+            ));
+
+    try {
+      User? userCredential = await FirebaseAuth.instance.currentUser;
+      Navigator.pop(context);
+
+      if (userCredential != null) {
+        updateUserDetails(userCredential);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('User Details updated suscefully'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => const MyProfilePage(title: '', username: '')));
+      }
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to update user details: $e'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
+  Future<void> updateUserDetails(User? userCredential) async {
+    if (userCredential != null) {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userCredential.email)
+          .update({
+        'username': _usernameController.text,
+        'name': _nameController.text,
+        'description': _descriptionController.text,
+      });
+    }
   }
 
   Future<void> _loadImage() async {
@@ -197,15 +309,17 @@ class _EditProfileState extends State<EditProfile> {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      const TextField(
-                        decoration: InputDecoration(
+                      TextField(
+                        controller: _usernameController,
+                        decoration: const InputDecoration(
                           hintText: 'Change Username',
                           prefixIcon: Icon(Icons.text_fields),
                         ),
                       ),
                       const SizedBox(height: 10),
-                      const TextField(
-                        decoration: InputDecoration(
+                      TextField(
+                        controller: _nameController,
+                        decoration: const InputDecoration(
                           hintText: 'Change Name',
                           prefixIcon: Icon(Icons.text_fields),
                         ),
@@ -243,7 +357,9 @@ class _EditProfileState extends State<EditProfile> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              postDescription();
+                              updateDescription();
+                              updateName();
+                              updateusername();
                               _saveImage();
                               Navigator.push(
                                 context,

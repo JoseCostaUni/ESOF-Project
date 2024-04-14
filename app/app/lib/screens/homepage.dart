@@ -1,9 +1,10 @@
 import 'package:app/features/bottomappnavigator.dart';
+import 'package:app/features/searchbar.dart';
 import 'package:flutter/material.dart';
 import 'package:app/screens/eventsearch.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key, required this.title}) : super(key: key);
+  const HomePage({Key? key, required this.title});
   final String title;
 
   @override
@@ -12,44 +13,50 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
+  final TextEditingController _searchcontroller = TextEditingController();
+  Map<String, dynamic>? _createdEvent;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final Map<String, dynamic>? eventData = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+    if (eventData != null) {
+      setState(() {
+        _createdEvent = eventData;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(239, 255, 228, 225),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Search Event',
-                hintStyle: const TextStyle(color: Colors.black),
-                prefixIcon: const Icon(Icons.search, color: Colors.black),
-                suffixIcon: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const EventSearch()),
-                    );
-                  },
-                  child: const Icon(Icons.menu),
-                ),
-                enabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color.fromARGB(255, 202, 178, 172),
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                ),
-                focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color.fromARGB(255, 202, 178, 172),
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                ),
-                filled: true,
-                fillColor: const Color.fromARGB(255, 213, 177, 168),
+          // Exibindo detalhes do evento
+          if (_createdEvent != null) ...[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Event Title: ${_createdEvent!['title']}'),
+                  Text('Date and Time: ${_createdEvent!['dateTime']}'),
+                  Text('Location: ${_createdEvent!['location']}'),
+                ],
               ),
-              style: const TextStyle(color: Colors.blue),
+            ),
+          ],
+          Expanded(
+            child: CustomSearchBar(
+              search: _searchcontroller,
+              onTapMenu: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const EventSearch()),
+                );
+              }, 
             ),
           ),
         ],

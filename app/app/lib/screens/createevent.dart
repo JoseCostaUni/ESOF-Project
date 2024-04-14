@@ -1,7 +1,7 @@
-import 'dart:html';
 import 'dart:io';
 
 import 'package:app/features/bottomappnavigator.dart';
+import 'package:app/read%20data/firestore_read_event.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -17,23 +17,24 @@ class CreateEvent extends StatefulWidget {
 
 class _CreateEventState extends State<CreateEvent> {
   int _currentIndex = 1;
-  File? __image;
+  final FirestoreReadData _firestoreReadData = FirestoreReadData();
+  File? ___image;
   void PostEvent() {}
   Future<void> _loadImage() async {
     final prefs = await SharedPreferences.getInstance();
-    final imagePath = prefs.getString('profile_image');
+    final imagePath = prefs.getString('profile__image');
 
     if (imagePath != null) {
       setState(() {
-        __image = File(imagePath);
+        ___image = File(imagePath);
       });
     }
   }
 
   Future<void> _cropImage() async {
-    if (_image != null) {
+    if (___image != null) {
       final croppedFile = await ImageCropper().cropImage(
-        sourcePath: _image!.path,
+        sourcePath: ___image!.path,
         aspectRatioPresets: Platform.isAndroid
             ? [
                 CropAspectRatioPreset.square,
@@ -71,7 +72,7 @@ class _CreateEventState extends State<CreateEvent> {
 
       if (croppedFile != null) {
         setState(() {
-          _image = File(croppedFile.path!);
+          ___image = File(croppedFile.path);
         });
       }
     }
@@ -81,7 +82,7 @@ class _CreateEventState extends State<CreateEvent> {
     final pickedFile = await ImagePicker().pickImage(source: source);
     if (pickedFile != null) {
       setState(() {
-        _image = File(pickedFile.path);
+        ___image = File(pickedFile.path);
       });
       await _cropImage();
     }
@@ -89,16 +90,16 @@ class _CreateEventState extends State<CreateEvent> {
 
   Future<void> _removeImage() async {
     setState(() {
-      _image = null;
+      ___image = null;
     });
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('profile_image');
+    await prefs.remove('profile__image');
   }
 
   Future<void> _saveImage() async {
-    if (_image != null) {
+    if (___image != null) {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('profile_image', _image!.path);
+      await prefs.setString('profile__image', ___image!.path);
     }
   }
 
@@ -142,9 +143,9 @@ class _CreateEventState extends State<CreateEvent> {
                         child: SizedBox(
                           width: 120,
                           height: 120,
-                          child: _image != null
+                          child: ___image != null
                               ? Image.file(
-                                  _image!,
+                                  ___image!,
                                   fit: BoxFit.cover,
                                 )
                               : Container(
