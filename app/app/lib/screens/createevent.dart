@@ -1,6 +1,12 @@
+import 'dart:html';
+import 'dart:io';
+
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateEvent extends StatefulWidget {
   const CreateEvent({super.key});
@@ -11,6 +17,94 @@ class CreateEvent extends StatefulWidget {
 
 class _CreateEventState extends State<CreateEvent> {
   int _currentIndex = 1;
+  File? _image;
+
+  void PostEvent() {
+    
+  }
+  Future<void> _loadImage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final imagePath = prefs.getString('profile_image');
+
+    if (imagePath != null) {
+      setState(() {
+        _image = File(imagePath);
+      });
+    }
+  }
+
+  Future<void> _cropImage() async {
+    if (_image != null) {
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: _image!.path,
+        aspectRatioPresets: Platform.isAndroid
+            ? [
+                CropAspectRatioPreset.square,
+                CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio16x9
+              ]
+            : [
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.square,
+                CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio5x3,
+                CropAspectRatioPreset.ratio5x4,
+                CropAspectRatioPreset.ratio7x5,
+                CropAspectRatioPreset.ratio16x9
+              ],
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Resize your image',
+            toolbarColor: const Color.fromARGB(255, 202, 178, 172),
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false,
+          ),
+          IOSUiSettings(
+            title: 'Cropper',
+          ),
+          WebUiSettings(
+            context: context,
+          ),
+        ],
+      );
+
+      if (croppedFile != null) {
+        setState(() {
+          _image = File(croppedFile.path!);
+        });
+      }
+    }
+  }
+
+  Future<void> getImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+      await _cropImage();
+    }
+  }
+
+  Future<void> _removeImage() async {
+    setState(() {
+      _image = null;
+    });
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('profile_image');
+  }
+
+  Future<void> _saveImage() async {
+    if (_image != null) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('profile_image', _image!.path);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,10 +141,39 @@ class _CreateEventState extends State<CreateEvent> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const CircleAvatar(
-                        backgroundColor: Colors.blue,
-                        radius: 30,
-                        child: Icon(Icons.add_a_photo, color: Colors.white),
+                      ClipOval(
+                        child: SizedBox(
+                          width: 120,
+                          height: 120,
+                          child: _image != null
+                              ? Image.file(
+                                  _image!,
+                                  fit: BoxFit.cover,
+                                )
+                              : Container(
+                                  color: Colors.grey[200],
+                                ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: _removeImage,
+                        child: const Text(
+                          "Remove",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.photo),
+                            onPressed: () => getImage(ImageSource.gallery),
+                          ),
+                          const SizedBox(width: 10),
+                          IconButton(
+                            icon: const Icon(Icons.camera_alt),
+                            onPressed: () => getImage(ImageSource.camera),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 20),
                       const TextField(
@@ -77,13 +200,6 @@ class _CreateEventState extends State<CreateEvent> {
                       const TextField(
                         decoration: InputDecoration(
                           hintText: 'Attendance limit',
-                          prefixIcon: Icon(Icons.text_fields),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      const TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Upload image',
                           prefixIcon: Icon(Icons.text_fields),
                         ),
                       ),

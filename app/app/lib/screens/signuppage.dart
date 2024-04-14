@@ -1,6 +1,7 @@
 import 'package:app/firebase/firebase_auth_services.dart';
+import 'package:app/screens/homepage.dart';
 import 'package:app/screens/login.dart';
-import 'package:app/screens/profile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -14,18 +15,44 @@ class SignUp extends StatefulWidget {
 class _SignUp extends State<SignUp> {
   final FirebaseAuthService _auth = FirebaseAuthService();
 
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _surnameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _surnameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _descriptionwordController = TextEditingController();
 
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _surnameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
+
+
+  void registeredUser() async {
+    showDialog(
+        context: context,
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(),
+            ));
+    try {
+      UserCredential? userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: _emailController.text, password: _passwordController.text);
+      CreateuserDocument(userCredential);
+      Navigator.pop(context);
+      if (userCredential != null) {
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const HomePage(title: '')));
+      }
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+    }
+  }
+
+  Future<void> CreateuserDocument(UserCredential? userCredential) async {
+    if (userCredential != null && userCredential.user != null) {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userCredential.user!.email)
+          .set({
+        'email': userCredential.user!.email,
+        'name': _nameController.text,
+      });
+    }
   }
 
   @override
@@ -159,7 +186,7 @@ class _SignUp extends State<SignUp> {
               width: 360,
               child: ElevatedButton(
                 key: const ValueKey('Next'),
-                onPressed: _signup,
+                onPressed: registeredUser,
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
                       const Color.fromARGB(255, 224, 167, 153)),
@@ -176,33 +203,5 @@ class _SignUp extends State<SignUp> {
         ),
       ),
     );
-  }
-
-  void _signup() async {
-    String name = _nameController.text.trim();
-    String surname = _surnameController.text;
-    String email = _emailController.text;
-    String password = _passwordController.text;
-
-    User? user = await _auth.signUpWithEmailAndPassword(email, password);
-
-    if (user != null) {
-      print("User is successfully created");
-      if (name.isNotEmpty) {
-        await _auth.adduserdetails(name, surname, email);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => MyProfilePage(
-              title: "Profile",
-              username: name, // Passa o nome para a página de perfil
-            ),
-          ),
-        );
-      } else {
-        // Se o nome estiver vazio, pode lidar com isso de acordo com sua lógica
-        print("Name is empty");
-      }
-    }
   }
 }
