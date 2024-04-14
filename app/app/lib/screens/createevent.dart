@@ -1,5 +1,6 @@
 import 'dart:io';
 
+
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,11 +17,13 @@ class CreateEvent extends StatefulWidget {
 }
 
 class _CreateEventState extends State<CreateEvent> {
+  List<String> eventsID = [];
   int _currentIndex = 1;
- final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
-  final TextEditingController _attendanceLimitsController = TextEditingController();
+  final TextEditingController _attendanceLimitsController =
+      TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   File? __image;
   void PostEvent() {}
@@ -34,15 +37,14 @@ class _CreateEventState extends State<CreateEvent> {
       });
     }
   }
-
   
-   Future<void> _createEvent() async {
+  Future<void> _createEvent() async {
     if (_titleController.text.isEmpty ||
-      _dateController.text.isEmpty ||
-      _locationController.text.isEmpty ||
-      _attendanceLimitsController.text.isEmpty ||
-      _descriptionController.text.isEmpty) {
-        return;
+        _dateController.text.isEmpty ||
+        _locationController.text.isEmpty ||
+        _attendanceLimitsController.text.isEmpty ||
+        _descriptionController.text.isEmpty) {
+      return;
     }
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -136,7 +138,7 @@ class _CreateEventState extends State<CreateEvent> {
     }
   }
 
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 253, 241, 238),

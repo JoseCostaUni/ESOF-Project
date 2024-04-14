@@ -11,9 +11,9 @@ class _AboutPageState extends State<AboutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(239, 255, 228, 225),
+      backgroundColor: Color.fromARGB(255, 255, 228, 225),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(239, 255, 228, 225),
+        backgroundColor: Colors.transparent   ,
         title: const Text(
           'About',
           style: TextStyle(
