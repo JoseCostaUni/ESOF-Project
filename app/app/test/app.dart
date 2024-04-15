@@ -5,5 +5,6 @@ import 'package:flutter/material.dart';
 void main() async {
   enableFlutterDriverExtension();
   WidgetsFlutterBinding.ensureInitialized();
+
   runApp(MyApp());
 }
