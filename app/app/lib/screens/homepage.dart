@@ -38,12 +38,8 @@ class _HomePageState extends State<HomePage> {
         children: [
           CustomSearchBar(
             search: _searchcontroller,
-            onTapMenu: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const EventSearch()),
-              );
-            },
+            onTapMenu: () {},
+         // Adicione ação ao menu aqui
           ),
           Expanded(
             child: FutureBuilder(
