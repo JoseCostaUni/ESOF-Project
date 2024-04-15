@@ -5,6 +5,7 @@ import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/screens/homepage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -38,7 +39,27 @@ class _CreateEventState extends State<CreateEvent> {
       });
     }
   }
-  
+  Future<String?> _uploadImageToFirebaseStorage(File imageFile) async {
+  try {
+    // Crie uma referência para o local onde deseja armazenar a imagem no Firebase Storage
+    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('event_images')
+        .child(DateTime.now().millisecondsSinceEpoch.toString() + '.jpg');
+
+    // Faça o upload do arquivo para o Firebase Storage
+    await ref.putFile(imageFile);
+
+    // Obtenha a URL da imagem carregada
+    String imageUrl = await ref.getDownloadURL();
+
+    // Retorne a URL da imagem
+    return imageUrl;
+  } catch (e) {
+    print('Erro ao fazer upload da imagem para o Firebase Storage: $e');
+    return null;
+  }
+}
   Future<void> _createEvent() async {
     if (_titleController.text.isEmpty ||
         _dateController.text.isEmpty ||
@@ -47,26 +68,32 @@ class _CreateEventState extends State<CreateEvent> {
         _descriptionController.text.isEmpty) {
       return;
     }
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      try {
-        await FirebaseFirestore.instance.collection("event").add({
-          "title": _titleController.text,
-          "dateTime": _dateController.text,
-          "location": _locationController.text,
-          "attendanceLimit": _attendanceLimitsController.text,
-          "description": _descriptionController.text,
-        });
-        Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => const HomePage(title: 'Home')));
-      } catch (e) {
-        print('Error creating event: $e');
-        // Handle error (show a snackbar, dialog, etc.)
+    String? imageUrl = await _uploadImageToFirebaseStorage(__image!);
+      if (imageUrl != null) {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        try {
+         // Salve o evento no Firestore junto com a URL da imagem
+          await FirebaseFirestore.instance.collection("event").add({
+            "title": _titleController.text,
+            "dateTime": _dateController.text,
+            "location": _locationController.text,
+            "attendanceLimit": _attendanceLimitsController.text,
+            "description": _descriptionController.text,
+            "imageUrl": imageUrl,
+          });
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomePage(title: 'Home')));
+        } catch (e) {
+          print('Erro ao criar o evento: $e');
+          // Handle error (show a snackbar, dialog, etc.)
+        }
+      }  else {
+        // Handle case when user is not logged in
       }
-    } else {
-      // Handle case when user is not logged in
     }
   }
-
   Future<void> _cropImage() async {
     if (__image != null) {
       final croppedFile = await ImageCropper().cropImage(
