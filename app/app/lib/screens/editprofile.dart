@@ -8,6 +8,7 @@ import 'profile.dart';
 import 'package:app/screens/homepage.dart';
 import 'package:image_cropper/image_cropper.dart';
 
+
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
 
@@ -157,50 +158,52 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future<void> _cropImage() async {
-    if (_image != null) {
-      final croppedFile = await ImageCropper().cropImage(
-        sourcePath: _image!.path,
-        aspectRatioPresets: Platform.isAndroid
-            ? [
-                CropAspectRatioPreset.square,
-                CropAspectRatioPreset.ratio3x2,
-                CropAspectRatioPreset.original,
-                CropAspectRatioPreset.ratio4x3,
-                CropAspectRatioPreset.ratio16x9
-              ]
-            : [
-                CropAspectRatioPreset.original,
-                CropAspectRatioPreset.square,
-                CropAspectRatioPreset.ratio3x2,
-                CropAspectRatioPreset.ratio4x3,
-                CropAspectRatioPreset.ratio5x3,
-                CropAspectRatioPreset.ratio5x4,
-                CropAspectRatioPreset.ratio7x5,
-                CropAspectRatioPreset.ratio16x9
-              ],
-        uiSettings: [
-          AndroidUiSettings(
-              toolbarTitle: 'Resize your image',
-              toolbarColor: const Color.fromARGB(255, 202, 178, 172),
-              toolbarWidgetColor: Colors.white,
-              initAspectRatio: CropAspectRatioPreset.original,
-              lockAspectRatio: false),
-          IOSUiSettings(
-            title: 'Cropper',
-          ),
-          WebUiSettings(
-            context: context,
-          ),
+  if (_image != null) {
+    final croppedFile = await ImageCropper().cropImage(
+      sourcePath: _image!.path,
+      aspectRatioPresets: Platform.isAndroid 
+       ? [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio16x9
+        ] : 
+        [
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio5x3,
+          CropAspectRatioPreset.ratio5x4,
+          CropAspectRatioPreset.ratio7x5,
+          CropAspectRatioPreset.ratio16x9
         ],
-      );
+        uiSettings: [
+        AndroidUiSettings(
+            toolbarTitle: 'Resize your image',
+            toolbarColor: const Color.fromARGB(255, 202, 178, 172),
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        IOSUiSettings(
+          title: 'Cropper',
+        ),
+        WebUiSettings(
+          context: context,
+        ),
+      ],
+    );
 
-      if (croppedFile != null) {
-        setState(() {
-          _image = File(croppedFile.path);
-        });
-      }
+    if (croppedFile != null) {
+      setState(() {
+        _image = File(croppedFile.path!);
+      });
     }
   }
+}
+
+
 
   Future<void> getImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
@@ -269,17 +272,19 @@ class _EditProfileState extends State<EditProfile> {
                           Column(
                             children: [
                               ClipOval(
-                                  child: SizedBox(
-                                      width: 120,
-                                      height: 120,
-                                      child: _image != null
-                                          ? Image.file(
-                                              _image!,
-                                              fit: BoxFit.cover,
-                                            )
-                                          : Container(
-                                              color: Colors.grey[200],
-                                            ))),
+                                child: SizedBox(
+                                  width: 120,
+                                  height: 120,
+                                  child: _image != null 
+                                  ? Image.file(
+                                    _image!,
+                                    fit: BoxFit.cover,
+                                    )
+                                  : Container(
+                                    color: Colors.grey[200],
+                                  )
+                                )
+                              ),
                               InkWell(
                                 onTap: _removeImage,
                                 child: const Text(
@@ -291,14 +296,12 @@ class _EditProfileState extends State<EditProfile> {
                                 children: [
                                   IconButton(
                                     icon: const Icon(Icons.photo),
-                                    onPressed: () =>
-                                        getImage(ImageSource.gallery),
+                                    onPressed: () => getImage(ImageSource.gallery),
                                   ),
                                   const SizedBox(width: 10),
                                   IconButton(
                                     icon: const Icon(Icons.camera_alt),
-                                    onPressed: () =>
-                                        getImage(ImageSource.camera),
+                                    onPressed: () => getImage(ImageSource.camera),
                                   ),
                                 ],
                               ),
@@ -331,13 +334,11 @@ class _EditProfileState extends State<EditProfile> {
                           hintText: 'New Description',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.black),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.black),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
                           ),
                         ),
                       ),
@@ -346,8 +347,7 @@ class _EditProfileState extends State<EditProfile> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red),
+                            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                             onPressed: () {
                               Navigator.pop(context);
                             },
@@ -362,10 +362,7 @@ class _EditProfileState extends State<EditProfile> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => const MyProfilePage(
-                                    title: "Profile",
-                                    username: '',
-                                  ),
+                                  builder: (_) => const MyProfilePage(title: "Profile", username: '',),
                                 ),
                               );
                             },
@@ -424,10 +421,7 @@ class _EditProfileState extends State<EditProfile> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (_) => const MyProfilePage(
-                                title: "Profile",
-                                username: '',
-                              )),
+                          builder: (_) => const MyProfilePage(title: "Profile", username: '',)),
                     );
                   },
                 ),

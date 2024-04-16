@@ -1,0 +1,1 @@
+ /home/dsl/ESOF/2LEIC04T4/vertical_prototype/Vertical\ Prototype/.dart_tool/flutter_build/908d872955e25b0c75684d39619a8f96/native_assets.yaml: 
