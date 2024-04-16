@@ -28,7 +28,7 @@ Best regards, 2LEIC04T4
   * [Logical architecture](#Logical-Architeture)
   * [Physical architecture](#Physical-Architeture)
   * [Vertical prototype](#Vertical-Prototype)
-*[Sprint]
+* [Sprint]
  * [Sprint 1](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/blob/Sprint1/README.md#sprint-1-app-version-101) 
 
 ---
