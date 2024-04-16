@@ -28,7 +28,7 @@ Best regards, 2LEIC04T4
   * [Logical architecture](#Logical-Architeture)
   * [Physical architecture](#Physical-Architeture)
   * [Vertical prototype](#Vertical-Prototype)
-* [Sprint-1-Review-(v1.0.1)]()
+* [Sprint-1-(App-Version-1.0.1)]()
 
 ---
 
