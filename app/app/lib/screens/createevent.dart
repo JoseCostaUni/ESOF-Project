@@ -39,6 +39,7 @@ class _CreateEventState extends State<CreateEvent> {
       });
     }
   }
+  
   Future<String?> _uploadImageToFirebaseStorage(File imageFile) async {
   try {
     // Crie uma referência para o local onde deseja armazenar a imagem no Firebase Storage
