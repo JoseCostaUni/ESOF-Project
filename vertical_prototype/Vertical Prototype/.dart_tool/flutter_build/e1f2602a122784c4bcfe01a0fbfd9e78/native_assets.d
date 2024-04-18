@@ -1,1 +1,0 @@
- /home/bruno/Desktop/FEUP/2o\ ano/2o\ semetre/Egenharia\ de\ software/Prototype/2LEIC04T4/vertical_prototype/Vertical\ Prototype/.dart_tool/flutter_build/e1f2602a122784c4bcfe01a0fbfd9e78/native_assets.yaml: 

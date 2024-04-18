@@ -28,6 +28,7 @@ Best regards, 2LEIC04T4
   * [Logical architecture](#Logical-Architeture)
   * [Physical architecture](#Physical-Architeture)
   * [Vertical prototype](#Vertical-Prototype)
+ * [Sprint 1](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/blob/Sprint1/README.md#sprint-1-app-version-101) 
 
 ---
 
@@ -87,3 +88,44 @@ Are you an advocate for sustainability and enjoy connecting with like-minded ind
 * Flutter: It allows developers to write code that can be used across multiple platforms using a single codebase, saving time and effort
 * Dart: This language is highly optimized with flutter and can be used as both frontend(Flutter) and backend(Dart server), promoting consistency.
 * Firebase: Firebase offers a wide amount of backend services, including real-time database, authentication, cloud storage, and hosting, simplifying backend development for Flutter apps.
+
+
+## Sprint 1 (App Version 1.0.1)
+
+
+### Sprint Planning
+
+![Untitled](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/5bdc734c-c686-4680-8601-f419ebc39169)
+
+### End of Sprint 1 Board
+
+![image](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/cc788382-acba-49e2-b14a-ad7134d47f55)
+
+### Sprint 1 Review (v1.0.1)
+
+At first glance , the sprint went really well as almost everything that was planned got actually done , apart from some minor things that will be left for the next sprint. We were able to complete 10 user stories from the 12 that were initially planned. In retrospective , we could probably have finished all of them had we not had problemas while trying to test the current code with flutter_gherkin, tests which were rendered useless due to the dart limitations. It is also important to note that backend and testing in general is still pretty raw , as this will be the main focus in the next sprint.
+
+To sum up, we agree that the sprint was well planned, well executed and that almost everything went according the plan.
+
+
+### Sprint Retrospective:
+
+#### What went well ?
+- Database connection firebase working well
+- UI
+- Application working without any bugs
+- All started user stories were completely done
+
+#### What went wrong ?
+- Tests not working the way it was intended
+- We didn't focus as much in the backend
+- Not included all apis used in the vertical prototype yet
+
+#### What puzzles us ?
+- The time wasted on trying to make the tests work
+- The not so trivial dart language
+- Database creation and connection not very easily done
+
+#### What are we going to do to improve?
+- We will try to organise the code in a better way
+- Work in more focused way, since we explored the language and now we know how to work with it a little better

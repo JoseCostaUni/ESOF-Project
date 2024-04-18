@@ -1,4 +1,0 @@
-#Wed Mar 27 16:16:46 WET 2024
-base.0=/home/bruno/Desktop/FEUP/2o ano/2o semetre/Egenharia de software/Prototype/2LEIC04T4/vertical_prototype/Vertical Prototype/build/app/intermediates/dex/release/minifyReleaseWithR8/classes.dex
-path.0=classes.dex
-renamed.0=classes.dex
