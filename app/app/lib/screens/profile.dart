@@ -32,19 +32,22 @@ class _MyProfilePageState extends State<MyProfilePage> {
   @override
   void initState() {
     super.initState();
-    _loadImage();
   }
 
-  Future<void> _loadImage() async {
-    final prefs = await SharedPreferences.getInstance();
-    final imagePath = prefs.getString('profile_image');
 
-    if (imagePath != null) {
-      setState(() {
-        _image = File(imagePath);
-      });
+  Future<String> getImageUrl() async {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(_currentuser!.email)
+        .get();
+    if (snapshot.exists) {
+      return snapshot.data()?['imageUrl'] ?? '';
+    } else {
+      return '';
     }
   }
+ 
 
   Future<String> getUsername() async {
     DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
@@ -113,18 +116,29 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                   child: SizedBox(
                                     width: 120,
                                     height: 120,
-                                    child: _image != null
-                                        ? Image.file(
-                                            _image!,
+                                    child: FutureBuilder<String>(
+                                      future: getImageUrl(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState == ConnectionState.waiting) {
+                                          return const CircularProgressIndicator();
+                                        }
+                                        if (snapshot.hasError) {
+                                          return Text(
+                                            "Error: ${snapshot.error}");
+                                        }
+                                        String imageUrl = snapshot.data ?? "";
+                                        return imageUrl.isNotEmpty
+                                        ? Image.network(
+                                          imageUrl,
                                             fit: BoxFit.cover,
                                           )
                                         : Container(
                                             color: const Color.fromARGB(
                                                 239, 255, 228, 225),
-                                          ),
-                                  ),
+                                          );
+                }),
                                 ),
-                              ],
+                            )],
                             ),
                             Padding(
                               padding:

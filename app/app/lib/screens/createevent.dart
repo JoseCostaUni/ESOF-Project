@@ -40,26 +40,26 @@ class _CreateEventState extends State<CreateEvent> {
     }
   }
   Future<String?> _uploadImageToFirebaseStorage(File imageFile) async {
-  try {
-    // Crie uma referência para o local onde deseja armazenar a imagem no Firebase Storage
-    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
-        .ref()
-        .child('event_images')
-        .child(DateTime.now().millisecondsSinceEpoch.toString() + '.jpg');
+    try {
+      // Crie uma referência para o local onde deseja armazenar a imagem no Firebase Storage
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('event_images')
+          .child(DateTime.now().millisecondsSinceEpoch.toString() + '.jpg');
 
-    // Faça o upload do arquivo para o Firebase Storage
-    await ref.putFile(imageFile);
+      // Faça o upload do arquivo para o Firebase Storage
+      await ref.putFile(imageFile);
 
-    // Obtenha a URL da imagem carregada
-    String imageUrl = await ref.getDownloadURL();
+      // Obtenha a URL da imagem carregada
+      String imageUrl = await ref.getDownloadURL();
 
-    // Retorne a URL da imagem
-    return imageUrl;
-  } catch (e) {
-    print('Erro ao fazer upload da imagem para o Firebase Storage: $e');
-    return null;
+      // Retorne a URL da imagem
+      return imageUrl;
+    } catch (e) {
+      print('Erro ao fazer upload da imagem para o Firebase Storage: $e');
+      return null;
+    }
   }
-}
   Future<void> _createEvent() async {
     if (_titleController.text.isEmpty ||
         _dateController.text.isEmpty ||
