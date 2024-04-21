@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:app/backend/notifications/createNotifications.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({Key? key}) : super(key: key);
@@ -12,6 +13,8 @@ class NotificationsPage extends StatefulWidget {
 class _NotificationsPageState extends State<NotificationsPage> {
   int _currentIndex = 3;
   bool _receiveNotifications = true;
+  final NotificationPreferenceHandler _notificationPreferenceHandler =
+      NotificationPreferenceHandler();
 
   @override
   void initState() {
@@ -30,6 +33,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('receive_notifications', value);
   }
+
+  bool getReceiveNotifications() => _receiveNotifications;
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +79,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
                     value: true,
                     groupValue: _receiveNotifications,
                     onChanged: (value) {
+                      _notificationPreferenceHandler
+                          .setNotificationPreference(value!);
                       setState(() {
                         _receiveNotifications = value!;
                         _saveNotificationPreference(value);
@@ -89,6 +96,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
                     groupValue: _receiveNotifications,
                     onChanged: (value) {
                       setState(() {
+                        _notificationPreferenceHandler
+                            .setNotificationPreference(value!);
                         _receiveNotifications = value!;
                         _saveNotificationPreference(value);
                       });
@@ -99,6 +108,18 @@ class _NotificationsPageState extends State<NotificationsPage> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _notificationPreferenceHandler.createNotification(
+            context,
+            1,
+            'basic_channel',
+            'Notification Test',
+            'This is a test notification',
+          );
+        },
+        child: const Icon(Icons.notifications),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _currentIndex,
