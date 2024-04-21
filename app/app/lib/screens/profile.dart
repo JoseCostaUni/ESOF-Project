@@ -4,9 +4,9 @@ import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/screens/editprofile.dart';
 import 'package:app/screens/settingpages.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 
 class MyProfilePage extends StatefulWidget {
@@ -32,22 +32,27 @@ class _MyProfilePageState extends State<MyProfilePage> {
   @override
   void initState() {
     super.initState();
+    _loadImage();
   }
 
-
-  Future<String> getImageUrl() async {
-    DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
-        .instance
-        .collection('users')
-        .doc(_currentuser!.email)
-        .get();
-    if (snapshot.exists) {
-      return snapshot.data()?['imageUrl'] ?? '';
-    } else {
-      return '';
+  Future<void> _loadImage() async {
+    final user = currentuser;
+    if(user != null){
+      try{
+          final docSnapshot = await FirebaseFirestore.instance.collection("users").doc(user.email).get();
+          final String imageUrl = docSnapshot.get('profilepicture');
+          if (imageUrl != "") {
+            firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child(imageUrl);
+            final File imageFile = File(await ref.getDownloadURL());
+            setState(() {
+              _image = imageFile;
+            });
+          }
+        } catch (e) {
+          print('Failed to load image from Firebase Storage: $e');
+        }
     }
   }
- 
 
   Future<String> getUsername() async {
     DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
@@ -116,29 +121,18 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                   child: SizedBox(
                                     width: 120,
                                     height: 120,
-                                    child: FutureBuilder<String>(
-                                      future: getImageUrl(),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.connectionState == ConnectionState.waiting) {
-                                          return const CircularProgressIndicator();
-                                        }
-                                        if (snapshot.hasError) {
-                                          return Text(
-                                            "Error: ${snapshot.error}");
-                                        }
-                                        String imageUrl = snapshot.data ?? "";
-                                        return imageUrl.isNotEmpty
-                                        ? Image.network(
-                                          imageUrl,
+                                    child: _image != null
+                                        ? Image.file(
+                                            _image!,
                                             fit: BoxFit.cover,
                                           )
                                         : Container(
                                             color: const Color.fromARGB(
                                                 239, 255, 228, 225),
-                                          );
-                }),
+                                          ),
+                                  ),
                                 ),
-                            )],
+                              ],
                             ),
                             Padding(
                               padding:
