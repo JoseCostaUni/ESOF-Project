@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class GetEvents extends StatelessWidget {
   final String documentId;
   GetEvents({required this.documentId});
-  
+
   @override
   Widget build(BuildContext context) {
     CollectionReference event = FirebaseFirestore.instance.collection('event');
@@ -12,7 +12,8 @@ class GetEvents extends StatelessWidget {
       future: event.doc(documentId).get(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          Map<String, dynamic>? data = snapshot.data?.data() as Map<String, dynamic>?;
+          Map<String, dynamic>? data =
+              snapshot.data?.data() as Map<String, dynamic>?;
 
           if (data != null) {
             String? title = data['title'];
