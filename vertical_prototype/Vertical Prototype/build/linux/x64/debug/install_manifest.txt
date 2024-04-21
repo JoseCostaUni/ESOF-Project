@@ -1,0 +1,14 @@
+/home/dsl/ESOF/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/first_app
+/home/dsl/ESOF/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/data/icudtl.dat
+/home/dsl/ESOF/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/lib/libflutter_linux_gtk.so
+/home/dsl/ESOF/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/lib/libawesome_notifications_plugin.so
+/home/dsl/ESOF/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/data/flutter_assets/fonts/MaterialIcons-Regular.otf
+/home/dsl/ESOF/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/data/flutter_assets/packages/awesome_notifications/test/assets/images/test_image.png
+/home/dsl/ESOF/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/data/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf
+/home/dsl/ESOF/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/data/flutter_assets/FontManifest.json
+/home/dsl/ESOF/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/data/flutter_assets/shaders/ink_sparkle.frag
+/home/dsl/ESOF/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/data/flutter_assets/AssetManifest.json
+/home/dsl/ESOF/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/data/flutter_assets/NOTICES.Z
+/home/dsl/ESOF/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/data/flutter_assets/kernel_blob.bin
+/home/dsl/ESOF/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/data/flutter_assets/AssetManifest.bin
+/home/dsl/ESOF/2LEIC04T4/vertical_prototype/Vertical Prototype/build/linux/x64/debug/bundle/data/flutter_assets/version.json
