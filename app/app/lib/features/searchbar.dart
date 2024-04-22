@@ -1,6 +1,12 @@
 import 'package:app/screens/eventsearch.dart';
 import 'package:flutter/material.dart';
 import 'package:app/backend/Search_Bar/Search_Bar_Algo.dart';
+import 'package:app/features/bottomappnavigator.dart';
+import 'package:app/features/searchbar.dart';
+import 'package:app/read%20data/firestore_read_changes.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:app/screens/eventsearch.dart';
 
 class CustomSearchBar extends StatefulWidget {
   final TextEditingController search;
@@ -21,6 +27,7 @@ class CustomSearchBar extends StatefulWidget {
 class _CustomSearchBarState extends State<CustomSearchBar> {
   EventHandler eventHandler = EventHandler();
   List<Map<String, dynamic>> suggestions = [];
+  List<String> eventsID = [];
 
   @override
   void initState() {
@@ -32,6 +39,17 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   void dispose() {
     widget.search.removeListener(_onSearchTextChanged);
     super.dispose();
+  }
+
+  Future<void> getEventsId() async {
+    eventsID.clear();
+    await FirebaseFirestore.instance
+        .collection('event')
+        .get()
+        .then((snapshot) => snapshot.docs.forEach((element) {
+              print(element.reference);
+              eventsID.add(element.reference.id);
+            }));
   }
 
   void _onSearchTextChanged() async {
@@ -99,15 +117,28 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             ),
           ),
           if (suggestions.isNotEmpty)
-            Container(
-              height: 200,
-              child: ListView.builder(
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(suggestions[index]['title']),
-                    onTap: () {
-                      widget.search.text = suggestions[index]['title'];
+            Expanded(
+              child: FutureBuilder(
+                future: getEventsId(),
+                builder: (context, snapshot) {
+                  return ListView.builder(
+                    itemCount: eventsID.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            // Ação ao clicar no cartão
+                            print('Clicou no evento ${eventsID[index]}');
+                          },
+                          child: Card(
+                            elevation: 4,
+                            child: ListTile(
+                              title: GetEvents(documentId: eventsID[index]),
+                            ),
+                          ),
+                        ),
+                      );
                     },
                   );
                 },
