@@ -41,15 +41,22 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
     super.dispose();
   }
 
-  Future<void> getEventsId() async {
+  Future<void> getEventsBySuggestions() async {
     eventsID.clear();
+
+    List suggestionTitles =
+        suggestions.map((suggestion) => suggestion['title']).toList();
+
     await FirebaseFirestore.instance
         .collection('event')
+        .where('title', whereIn: suggestionTitles)
         .get()
-        .then((snapshot) => snapshot.docs.forEach((element) {
-              print(element.reference);
-              eventsID.add(element.reference.id);
-            }));
+        .then((snapshot) {
+      snapshot.docs.forEach((element) {
+        print(element.reference);
+        eventsID.add(element.reference.id);
+      });
+    });
   }
 
   void _onSearchTextChanged() async {
@@ -117,32 +124,39 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             ),
           ),
           if (suggestions.isNotEmpty)
-            Expanded(
-              child: FutureBuilder(
-                future: getEventsId(),
-                builder: (context, snapshot) {
-                  return ListView.builder(
-                    itemCount: eventsID.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            // Ação ao clicar no cartão
-                            print('Clicou no evento ${eventsID[index]}');
-                          },
-                          child: Card(
-                            elevation: 4,
-                            child: ListTile(
-                              title: GetEvents(documentId: eventsID[index]),
+            FutureBuilder(
+              future: getEventsBySuggestions(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                }
+                if (snapshot.hasData) {
+                  return Expanded(
+                    // Add Expanded here
+                    child: ListView.builder(
+                      itemCount: eventsID.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              // Action when tapping on the card
+                              print('Clicked on event ${eventsID[index]}');
+                            },
+                            child: Card(
+                              elevation: 4,
+                              child: ListTile(
+                                title: Text(eventsID[index]),
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   );
-                },
-              ),
+                }
+                return Container(); // Return an empty container if no data is available
+              },
             ),
         ],
       ),
