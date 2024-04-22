@@ -5,8 +5,13 @@ import 'package:app/backend/Search_Bar/Search_Bar_Algo.dart';
 class CustomSearchBar extends StatefulWidget {
   final TextEditingController search;
   final VoidCallback onTapMenu;
+  final String currentScreen;
 
-  CustomSearchBar({Key? key, required this.search, required this.onTapMenu})
+  CustomSearchBar(
+      {Key? key,
+      required this.search,
+      required this.onTapMenu,
+      required this.currentScreen})
       : super(key: key);
 
   @override
@@ -30,6 +35,13 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   }
 
   void _onSearchTextChanged() async {
+    if (widget.currentScreen != 'EventSearch') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => EventSearch()),
+      );
+    }
+
     String input = widget.search.text;
     if (input.isNotEmpty) {
       // Call your search algorithm to get autocomplete suggestions
@@ -39,6 +51,8 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
     }
     setState(() {}); // Update the UI to reflect the changes
   }
+
+  void _SwitchScreens() {}
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +64,6 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
         children: [
           GestureDetector(
             onTap: () {
-              // Navigate to search screen
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => EventSearch()),
@@ -94,11 +107,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                   return ListTile(
                     title: Text(suggestions[index]['title']),
                     onTap: () {
-                      // Handle the selection of an autocomplete suggestion
-                      // For example, you can update the search text field with the selected suggestion
                       widget.search.text = suggestions[index]['title'];
-                      // Perform the search or any other action
-                      // ...
                     },
                   );
                 },
