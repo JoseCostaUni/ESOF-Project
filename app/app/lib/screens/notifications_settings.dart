@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:app/features/bottomappnavigator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:app/backend/notifications/createNotifications.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:app/backend/notifications/NotificationService.dart';
+import 'package:app/features/bottomappnavigator.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({Key? key}) : super(key: key);
@@ -13,8 +14,7 @@ class NotificationsPage extends StatefulWidget {
 class _NotificationsPageState extends State<NotificationsPage> {
   int _currentIndex = 3;
   bool _receiveNotifications = true;
-  final NotificationPreferenceHandler _notificationPreferenceHandler =
-      NotificationPreferenceHandler();
+  final NotificationService notificationService = NotificationService();
 
   @override
   void initState() {
@@ -27,11 +27,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
     setState(() {
       _receiveNotifications = prefs.getBool('receive_notifications') ?? true;
     });
-  }
-
-  Future<void> _saveNotificationPreference(bool value) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('receive_notifications', value);
   }
 
   bool getReceiveNotifications() => _receiveNotifications;
@@ -78,13 +73,11 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   leading: Radio<bool>(
                     value: true,
                     groupValue: _receiveNotifications,
-                    onChanged: (value) {
-                      _notificationPreferenceHandler
-                          .setNotificationPreference(value!);
+                    onChanged: (value) async {
                       setState(() {
                         _receiveNotifications = value!;
-                        _saveNotificationPreference(value);
                       });
+                      notificationService.turnOnPermissions();
                     },
                   ),
                 ),
@@ -94,13 +87,11 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   leading: Radio<bool>(
                     value: false,
                     groupValue: _receiveNotifications,
-                    onChanged: (value) {
+                    onChanged: (value) async {
                       setState(() {
-                        _notificationPreferenceHandler
-                            .setNotificationPreference(value!);
                         _receiveNotifications = value!;
-                        _saveNotificationPreference(value);
                       });
+                      notificationService.turnOff();
                     },
                   ),
                 ),
@@ -110,14 +101,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _notificationPreferenceHandler.createNotification(
-            context,
-            1,
-            'basic_channel',
-            'Notification Test',
-            'This is a test notification',
-          );
+        onPressed: () async {
+          await NotificationService.showNotifications(
+              title: 'Notification Test', body: 'This is a test notification');
         },
         child: const Icon(Icons.notifications),
       ),

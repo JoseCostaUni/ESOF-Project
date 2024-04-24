@@ -130,7 +130,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return CircularProgressIndicator();
                 }
-                if (snapshot.hasData) {
+                if (eventsID.isNotEmpty) {
                   return Expanded(
                     // Add Expanded here
                     child: ListView.builder(
