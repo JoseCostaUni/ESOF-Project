@@ -1,6 +1,8 @@
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/features/searchbar.dart';
 import 'package:app/read%20data/Read_event.dart';
+import 'package:app/read%20data/get_some_info_event.dart';
+import 'package:app/screens/perfil_do_evento.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:app/screens/eventsearch.dart';
@@ -23,6 +25,7 @@ class _HomePageState extends State<HomePage> {
     eventsID.clear();
     await FirebaseFirestore.instance
         .collection('event')
+        .orderBy('createdAt', descending: true)
         .get()
         .then((snapshot) => snapshot.docs.forEach((element) {
               print(element.reference);
@@ -52,13 +55,12 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
                         onTap: () {
-                          // Ação ao clicar no cartão
-                          print('Clicou no evento ${eventsID[index]}');
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => const PerfilEvent()));
                         },
                         child: Card(
                           elevation: 4,
                           child: ListTile(
-                            title: GetEvents(documentId: eventsID[index]),
+                            title: GetInfo(docID: eventsID[index]),
                           ),
                         ),
                       ),

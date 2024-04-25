@@ -1,5 +1,7 @@
 import 'dart:io';
-
+import 'package:app/features/maps_screen.dart';
+import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/screens/homepage.dart';
@@ -9,6 +11,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateEvent extends StatefulWidget {
@@ -39,28 +42,29 @@ class _CreateEventState extends State<CreateEvent> {
       });
     }
   }
-  
+
   Future<String?> _uploadImageToFirebaseStorage(File imageFile) async {
-  try {
-    // Crie uma referência para o local onde deseja armazenar a imagem no Firebase Storage
-    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
-        .ref()
-        .child('event_images')
-        .child(DateTime.now().millisecondsSinceEpoch.toString() + '.jpg');
+    try {
+      // Crie uma referência para o local onde deseja armazenar a imagem no Firebase Storage
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('event_images')
+          .child(DateTime.now().millisecondsSinceEpoch.toString() + '.jpg');
 
-    // Faça o upload do arquivo para o Firebase Storage
-    await ref.putFile(imageFile);
+      // Faça o upload do arquivo para o Firebase Storage
+      await ref.putFile(imageFile);
 
-    // Obtenha a URL da imagem carregada
-    String imageUrl = await ref.getDownloadURL();
+      // Obtenha a URL da imagem carregada
+      String imageUrl = await ref.getDownloadURL();
 
-    // Retorne a URL da imagem
-    return imageUrl;
-  } catch (e) {
-    print('Erro ao fazer upload da imagem para o Firebase Storage: $e');
-    return null;
+      // Retorne a URL da imagem
+      return imageUrl;
+    } catch (e) {
+      print('Erro ao fazer upload da imagem para o Firebase Storage: $e');
+      return null;
+    }
   }
-}
+
   Future<void> _createEvent() async {
     if (_titleController.text.isEmpty ||
         _dateController.text.isEmpty ||
@@ -70,11 +74,11 @@ class _CreateEventState extends State<CreateEvent> {
       return;
     }
     String? imageUrl = await _uploadImageToFirebaseStorage(__image!);
-      if (imageUrl != null) {
+    if (imageUrl != null) {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         try {
-         // Salve o evento no Firestore junto com a URL da imagem
+          // Salve o evento no Firestore junto com a URL da imagem
           await FirebaseFirestore.instance.collection("event").add({
             "title": _titleController.text,
             "dateTime": _dateController.text,
@@ -85,16 +89,18 @@ class _CreateEventState extends State<CreateEvent> {
           });
           Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const HomePage(title: 'Home')));
+              MaterialPageRoute(
+                  builder: (context) => const HomePage(title: 'Home')));
         } catch (e) {
           print('Erro ao criar o evento: $e');
           // Handle error (show a snackbar, dialog, etc.)
         }
-      }  else {
+      } else {
         // Handle case when user is not logged in
       }
     }
   }
+
   Future<void> _cropImage() async {
     if (__image != null) {
       final croppedFile = await ImageCropper().cropImage(
@@ -246,20 +252,53 @@ class _CreateEventState extends State<CreateEvent> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      TextField(
-                        controller: _dateController,
-                        decoration: const InputDecoration(
-                          hintText: 'Date and time',
-                          prefixIcon: Icon(Icons.text_fields),
+                      GestureDetector(
+                        onTap: () async {
+                          DateTime? dateTime = await showOmniDateTimePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1600)
+                                .subtract(const Duration(days: 3652)),
+                            lastDate:
+                                DateTime.now().add(const Duration(days: 3652)),
+                          );
+                          if (dateTime != null) {
+                            String formattedDateTime =
+                                DateFormat('yyyy-MM-dd HH:mm').format(dateTime);
+                            setState(() {
+                              _dateController.text = formattedDateTime;
+                            });
+                          }
+                        },
+                        child: TextField(
+                          controller: _dateController,
+                          decoration: const InputDecoration(
+                            hintText: 'Select Date and Time',
+                            prefixIcon: Icon(Icons.calendar_today),
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black)),
+                            disabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black)),
+                          ),
+                          enabled: false,
+                          style: TextStyle(color: Colors.black),
                         ),
                       ),
                       const SizedBox(height: 10),
                       TextField(
                         controller: _locationController,
-                        decoration: const InputDecoration(
-                          hintText: 'Location',
-                          prefixIcon: Icon(Icons.text_fields),
-                        ),
+                        decoration: InputDecoration(
+                            hintText: 'Location',
+                            prefixIcon: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const MapsScreen()));
+                              },
+                              child: const Icon(Icons.location_on_outlined),
+                            )),
                       ),
                       const SizedBox(height: 10),
                       TextField(
