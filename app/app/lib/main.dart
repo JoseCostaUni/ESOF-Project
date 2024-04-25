@@ -1,14 +1,20 @@
 // ignore_for_file: unused_import
 
+import 'package:app/backend/notifications/NotificationService.dart';
 import 'package:app/screens/homepage.dart';
 import 'package:app/screens/login.dart';
 import 'package:app/screens/profile.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.initializeLocalNotifications();
   await Firebase.initializeApp();
 
   void main() async {

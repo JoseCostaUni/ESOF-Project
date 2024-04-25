@@ -1,12 +1,23 @@
 import 'package:app/screens/eventsearch.dart';
 import 'package:flutter/material.dart';
 import 'package:app/backend/Search_Bar/Search_Bar_Algo.dart';
+import 'package:app/features/bottomappnavigator.dart';
+import 'package:app/features/searchbar.dart';
+import 'package:app/read%20data/firestore_read_changes.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:app/screens/eventsearch.dart';
 
 class CustomSearchBar extends StatefulWidget {
   final TextEditingController search;
   final VoidCallback onTapMenu;
+  final String currentScreen;
 
-  CustomSearchBar({Key? key, required this.search, required this.onTapMenu})
+  CustomSearchBar(
+      {Key? key,
+      required this.search,
+      required this.onTapMenu,
+      required this.currentScreen})
       : super(key: key);
 
   @override
@@ -16,6 +27,7 @@ class CustomSearchBar extends StatefulWidget {
 class _CustomSearchBarState extends State<CustomSearchBar> {
   EventHandler eventHandler = EventHandler();
   List<Map<String, dynamic>> suggestions = [];
+  List<String> eventsID = [];
 
   @override
   void initState() {
@@ -29,7 +41,32 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
     super.dispose();
   }
 
+  Future<void> getEventsBySuggestions() async {
+    eventsID.clear();
+
+    List suggestionTitles =
+        suggestions.map((suggestion) => suggestion['title']).toList();
+
+    await FirebaseFirestore.instance
+        .collection('event')
+        .where('title', whereIn: suggestionTitles)
+        .get()
+        .then((snapshot) {
+      snapshot.docs.forEach((element) {
+        print(element.reference);
+        eventsID.add(element.reference.id);
+      });
+    });
+  }
+
   void _onSearchTextChanged() async {
+    if (widget.currentScreen != 'EventSearch') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => EventSearch()),
+      );
+    }
+
     String input = widget.search.text;
     if (input.isNotEmpty) {
       // Call your search algorithm to get autocomplete suggestions
@@ -39,6 +76,8 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
     }
     setState(() {}); // Update the UI to reflect the changes
   }
+
+  void _SwitchScreens() {}
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +89,6 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
         children: [
           GestureDetector(
             onTap: () {
-              // Navigate to search screen
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => EventSearch()),
@@ -86,23 +124,39 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             ),
           ),
           if (suggestions.isNotEmpty)
-            Container(
-              height: 200,
-              child: ListView.builder(
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(suggestions[index]['title']),
-                    onTap: () {
-                      // Handle the selection of an autocomplete suggestion
-                      // For example, you can update the search text field with the selected suggestion
-                      widget.search.text = suggestions[index]['title'];
-                      // Perform the search or any other action
-                      // ...
-                    },
+            FutureBuilder(
+              future: getEventsBySuggestions(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                }
+                if (eventsID.isNotEmpty) {
+                  return Expanded(
+                    // Add Expanded here
+                    child: ListView.builder(
+                      itemCount: eventsID.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              // Action when tapping on the card
+                              print('Clicked on event ${eventsID[index]}');
+                            },
+                            child: Card(
+                              elevation: 4,
+                              child: ListTile(
+                                title: Text(eventsID[index]),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   );
-                },
-              ),
+                }
+                return Container(); // Return an empty container if no data is available
+              },
             ),
         ],
       ),
