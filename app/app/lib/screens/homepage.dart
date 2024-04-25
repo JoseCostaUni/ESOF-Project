@@ -1,7 +1,6 @@
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/features/searchbar.dart';
 import 'package:app/read%20data/Read_event.dart';
-import 'package:app/read%20data/get_some_info_event.dart';
 import 'package:app/screens/perfil_do_evento.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -16,21 +15,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<String> eventsID = [];
   int _currentIndex = 0;
   final TextEditingController _searchcontroller = TextEditingController();
-  Map<String, dynamic>? _createdEvent;
 
-  Future<void> getEventsId() async {
-    eventsID.clear();
-    await FirebaseFirestore.instance
+  // Método para buscar os eventos
+  Future<List<Map<String, dynamic>>> getEvents() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('event')
         .orderBy('createdAt', descending: true)
-        .get()
-        .then((snapshot) => snapshot.docs.forEach((element) {
-              print(element.reference);
-              eventsID.add(element.reference.id);
-            }));
+        .get();
+    return querySnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
   }
 
   @override
@@ -47,32 +41,47 @@ class _HomePageState extends State<HomePage> {
                 MaterialPageRoute(builder: (context) => EventSearch()),
               );
             },
-            currentScreen: 'HomePage',
+            currentScreen: '',
             // Adicione ação ao menu aqui
           ),
           Expanded(
-            child: FutureBuilder(
-              future: getEventsId(),
+            child: FutureBuilder<List<Map<String, dynamic>>>(
+              future: getEvents(),
               builder: (context, snapshot) {
-                return ListView.builder(
-                  itemCount: eventsID.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (_) => const PerfilEvent()));
-                        },
-                        child: Card(
-                          elevation: 4,
-                          child: ListTile(
-                            title: GetInfo(docID: eventsID[index]),
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                } else {
+                  return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      final event = snapshot.data![index];
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (_) => const PerfilEvent()));
+                          },
+                          child: Card(
+                            elevation: 4,
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                backgroundImage: NetworkImage(event['imageUrl'] ?? ''), // Exibição da foto
+                              ),
+                              title: Text(event['title'] ?? ''),
+                              subtitle: Text(event['location'] ?? ''),
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                );
+                      );
+                    },
+                  );
+                }
               },
             ),
           ),
