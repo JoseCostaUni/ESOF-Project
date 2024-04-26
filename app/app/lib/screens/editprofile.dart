@@ -21,13 +21,15 @@ class _EditProfileState extends State<EditProfile> {
   String _imageUrl = "";
   bool resized = false;
 
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
 
+  @override
   void initState() {
-    super.initState();
+    _loadText();
     _loadImage();
+    super.initState();
   }
 
   Future<void> updateUserDetails(User? userCredential) async {
@@ -44,6 +46,32 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
+  Future<void> _loadText() async{
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        final docSnapshot = await FirebaseFirestore.instance
+            .collection("users")
+            .doc(user.email)
+            .get();
+
+
+        setState(() {
+          final TextEditingController _nameController2 = TextEditingController(text: docSnapshot.get('name'));
+          final TextEditingController _usernameController2 = TextEditingController(text: docSnapshot.get('username'));
+          final TextEditingController _descriptionController2 = TextEditingController(text: docSnapshot.get('description'));
+            
+          _nameController = _nameController2;
+          _usernameController = _usernameController2;
+          _descriptionController = _descriptionController2;
+        });
+        
+      } catch (e) {
+        print('Failed to load profile details from Firebase Storage: $e');
+      }
+    }
+  }
+
   Future<void> _loadImage() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -52,6 +80,7 @@ class _EditProfileState extends State<EditProfile> {
             .collection("users")
             .doc(user.email)
             .get();
+
         final String imageUrl = docSnapshot.get('profilepicture');
         if (imageUrl.isNotEmpty) {
           setState(() {
