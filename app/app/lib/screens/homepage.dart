@@ -4,6 +4,7 @@ import 'package:app/read%20data/firestore_read_changes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:app/screens/eventsearch.dart';
+import 'package:app/screens/event_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title});
@@ -54,6 +55,14 @@ class _HomePageState extends State<HomePage> {
                         onTap: () {
                           // Ação ao clicar no cartão
                           print('Clicou no evento ${eventsID[index]}');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EventPage(
+                                eventId: eventsID[index],
+                              ),
+                            ),
+                          );
                         },
                         child: Card(
                           elevation: 4,
