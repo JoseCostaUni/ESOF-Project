@@ -6,7 +6,9 @@ import 'package:app/screens/login.dart';
 import 'package:app/screens/notifications_settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key});
@@ -22,6 +24,22 @@ class _SettingPageState extends State<SettingsPage> {
     await prefs.remove('user_email');
     await prefs.remove('user_password');
     await prefs.remove('profile_image');
+  }
+
+  Future<void> _deleteUser() async{
+    final user = FirebaseAuth.instance.currentUser;
+    try {
+      if(user != null){
+        final userEmail = user.email;
+        await FirebaseFirestore.instance.collection("users").doc(user.email).delete();
+        await _removeLogIn();
+        final ref = firebase_storage.FirebaseStorage.instance.ref().child("user_profile").child('$userEmail.jpg');
+        await ref.delete();
+      }
+      print("Document successfully deleted");
+    } catch (e) {
+      print("Error deleting document: $e");
+    }
   }
 
   @override
@@ -203,16 +221,42 @@ class _SettingPageState extends State<SettingsPage> {
               ),
             ),
           ),
-          const SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: SizedBox(
               width: 150,
               child: ElevatedButton(
                 onPressed: () {
-                  // Implement your logic here
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Are you sure?'),
+                        content: const Text("Deleting your account is permanent and your can't get it back"),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              _deleteUser();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => const LoginPage()),
+                              );
+                            },
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
-                child: const Text('Add Account'),
+                child: const Text('Delete account'),
               ),
             ),
           ),
