@@ -23,22 +23,50 @@ class _SettingPageState extends State<SettingsPage> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('user_email');
     await prefs.remove('user_password');
-    await prefs.remove('profile_image');
   }
 
-  Future<void> _deleteUser() async{
+  TextEditingController _newPasswordController = TextEditingController();
+  TextEditingController _oldPasswordController = TextEditingController();
+  TextEditingController _deletePasswordController = TextEditingController();
+
+  Future<void> _deleteUser(String delpassword) async {
     final user = FirebaseAuth.instance.currentUser;
+    if(user != null){
     try {
-      if(user != null){
+        AuthCredential credential = EmailAuthProvider.credential(email: user.email!, password: delpassword);
+        await user.reauthenticateWithCredential(credential);
+        await user.delete();
         final userEmail = user.email;
-        await FirebaseFirestore.instance.collection("users").doc(user.email).delete();
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(user.email)
+            .delete();
         await _removeLogIn();
-        final ref = firebase_storage.FirebaseStorage.instance.ref().child("user_profile").child('$userEmail.jpg');
+        final ref = firebase_storage.FirebaseStorage.instance
+            .ref()
+            .child("user_profile")
+            .child('$userEmail.jpg');
         await ref.delete();
-      }
       print("Document successfully deleted");
     } catch (e) {
       print("Error deleting document: $e");
+    }
+  }
+}
+
+  Future<void> _changePassword(String oldPassword,String new_password) async {
+    final user = FirebaseAuth.instance.currentUser;
+    try {
+      if (user != null) {
+         AuthCredential credential = EmailAuthProvider.credential(email: user.email!, password: oldPassword);
+        await user.reauthenticateWithCredential(credential);
+        await user.updatePassword(new_password);
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('user_password', new_password);
+      }
+    } catch (e) {
+      print("Error deleting document: $e");
+       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Passwords do not match.'),),);
     }
   }
 
@@ -232,8 +260,16 @@ class _SettingPageState extends State<SettingsPage> {
                     builder: (BuildContext context) {
                       return AlertDialog(
                         title: const Text('Are you sure?'),
-                        content: const Text("Deleting your account is permanent and your can't get it back"),
+                        content: const Text(
+                            "Deleting your account is permanent and your can't get it back"),
                         actions: <Widget>[
+                          TextFormField(
+                            controller: _deletePasswordController,
+                            decoration: const InputDecoration(
+                              labelText: 'Insert Password',
+                            ),
+                            obscureText: true,
+                          ),
                           TextButton(
                             onPressed: () {
                               Navigator.pop(context);
@@ -242,7 +278,8 @@ class _SettingPageState extends State<SettingsPage> {
                           ),
                           TextButton(
                             onPressed: () {
-                              _deleteUser();
+                              String password = _deletePasswordController.text;
+                              _deleteUser(password);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -257,6 +294,57 @@ class _SettingPageState extends State<SettingsPage> {
                   );
                 },
                 child: const Text('Delete account'),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: SizedBox(
+              width: 150,
+              child: ElevatedButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Change Password'),
+                        actions: <Widget>[
+                          TextFormField(
+                            controller: _oldPasswordController,
+                            decoration: const InputDecoration(
+                              labelText: 'Old Password',
+                            ),
+                            obscureText: true,
+                          ),
+                          TextFormField(
+                            controller: _newPasswordController,
+                            decoration: const InputDecoration(
+                              labelText: 'New Password',
+                            ),
+                            obscureText: true,
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              String newPassword = _newPasswordController.text;
+                              String oldPassword =
+                                  _oldPasswordController.text;
+                                _changePassword(oldPassword,newPassword);
+                                Navigator.pop(context);
+                            },
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: const Text('Change Password'),
               ),
             ),
           ),
