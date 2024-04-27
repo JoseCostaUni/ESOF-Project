@@ -2,6 +2,7 @@ import 'package:app/screens/homepage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'login.dart';
 
 class VerifyEmailPage extends StatefulWidget {
   const VerifyEmailPage({Key? key});
@@ -37,11 +38,13 @@ class _VerifyEmailPage extends State<VerifyEmailPage> {
   }
 
   Future sendVerificationEmail() async {
+    print("--------------------a----------------");
     final user = FirebaseAuth.instance.currentUser!;
     await user.sendEmailVerification();
   }
 
   Future checkEmailVerified() async {
+    print("--------------------b----------------");
     await FirebaseAuth.instance.currentUser!.reload();
     setState(() {
       isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
@@ -49,6 +52,14 @@ class _VerifyEmailPage extends State<VerifyEmailPage> {
     if (isEmailVerified) {
       timer?.cancel();
     }
+  }
+
+  Future go_login() async {
+    FirebaseAuth.instance.signOut();
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginPage()),
+    );
   }
 
   @override
@@ -77,7 +88,7 @@ class _VerifyEmailPage extends State<VerifyEmailPage> {
                     'Resent email',
                     style: TextStyle(fontSize: 24),
                   ),
-                  onPressed: () {},
+                  onPressed: () => sendVerificationEmail(),
                 ),
                 const SizedBox(height: 8),
                 TextButton(
@@ -88,7 +99,7 @@ class _VerifyEmailPage extends State<VerifyEmailPage> {
                     'Cancel',
                     style: TextStyle(fontSize: 24),
                   ),
-                  onPressed: () => FirebaseAuth.instance.signOut(),
+                  onPressed: () => go_login(),
                 )
               ],
             ),

@@ -39,13 +39,20 @@ class _LoginPageState extends State<LoginPage> {
 
     if (email != null && password != null) {
       final user = await _auth.signInWithEmailAndPassword(email, password);
-      if (UserCredential != null) {
+      if (!FirebaseAuth.instance.currentUser!.emailVerified) {
         // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => const VerifyEmailPage()),
         );
       }
+      else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomePage(title: 'Home')),
+        );
+      }
+
     }
   }
 
