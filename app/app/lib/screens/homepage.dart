@@ -24,7 +24,18 @@ class _HomePageState extends State<HomePage> {
         .collection('event')
         .orderBy('createdAt', descending: true)
         .get();
-    return querySnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+    return querySnapshot.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
+  }
+
+  void checkScreen(String currentScreen) {
+    if (currentScreen != 'EventSearch') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => EventSearch()),
+      );
+    }
   }
 
   @override
@@ -35,14 +46,9 @@ class _HomePageState extends State<HomePage> {
         children: [
           CustomSearchBar(
             search: _searchcontroller,
-            onTapMenu: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => EventSearch()),
-              );
-            },
-            currentScreen: '',
-            // Adicione ação ao menu aqui
+            currentScreen: 'homepage',
+            onTapMenu: () => checkScreen('homepage'),
+            onChanged: () => {},
           ),
           Expanded(
             child: FutureBuilder<List<Map<String, dynamic>>>(
@@ -65,13 +71,18 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.all(8.0),
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (_) => const PerfilEvent()));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => const PerfilEvent()));
                           },
                           child: Card(
                             elevation: 4,
                             child: ListTile(
                               leading: CircleAvatar(
-                                backgroundImage: NetworkImage(event['imageUrl'] ?? ''), // Exibição da foto
+                                backgroundImage: NetworkImage(
+                                    event['imageUrl'] ??
+                                        ''), // Exibição da foto
                               ),
                               title: Text(event['title'] ?? ''),
                               subtitle: Text(event['location'] ?? ''),

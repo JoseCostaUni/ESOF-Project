@@ -7,6 +7,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class EventHandler {
   List<Map<String, dynamic>> eventsArray = [];
   Map<String, Map<String, dynamic>> eventsMap = {};
+  List<Map<String, dynamic>> suggestions = [];
+  List<String> eventsID = [];
+  List<Map<String, dynamic>> events = [];
 
   Future<List<Map<String, dynamic>>> getAllEvents() async {
     List<Map<String, dynamic>> events = [];
@@ -123,5 +126,33 @@ class EventHandler {
     }
 
     return recommendations;
+  }
+
+  List<Map<String, dynamic>> getEvents() {
+    return events;
+  }
+
+  void calcEvents(String input) async {
+    if (input.isNotEmpty) {
+      suggestions = await calculateRecommendations(input);
+    } else {
+      suggestions.clear();
+      events = [];
+    }
+
+    List suggestionTitles =
+        suggestions.map((suggestion) => suggestion['title']).toList();
+
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('event')
+        .orderBy('createdAt', descending: true)
+        .get();
+
+    querySnapshot.docs.forEach((doc) {
+      Map<String, dynamic> eventData = doc.data() as Map<String, dynamic>;
+      events.add(eventData);
+    });
+
+    events.removeWhere((event) => !suggestionTitles.contains(event['title']));
   }
 }
