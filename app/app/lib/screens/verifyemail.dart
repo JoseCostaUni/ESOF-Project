@@ -53,10 +53,45 @@ class _VerifyEmailPage extends State<VerifyEmailPage> {
 
   @override
   Widget build(BuildContext context) => isEmailVerified
-      ? HomePage(title: "home")
+      ? const HomePage(title: "home")
       : Scaffold(
           appBar: AppBar(
-            title: Text('Verify Email'),
+            title: const Text('Verify Email'),
+          ),
+          body: Padding(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              children: [
+                const Text(
+                  'Verifification email has been sent.',
+                  style: TextStyle(fontSize: 20),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 24),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(50),
+                  ),
+                  icon: const Icon(Icons.email, size: 32),
+                  label: const Text(
+                    'Resent email',
+                    style: TextStyle(fontSize: 24),
+                  ),
+                  onPressed: () {},
+                ),
+                const SizedBox(height: 8),
+                TextButton(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(50),
+                  ),
+                  child: const Text(
+                    'Cancel',
+                    style: TextStyle(fontSize: 24),
+                  ),
+                  onPressed: () => FirebaseAuth.instance.signOut(),
+                )
+              ],
+            ),
           ),
         );
 }
