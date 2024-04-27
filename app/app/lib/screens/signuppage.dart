@@ -3,6 +3,7 @@ import 'package:app/screens/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'verifyemail.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key});
@@ -12,14 +13,12 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUp extends State<SignUp> {
-
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _descriptionwordController = TextEditingController();
-
-
+  final TextEditingController _descriptionwordController =
+      TextEditingController();
 
   void registeredUser() async {
     showDialog(
@@ -34,7 +33,8 @@ class _SignUp extends State<SignUp> {
       CreateuserDocument(userCredential);
       Navigator.pop(context);
       if (userCredential != null) {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const HomePage(title: '')));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (_) => const VerifyEmailPage()));
       }
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
