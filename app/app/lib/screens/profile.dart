@@ -4,9 +4,9 @@ import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/screens/editprofile.dart';
 import 'package:app/screens/settingpages.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 
 class MyProfilePage extends StatefulWidget {
@@ -36,13 +36,21 @@ class _MyProfilePageState extends State<MyProfilePage> {
   }
 
   Future<void> _loadImage() async {
-    final prefs = await SharedPreferences.getInstance();
-    final imagePath = prefs.getString('profile_image');
-
-    if (imagePath != null) {
-      setState(() {
-        _image = File(imagePath);
-      });
+    final user = currentuser;
+    if(user != null){
+      try{
+          final docSnapshot = await FirebaseFirestore.instance.collection("users").doc(user.email).get();
+          final String imageUrl = docSnapshot.get('profilepicture');
+          if (imageUrl != "") {
+            firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child(imageUrl);
+            final File imageFile = File(await ref.getDownloadURL());
+            setState(() {
+              _image = imageFile;
+            });
+          }
+        } catch (e) {
+          print('Failed to load image from Firebase Storage: $e');
+        }
     }
   }
 

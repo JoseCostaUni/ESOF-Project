@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'profile.dart';
 import 'package:app/screens/homepage.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -22,6 +22,7 @@ class _EditProfileState extends State<EditProfile> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+
   void initState() {
     super.initState();
     _loadImage();
@@ -60,6 +61,44 @@ class _EditProfileState extends State<EditProfile> {
         ),
       );
     }
+  }
+
+  void updateProfilePicture() async{
+    showDialog(
+        context: context,
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(),
+            ));
+
+    try {
+      User? userCredential = await FirebaseAuth.instance.currentUser;
+      Navigator.pop(context);
+
+      if (userCredential != null) {
+        updateUserDetails(userCredential);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Profile Picture updated suscefully'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => const MyProfilePage(title: '', username: '')));
+      }
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to update profile picture: $e'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
+
+
   }
 
   void updateDescription() async {
@@ -147,13 +186,18 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future<void> _loadImage() async {
-    final prefs = await SharedPreferences.getInstance();
-    final imagePath = prefs.getString('profile_image');
-
-    if (imagePath != null) {
-      setState(() {
-        _image = File(imagePath);
-      });
+    final user = FirebaseAuth.instance.currentUser;
+    if(user != null){
+      try{
+        final docSnapshot = await FirebaseFirestore.instance.collection("users").doc(user.email).get();
+          final imageUrl = docSnapshot.get('profilepicture');
+          if (imageUrl != null) {
+            firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child(imageUrl);
+            _image = File(await ref.getDownloadURL());
+          }
+        } catch (e) {
+          print('Failed to load image from Firebase Storage: $e');
+      }
     }
   }
 
@@ -219,14 +263,48 @@ class _EditProfileState extends State<EditProfile> {
     setState(() {
       _image = null;
     });
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('profile_image');
+
+    try {
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child('user_profile').child(DateTime.now().millisecondsSinceEpoch.toString() + '.jpg');
+
+      await ref.putFile(_image!);
+
+      final String imageUrl = await ref.getDownloadURL();
+
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(user.email)
+            .update({'profilepicture': null});
+        final imageUrl = user.photoURL;
+        if (imageUrl != null) {
+          final ref = firebase_storage.FirebaseStorage.instance.refFromURL(imageUrl);
+          await ref.delete();
+        }
+      }
+    } catch (e) {
+      print('Failed to upload image to Firebase Storage: $e');
+    }
   }
 
   Future<void> _saveImage() async {
-    if (_image != null) {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('profile_image', _image!.path);
+    try {
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child('user_profile').child(DateTime.now().millisecondsSinceEpoch.toString() + '.jpg');
+
+      await ref.putFile(_image!);
+
+      final String imageUrl = await ref.getDownloadURL();
+
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(user.email)
+            .update({'profilepicture': imageUrl});
+      }
+    } catch (e) {
+      print('Failed to upload image to Firebase Storage: $e');
     }
   }
 
