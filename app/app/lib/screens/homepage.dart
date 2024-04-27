@@ -1,6 +1,5 @@
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/features/searchbar.dart';
-import 'package:app/read%20data/Read_event.dart';
 import 'package:app/screens/perfil_do_evento.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +64,7 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.all(8.0),
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (_) => const PerfilEvent()));
+                            Navigator.push(context, MaterialPageRoute(builder: (_) =>  PerfilEvent()));
                           },
                           child: Card(
                             elevation: 4,
