@@ -71,88 +71,72 @@ class EventHandler {
     });
   }
 
-  Future<List<Map<String, dynamic>>> calculateRecommendations(
-      String input) async {
-    List<Map<String, dynamic>> recommendations = [];
-    List<String> itemNames = [];
-    Map<String, Map<String, dynamic>> eventsMap = {};
-
-    List<Map<String, dynamic>> allEvents = await getAllEvents();
-
-    for (var event in allEvents) {
-      String title = event['title'];
-      title = title.toLowerCase();
-      itemNames.add(title);
-      eventsMap[title] = event;
-    }
-
-    if (input.isNotEmpty) {
-      input = input.toLowerCase();
-
-      itemNames = itemNames.map((item) => item.toLowerCase()).toList();
-
-      List<String> filteredItems =
-          itemNames.where((item) => item.startsWith(input)).toList();
-
-      itemNames = itemNames.where((item) => !item.startsWith(input)).toList();
-
-      Map<String, int> suggestionsMap = {};
-      filteredItems.forEach((item) {
-        int differences = 0;
-        for (int i = 0; i < input.length; i++) {
-          if (item[i] != input[i]) {
-            differences++;
-          }
-        }
-        suggestionsMap[item] = differences;
-      });
-
-      List<String> sortedItems = filteredItems
-        ..sort((a, b) =>
-            (a.length - input.length).abs() - (b.length - input.length).abs());
-
-      List<MapEntry<String, int>> sortedMap = suggestionsMap.entries.toList()
-        ..sort((a, b) => a.value - b.value);
-
-      List<String> result = [];
-      result.addAll(sortedItems);
-      result.addAll(sortedMap.map((item) => item.key));
-
-      result = result.toSet().toList();
-
-      for (String name in result) {
-        recommendations.add(eventsMap[name]!);
-      }
-    }
-
-    return recommendations;
-  }
-
   List<Map<String, dynamic>> getEvents() {
     return events;
   }
 
-  void calcEvents(String input) async {
+  Future<List<Map<String, dynamic>>> calcEvents(String input) async {
     if (input.isNotEmpty) {
-      suggestions = await calculateRecommendations(input);
+      List<Map<String, dynamic>> recommendations = [];
+      List<String> itemNames = [];
+      Map<String, Map<String, dynamic>> eventsMap = {};
+
+      List<Map<String, dynamic>> allEvents = await getAllEvents();
+
+      for (var event in allEvents) {
+        String title = event['title'];
+        title = title.toLowerCase();
+        itemNames.add(title);
+        eventsMap[title] = event;
+      }
+
+      if (input.isNotEmpty) {
+        input = input.toLowerCase();
+
+        itemNames = itemNames.map((item) => item.toLowerCase()).toList();
+
+        List<String> filteredItems =
+            itemNames.where((item) => item.startsWith(input)).toList();
+
+        itemNames = itemNames.where((item) => !item.startsWith(input)).toList();
+
+        Map<String, int> suggestionsMap = {};
+        filteredItems.forEach((item) {
+          int differences = 0;
+          for (int i = 0; i < input.length; i++) {
+            if (item[i] != input[i]) {
+              differences++;
+            }
+          }
+          suggestionsMap[item] = differences;
+        });
+
+        List<String> sortedItems = filteredItems
+          ..sort((a, b) =>
+              (a.length - input.length).abs() -
+              (b.length - input.length).abs());
+
+        List<MapEntry<String, int>> sortedMap = suggestionsMap.entries.toList()
+          ..sort((a, b) => a.value - b.value);
+
+        List<String> result = [];
+        result.addAll(sortedItems);
+        result.addAll(sortedMap.map((item) => item.key));
+
+        result = result.toSet().toList();
+
+        for (String name in result) {
+          recommendations.add(eventsMap[name]!);
+        }
+      }
+
+      suggestions = recommendations; // Update suggestions with the latest data
     } else {
-      suggestions.clear();
-      events = [];
+      suggestions = []; // Clear suggestions if input is empty
     }
 
-    List suggestionTitles =
-        suggestions.map((suggestion) => suggestion['title']).toList();
+    events = [...suggestions]; // Update events with the latest suggestions
 
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('event')
-        .orderBy('createdAt', descending: true)
-        .get();
-
-    querySnapshot.docs.forEach((doc) {
-      Map<String, dynamic> eventData = doc.data() as Map<String, dynamic>;
-      events.add(eventData);
-    });
-
-    events.removeWhere((event) => !suggestionTitles.contains(event['title']));
+    return events;
   }
 }

@@ -47,9 +47,9 @@ class _EventSearchState extends State<EventSearch> {
 
   void calcReccomendations() async {
     String input = _searchcontroller.text;
-    eventHandler.calcEvents(input);
+    await eventHandler.calcEvents(input);
     suggestions = await eventHandler.getEvents();
-    events = suggestions;
+    events = [...suggestions];
     String a = "a";
     setState(() {});
   }
@@ -73,7 +73,7 @@ class _EventSearchState extends State<EventSearch> {
             search: _searchcontroller,
             currentScreen: 'EventSearch',
             onTapMenu: () => checkScreen(),
-            onChanged: () => calcReccomendations(),
+            onChanged: () => {events.clear(), calcReccomendations()},
           ),
           if (events.isEmpty) Center(child: Text('No events found')),
           if (events.isNotEmpty)
@@ -104,8 +104,13 @@ class _EventSearchState extends State<EventSearch> {
                             child: Card(
                               elevation: 4,
                               child: ListTile(
+                                leading: CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                      event['imageUrl'] ??
+                                          ''), // Exibição da foto
+                                ),
                                 title: Text(event['title'] ?? ''),
-                                // Add other fields as needed
+                                subtitle: Text(event['location'] ?? ''),
                               ),
                             ),
                           ),
