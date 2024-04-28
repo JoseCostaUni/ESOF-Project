@@ -19,13 +19,15 @@ class CustomSearchBar extends StatefulWidget {
   final VoidCallback onTapMenu;
   final VoidCallback onChanged;
   final String currentScreen;
+  Function(String)? onOptionSelected;
 
   CustomSearchBar(
       {Key? key,
       required this.search,
       required this.onTapMenu,
       required this.onChanged,
-      required this.currentScreen})
+      required this.currentScreen,
+      this.onOptionSelected})
       : super(key: key);
 
   @override
@@ -37,6 +39,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   List<Map<String, dynamic>> suggestions = [];
   List<String> eventsID = [];
   List<Map<String, dynamic>> events = [];
+  String? selectedOption = "";
 
   @override
   void initState() {
@@ -52,27 +55,6 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
 
   List<Map<String, dynamic>> getEvents() {
     return events;
-  }
-
-  void calcEvents() async {
-    if (suggestions.isEmpty) {
-      events = [];
-    }
-
-    List suggestionTitles =
-        suggestions.map((suggestion) => suggestion['title']).toList();
-
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('event')
-        .orderBy('createdAt', descending: true)
-        .get();
-
-    querySnapshot.docs.forEach((doc) {
-      Map<String, dynamic> eventData = doc.data() as Map<String, dynamic>;
-      events.add(eventData);
-    });
-
-    events.removeWhere((event) => !suggestionTitles.contains(event['title']));
   }
 
   void _onSearchTextChanged() async {
@@ -105,9 +87,27 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                 hintText: 'Search Event',
                 hintStyle: const TextStyle(color: Colors.grey),
                 prefixIcon: const Icon(Icons.search, color: Colors.black),
-                suffixIcon: GestureDetector(
-                  onTap: widget.onTapMenu,
-                  child: const Icon(Icons.menu),
+                suffixIcon: PopupMenuButton(
+                  itemBuilder: (BuildContext context) {
+                    return [
+                      const PopupMenuItem(
+                        value: 'People',
+                        child: Text('People'),
+                      ),
+                      const PopupMenuItem(
+                        value: 'Events',
+                        child: Text('Events'),
+                      ),
+                    ];
+                  },
+                  onSelected: (value) {
+                    setState(() {
+                      selectedOption = value;
+                    });
+                    if (widget.onOptionSelected != null) {
+                      widget.onOptionSelected!(selectedOption!);
+                    }
+                  },
                 ),
                 enabledBorder: const OutlineInputBorder(
                   borderSide: BorderSide(

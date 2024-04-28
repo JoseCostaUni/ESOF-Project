@@ -14,6 +14,7 @@ import 'package:app/screens/eventsearch.dart';
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/features/searchbar.dart';
 import 'package:app/read%20data/Read_event.dart';
+import 'package:app/screens/searched_profile.dart';
 import 'package:app/screens/perfil_do_evento.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,9 @@ class _EventSearchState extends State<EventSearch> {
   List<Map<String, dynamic>> suggestions = [];
   List<String> eventsID = [];
   List<Map<String, dynamic>> events = [];
+  List<Map<String, dynamic>> users = [];
   final TextEditingController _searchcontroller = TextEditingController();
+  String selectedOption = "Events";
 
   Future<List<Map<String, dynamic>>> _loadEvents(String query) async {
     return Future.delayed(Duration(seconds: 2), () {
@@ -45,13 +48,28 @@ class _EventSearchState extends State<EventSearch> {
     return events;
   }
 
-  void calcReccomendations() async {
-    String input = _searchcontroller.text;
-    await eventHandler.calcEvents(input);
-    suggestions = await eventHandler.getEvents();
-    events = [...suggestions];
-    String a = "a";
-    setState(() {});
+  List<Map<String, dynamic>> getUsers() {
+    return users;
+  }
+
+  void calcReccomendations(String _selectedOption) async {
+    if (selectedOption == 'Events') {
+      users.clear();
+      String input = _searchcontroller.text;
+      await eventHandler.calcEvents(input);
+      suggestions = await eventHandler.getEvents();
+      events = [...suggestions];
+      String a = "a";
+      setState(() {});
+    } else {
+      events.clear();
+      String input = _searchcontroller.text;
+      await eventHandler.calcUsers(input);
+      suggestions = await eventHandler.getEvents();
+      users = [...suggestions];
+      String a = "a";
+      setState(() {});
+    }
   }
 
   void checkScreen() {
@@ -73,9 +91,15 @@ class _EventSearchState extends State<EventSearch> {
             search: _searchcontroller,
             currentScreen: 'EventSearch',
             onTapMenu: () => checkScreen(),
-            onChanged: () => {events.clear(), calcReccomendations()},
+            onChanged: () =>
+                {events.clear(), calcReccomendations(selectedOption)},
+            onOptionSelected: (value) {
+              selectedOption = value;
+              calcReccomendations(selectedOption);
+            },
           ),
-          if (events.isEmpty) Center(child: Text('No events found')),
+          if (events.isEmpty && selectedOption == 'Events')
+            Center(child: Text('No events found')),
           if (events.isNotEmpty)
             Expanded(
               child: FutureBuilder<List<Map<String, dynamic>>>(
@@ -111,6 +135,58 @@ class _EventSearchState extends State<EventSearch> {
                                 ),
                                 title: Text(event['title'] ?? ''),
                                 subtitle: Text(event['location'] ?? ''),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  } else {
+                    return Center(
+                      child: Text('No events found'),
+                    );
+                  }
+                },
+              ),
+            ),
+          if (users.isEmpty && selectedOption == 'People')
+            Center(child: Text('No people found')),
+          if (users.isNotEmpty)
+            Expanded(
+              child: FutureBuilder<List<Map<String, dynamic>>>(
+                future: Future.value(getUsers()),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasData) {
+                    final users = snapshot.data!;
+                    return ListView.builder(
+                      itemCount: users.length,
+                      itemBuilder: (context, index) {
+                        final user = users[index];
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) =>
+                                        SearchedProfile(user: user)),
+                              );
+                            },
+                            child: Card(
+                              elevation: 4,
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                      user['profilepicture'] ??
+                                          ''), // Exibição da foto
+                                ),
+                                title: Text(user['name'] ?? ''),
+                                subtitle: Text(user['username'] ?? ''),
                               ),
                             ),
                           ),

@@ -7,9 +7,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class EventHandler {
   List<Map<String, dynamic>> eventsArray = [];
   Map<String, Map<String, dynamic>> eventsMap = {};
+  Map<String, Map<String, dynamic>> usersMap = {};
   List<Map<String, dynamic>> suggestions = [];
   List<String> eventsID = [];
   List<Map<String, dynamic>> events = [];
+  List<Map<String, dynamic>> Allusers = [];
 
   Future<List<Map<String, dynamic>>> getAllEvents() async {
     List<Map<String, dynamic>> events = [];
@@ -24,6 +26,21 @@ class EventHandler {
     eventsArray = events;
 
     return events;
+  }
+
+  Future<List<Map<String, dynamic>>> getAllUsers() async {
+    List<Map<String, dynamic>> users = [];
+    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await FirebaseFirestore.instance.collection('users').get();
+
+    querySnapshot.docs.forEach((doc) {
+      Map<String, dynamic> userData = doc.data();
+      users.add(userData);
+    });
+
+    Allusers = users;
+
+    return Allusers;
   }
 
   Future<Map<String, dynamic>> getEventById(String eventId) async {
@@ -72,6 +89,72 @@ class EventHandler {
   }
 
   List<Map<String, dynamic>> getEvents() {
+    return events;
+  }
+
+  Future<List<Map<String, dynamic>>> calcUsers(String input) async {
+    if (input.isNotEmpty) {
+      List<Map<String, dynamic>> recommendations = [];
+      List<String> usersNames = [];
+      Map<String, Map<String, dynamic>> usersMap = {};
+
+      List<Map<String, dynamic>> allEvents = await getAllUsers();
+
+      for (var event in allEvents) {
+        String name = event['name'];
+        name = name.toLowerCase();
+        usersNames.add(name);
+        usersMap[name] = event;
+      }
+
+      if (input.isNotEmpty) {
+        input = input.toLowerCase();
+
+        usersNames = usersNames.map((item) => item.toLowerCase()).toList();
+
+        List<String> filteredUsers =
+            usersNames.where((user) => user.startsWith(input)).toList();
+
+        usersNames =
+            usersNames.where((item) => !item.startsWith(input)).toList();
+
+        Map<String, int> suggestionsMap = {};
+        filteredUsers.forEach((user) {
+          int differences = 0;
+          for (int i = 0; i < input.length; i++) {
+            if (user[i] != input[i]) {
+              differences++;
+            }
+          }
+          suggestionsMap[user] = differences;
+        });
+
+        List<String> sortedUsers = filteredUsers
+          ..sort((a, b) =>
+              (a.length - input.length).abs() -
+              (b.length - input.length).abs());
+
+        List<MapEntry<String, int>> sortedMap = suggestionsMap.entries.toList()
+          ..sort((a, b) => a.value - b.value);
+
+        List<String> result = [];
+        result.addAll(sortedUsers);
+        result.addAll(sortedMap.map((user) => user.key));
+
+        result = result.toSet().toList();
+
+        for (String name in result) {
+          recommendations.add(usersMap[name]!);
+        }
+      }
+
+      suggestions = recommendations;
+    } else {
+      suggestions = [];
+    }
+
+    events = [...suggestions];
+
     return events;
   }
 
