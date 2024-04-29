@@ -11,6 +11,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 
 class NotificationService {
   bool permissionStatus = false;
+  bool _notificationsEnabled = false;
 
   static Future<void> initializeLocalNotifications() async {
     AwesomeNotifications().initialize(
@@ -71,7 +72,7 @@ class NotificationService {
     debugPrint('Notification display methode: ${receivedAction.id}');
   }
 
-  static Future<void> showNotifications(
+  Future<void> sendNotification(
       {required final String title,
       required final String body,
       final String? summary,
@@ -83,28 +84,30 @@ class NotificationService {
       final List<NotificationActionButton>? actionButtons,
       final bool schedule = false,
       final int? interval}) async {
-    assert(!schedule || (schedule && interval != null));
+    if (_notificationsEnabled) {
+      assert(!schedule || (schedule && interval != null));
 
-    await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: -1,
-        channelKey: 'high_importance_channel',
-        title: title,
-        body: body,
-        summary: summary,
-        payload: payload,
-        category: notificationCategory,
-        bigPicture: bigPicture,
-      ),
-      actionButtons: actionButtons,
-      schedule: schedule
-          ? NotificationInterval(
-              interval: interval,
-              timeZone:
-                  await AwesomeNotifications().getLocalTimeZoneIdentifier(),
-              preciseAlarm: true)
-          : null,
-    );
+      await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: -1,
+          channelKey: 'high_importance_channel',
+          title: title,
+          body: body,
+          summary: summary,
+          payload: payload,
+          category: notificationCategory,
+          bigPicture: bigPicture,
+        ),
+        actionButtons: actionButtons,
+        schedule: schedule
+            ? NotificationInterval(
+                interval: interval,
+                timeZone:
+                    await AwesomeNotifications().getLocalTimeZoneIdentifier(),
+                preciseAlarm: true)
+            : null,
+      );
+    }
   }
 
   void checkPermissions() async {
@@ -116,6 +119,7 @@ class NotificationService {
   }
 
   void turnOnPermissions() async {
+    _notificationsEnabled = true;
     await AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
       if (!isAllowed) {
         AwesomeNotifications().requestPermissionToSendNotifications();
@@ -124,6 +128,7 @@ class NotificationService {
   }
 
   void turnOff() async {
-    await AwesomeNotifications().cancelAllSchedules();
+    AwesomeNotifications().cancelAll();
+    _notificationsEnabled = false;
   }
 }
