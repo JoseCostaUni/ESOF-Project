@@ -1,6 +1,7 @@
 import 'package:app/firebase/firebase_auth_services.dart';
 import 'package:app/screens/homepage.dart';
 import 'package:app/screens/signuppage.dart';
+import 'package:app/screens/verifyemail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -37,12 +38,19 @@ class _LoginPageState extends State<LoginPage> {
     final password = prefs.getString('user_password');
 
     if (email != null && password != null) {
-        final user = await _auth.signInWithEmailAndPassword(email, password);
-        if (UserCredential != null) {
-          // ignore: use_build_context_synchronously
-          Navigator.pushReplacement(context,MaterialPageRoute(builder: (_) => const HomePage(title: "home")),
-          );
-        }
+      final user = await _auth.signInWithEmailAndPassword(email, password);
+      if (!FirebaseAuth.instance.currentUser!.emailVerified) {
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const LoginPage()),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomePage(title: 'Home')),
+        );
+      }
     }
   }
 
@@ -86,6 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(
                         color: Color.fromARGB(255, 0, 0, 0),
                         fontSize: 24.0,
+                        decoration: TextDecoration.underline,
                       ),
                     ),
                   ),
@@ -188,10 +197,13 @@ class _LoginPageState extends State<LoginPage> {
               child: ElevatedButton(
                 onPressed: _signIn,
                 style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 224, 167, 153))),
+                    backgroundColor: MaterialStateProperty.all(
+                        const Color.fromARGB(255, 224, 167, 153))),
                 child: const Text(
                   'Login',
-                  style: TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: 15.0),
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      fontSize: 15.0),
                 ),
               ),
             ),
@@ -223,6 +235,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+
   void _signIn() async {
     String email = _emailController.text;
     String password = _passwordController.text;
@@ -230,11 +243,11 @@ class _LoginPageState extends State<LoginPage> {
     User? user = await _auth.signInWithEmailAndPassword(email, password);
 
     if (user != null) {
-
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('user_email', email);
       await prefs.setString('user_password', password);
-      Navigator.push(context,MaterialPageRoute(builder: (_) => const HomePage(title: "home")));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (_) => const VerifyEmailPage()));
     }
   }
 }
