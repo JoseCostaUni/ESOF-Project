@@ -6,7 +6,9 @@ import 'package:app/screens/login.dart';
 import 'package:app/screens/notifications_settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key});
@@ -21,7 +23,51 @@ class _SettingPageState extends State<SettingsPage> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('user_email');
     await prefs.remove('user_password');
-    await prefs.remove('profile_image');
+  }
+
+  TextEditingController _newPasswordController = TextEditingController();
+  TextEditingController _oldPasswordController = TextEditingController();
+  TextEditingController _deletePasswordController = TextEditingController();
+
+  Future<void> _deleteUser(String delpassword) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if(user != null){
+    try {
+        AuthCredential credential = EmailAuthProvider.credential(email: user.email!, password: delpassword);
+        await user.reauthenticateWithCredential(credential);
+        await user.delete();
+        final userEmail = user.email;
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(user.email)
+            .delete();
+        await _removeLogIn();
+        final ref = firebase_storage.FirebaseStorage.instance
+            .ref()
+            .child("user_profile")
+            .child('$userEmail.jpg');
+        await ref.delete();
+      print("Document successfully deleted");
+    } catch (e) {
+      print("Error deleting document: $e");
+    }
+  }
+}
+
+  Future<void> _changePassword(String oldPassword,String new_password) async {
+    final user = FirebaseAuth.instance.currentUser;
+    try {
+      if (user != null) {
+         AuthCredential credential = EmailAuthProvider.credential(email: user.email!, password: oldPassword);
+        await user.reauthenticateWithCredential(credential);
+        await user.updatePassword(new_password);
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('user_password', new_password);
+      }
+    } catch (e) {
+      print("Error deleting document: $e");
+       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Passwords do not match.'),),);
+    }
   }
 
   @override
@@ -186,35 +232,6 @@ class _SettingPageState extends State<SettingsPage> {
             color: Colors.black,
             indent: 20,
             endIndent: 20,
-          ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: SizedBox(
-              width: 150,
-              child: ElevatedButton(
-                onPressed: () {
-                  FirebaseAuth.instance.signOut();
-                  _removeLogIn();
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => const LoginPage()));
-                },
-                child: const Text('Log Out'),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: SizedBox(
-              width: 150,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Implement your logic here
-                },
-                child: const Text('Add Account'),
-              ),
-            ),
           ),
         ],
       ),

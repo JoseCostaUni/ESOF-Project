@@ -1,5 +1,8 @@
 import 'dart:io';
-
+import 'package:app/features/maps_screen.dart';
+import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/screens/homepage.dart';
@@ -7,59 +10,60 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateEvent extends StatefulWidget {
-  const CreateEvent({super.key});
+  const CreateEvent({Key? key}) : super(key: key);
 
   @override
   State<CreateEvent> createState() => _CreateEventState();
 }
 
 class _CreateEventState extends State<CreateEvent> {
-  List<String> eventsID = [];
   int _currentIndex = 1;
+
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _attendanceLimitsController =
       TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  File? __image;
-  void PostEvent() {}
+  File? _image;
+
   Future<void> _loadImage() async {
     final prefs = await SharedPreferences.getInstance();
     final imagePath = prefs.getString('profile_image');
 
     if (imagePath != null) {
       setState(() {
-        __image = File(imagePath);
+        _image = File(imagePath);
       });
     }
   }
+
   Future<String?> _uploadImageToFirebaseStorage(File imageFile) async {
-  try {
-    // Crie uma referência para o local onde deseja armazenar a imagem no Firebase Storage
-    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
-        .ref()
-        .child('event_images')
-        .child(DateTime.now().millisecondsSinceEpoch.toString() + '.jpg');
+    try {
+      // Crie uma referência para o local onde deseja armazenar a imagem no Firebase Storage
+      final ref = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('event_images')
+          .child(DateTime.now().millisecondsSinceEpoch.toString() + '.jpg');
 
-    // Faça o upload do arquivo para o Firebase Storage
-    await ref.putFile(imageFile);
+      // Faça o upload do arquivo para o Firebase Storage
+      await ref.putFile(imageFile);
 
-    // Obtenha a URL da imagem carregada
-    String imageUrl = await ref.getDownloadURL();
+      // Obtenha a URL da imagem carregada
+      final imageUrl = await ref.getDownloadURL();
 
-    // Retorne a URL da imagem
-    return imageUrl;
-  } catch (e) {
-    print('Erro ao fazer upload da imagem para o Firebase Storage: $e');
-    return null;
+      // Retorne a URL da imagem
+      return imageUrl;
+    } catch (e) {
+      print('Erro ao fazer upload da imagem para o Firebase Storage: $e');
+      return null;
+    }
   }
-}
+
   Future<void> _createEvent() async {
     if (_titleController.text.isEmpty ||
         _dateController.text.isEmpty ||
@@ -68,101 +72,36 @@ class _CreateEventState extends State<CreateEvent> {
         _descriptionController.text.isEmpty) {
       return;
     }
-    String? imageUrl = await _uploadImageToFirebaseStorage(__image!);
+    if (_image != null) {
+      String? imageUrl = await _uploadImageToFirebaseStorage(_image!);
       if (imageUrl != null) {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        try {
-         // Salve o evento no Firestore junto com a URL da imagem
-          await FirebaseFirestore.instance.collection("event").add({
-            "title": _titleController.text,
-            "dateTime": _dateController.text,
-            "location": _locationController.text,
-            "attendanceLimit": _attendanceLimitsController.text,
-            "description": _descriptionController.text,
-            "imageUrl": imageUrl,
-          });
-          Navigator.pushReplacement(
+        final user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          try {
+            // Salve o evento no Firestore junto com a URL da imagem
+            await FirebaseFirestore.instance.collection("event").add({
+              "title": _titleController.text,
+              "dateTime": _dateController.text,
+              "location": _locationController.text,
+              "attendanceLimit": _attendanceLimitsController.text,
+              "description": _descriptionController.text,
+              "imageUrl": imageUrl,
+              "createdAt": DateTime.now(),
+            });
+            Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const HomePage(title: 'Home')));
-        } catch (e) {
-          print('Erro ao criar o evento: $e');
-          // Handle error (show a snackbar, dialog, etc.)
+              MaterialPageRoute(
+                builder: (context) => const HomePage(title: 'Home'),
+              ),
+            );
+          } catch (e) {
+            print('Erro ao criar o evento: $e');
+            // Handle error (show a snackbar, dialog, etc.)
+          }
+        } else {
+          // Handle case when user is not logged in
         }
-      }  else {
-        // Handle case when user is not logged in
       }
-    }
-  }
-  Future<void> _cropImage() async {
-    if (__image != null) {
-      final croppedFile = await ImageCropper().cropImage(
-        sourcePath: __image!.path,
-        aspectRatioPresets: Platform.isAndroid
-            ? [
-                CropAspectRatioPreset.square,
-                CropAspectRatioPreset.ratio3x2,
-                CropAspectRatioPreset.original,
-                CropAspectRatioPreset.ratio4x3,
-                CropAspectRatioPreset.ratio16x9
-              ]
-            : [
-                CropAspectRatioPreset.original,
-                CropAspectRatioPreset.square,
-                CropAspectRatioPreset.ratio3x2,
-                CropAspectRatioPreset.ratio4x3,
-                CropAspectRatioPreset.ratio5x3,
-                CropAspectRatioPreset.ratio5x4,
-                CropAspectRatioPreset.ratio7x5,
-                CropAspectRatioPreset.ratio16x9
-              ],
-        uiSettings: [
-          AndroidUiSettings(
-            toolbarTitle: 'Resize your image',
-            toolbarColor: const Color.fromARGB(255, 202, 178, 172),
-            toolbarWidgetColor: Colors.white,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false,
-          ),
-          IOSUiSettings(
-            title: 'Cropper',
-          ),
-          WebUiSettings(
-            context: context,
-          ),
-        ],
-      );
-
-      if (croppedFile != null) {
-        setState(() {
-          __image = File(croppedFile.path);
-        });
-      }
-    }
-  }
-
-  Future<void> getImage(ImageSource source) async {
-    final pickedFile = await ImagePicker().pickImage(source: source);
-    if (pickedFile != null) {
-      setState(() {
-        __image = File(pickedFile.path);
-      });
-      await _cropImage();
-    }
-  }
-
-  Future<void> _removeImage() async {
-    setState(() {
-      __image = null;
-    });
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('profile_image');
-  }
-
-  Future<void> _saveImage() async {
-    if (__image != null) {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('profile_image', __image!.path);
     }
   }
 
@@ -202,37 +141,48 @@ class _CreateEventState extends State<CreateEvent> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ClipOval(
-                        child: SizedBox(
-                          width: 120,
-                          height: 120,
-                          child: __image != null
-                              ? Image.file(
-                                  __image!,
-                                  fit: BoxFit.cover,
-                                )
-                              : Container(
-                                  color: Colors.grey[200],
-                                ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: _removeImage,
-                        child: const Text(
-                          "Remove",
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      ),
                       Row(
                         children: [
-                          IconButton(
-                            icon: const Icon(Icons.photo),
-                            onPressed: () => getImage(ImageSource.gallery),
+                          ClipOval(
+                            child: SizedBox(
+                              width: 120,
+                              height: 120,
+                              child: _image != null
+                                  ? Image.file(
+                                      _image!,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Container(
+                                      color: Colors.grey[200],
+                                    ),
+                            ),
                           ),
-                          const SizedBox(width: 10),
-                          IconButton(
-                            icon: const Icon(Icons.camera_alt),
-                            onPressed: () => getImage(ImageSource.camera),
+                          const SizedBox(width: 20),
+                          FutureBuilder<DocumentSnapshot>(
+                            future: FirebaseFirestore.instance
+                                .collection("users")
+                                .doc(FirebaseAuth.instance.currentUser?.email)
+                                .get(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<DocumentSnapshot> snapshot) {
+                              if (snapshot.hasError) {
+                                return Text("Error: ${snapshot.error}");
+                              }
+
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                Map<String, dynamic> data = snapshot.data!
+                                    .data() as Map<String, dynamic>;
+                                return Text(
+                                  data['username'],
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                );
+                              }
+
+                              return CircularProgressIndicator();
+                            },
                           ),
                         ],
                       ),
@@ -245,19 +195,53 @@ class _CreateEventState extends State<CreateEvent> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      TextField(
-                        controller: _dateController,
-                        decoration: const InputDecoration(
-                          hintText: 'Date and time',
-                          prefixIcon: Icon(Icons.text_fields),
+                      GestureDetector(
+                        onTap: () async {
+                          DateTime? dateTime = await showOmniDateTimePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1600)
+                                .subtract(const Duration(days: 3652)),
+                            lastDate:
+                                DateTime.now().add(const Duration(days: 3652)),
+                          );
+                          if (dateTime != null) {
+                            String formattedDateTime =
+                                DateFormat('yyyy-MM-dd HH:mm').format(dateTime);
+                            setState(() {
+                              _dateController.text = formattedDateTime;
+                            });
+                          }
+                        },
+                        child: TextField(
+                          controller: _dateController,
+                          decoration: const InputDecoration(
+                            hintText: 'Select Date and Time',
+                            prefixIcon: Icon(Icons.calendar_today),
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black)),
+                            disabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black)),
+                          ),
+                          enabled: false,
+                          style: TextStyle(color: Colors.black),
                         ),
                       ),
                       const SizedBox(height: 10),
                       TextField(
                         controller: _locationController,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           hintText: 'Location',
-                          prefixIcon: Icon(Icons.text_fields),
+                          prefixIcon: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const MapsScreen()),
+                              );
+                            },
+                            child: const Icon(Icons.location_on_outlined),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -287,8 +271,35 @@ class _CreateEventState extends State<CreateEvent> {
                       ),
                       const SizedBox(height: 20),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: () async {
+                                  // Abra o seletor de imagem da galeria ou da câmera
+                                  final pickedFile = await ImagePicker()
+                                      .pickImage(source: ImageSource.gallery);
+                                  // Se a seleção da galeria estiver vazia, tente abrir a câmera
+                                  if (pickedFile == null) {
+                                    final pickedCameraFile = await ImagePicker()
+                                        .pickImage(source: ImageSource.camera);
+                                    if (pickedCameraFile != null) {
+                                      setState(() {
+                                        _image = File(pickedCameraFile.path);
+                                      });
+                                    }
+                                  } else {
+                                    setState(() {
+                                      _image = File(pickedFile.path);
+                                    });
+                                  }
+                                },
+                                icon: Icon(Icons.add),
+                              ),
+                              Text("Add photos"),
+                            ],
+                          ),
                           ElevatedButton(
                             onPressed: _createEvent,
                             child: const Text("Create Event"),

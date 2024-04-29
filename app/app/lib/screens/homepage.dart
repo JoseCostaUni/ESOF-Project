@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
           CustomSearchBar(
             search: _searchcontroller,
             onTapMenu: () {},
-         // Adicione ação ao menu aqui
+            // Adicione ação ao menu aqui
           ),
           Expanded(
             child: FutureBuilder(
