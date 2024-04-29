@@ -13,6 +13,7 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUp extends State<SignUp> {
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -49,6 +50,7 @@ class _SignUp extends State<SignUp> {
           .set({
         'email': userCredential.user!.email,
         'name': _nameController.text,
+        'username': _usernameController.text,
       });
     }
   }
@@ -138,6 +140,25 @@ class _SignUp extends State<SignUp> {
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
                   ),
                   labelText: 'Surname',
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 15.0, right: 15.0, bottom: 20.0, top: 20.0),
+              child: TextField(
+                key: const ValueKey('Userame'),
+                controller: _usernameController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  ),
+                  labelText: 'Userame',
                 ),
               ),
             ),
