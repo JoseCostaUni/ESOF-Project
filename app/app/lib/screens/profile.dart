@@ -4,9 +4,9 @@ import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/screens/editprofile.dart';
 import 'package:app/screens/settingpages.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 
 class MyProfilePage extends StatefulWidget {
@@ -27,7 +27,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
   User? currentuser = FirebaseAuth.instance.currentUser;
 
-  File? _image;
+  String _image = "";
 
   @override
   void initState() {
@@ -36,15 +36,22 @@ class _MyProfilePageState extends State<MyProfilePage> {
   }
 
   Future<void> _loadImage() async {
-    final prefs = await SharedPreferences.getInstance();
-    final imagePath = prefs.getString('profile_image');
-
-    if (imagePath != null) {
-      setState(() {
-        _image = File(imagePath);
-      });
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    try {
+      final docSnapshot = await FirebaseFirestore.instance.collection("users").doc(user.email).get();
+      final String imageUrl = docSnapshot.get('profilepicture');
+      if (imageUrl.isNotEmpty) {
+        setState(() {
+          _image = imageUrl;
+        });
+      }
+    } catch (e) {
+      print('Failed to load image from Firebase Storage: $e');
     }
   }
+}
+
 
   Future<String> getUsername() async {
     DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
@@ -113,9 +120,9 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                   child: SizedBox(
                                     width: 120,
                                     height: 120,
-                                    child: _image != null
-                                        ? Image.file(
-                                            _image!,
+                                    child: _image != ""
+                                        ? Image.network(
+                                            _image,
                                             fit: BoxFit.cover,
                                           )
                                         : Container(
