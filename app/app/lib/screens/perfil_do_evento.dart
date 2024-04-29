@@ -20,7 +20,8 @@ class _PerfilEventState extends State<PerfilEvent> {
             children: [
               // Parte superior: Foto do evento
               Container(
-                height: MediaQuery.of(context).size.height * 0.5, // Defina a altura com base na altura da tela
+                height: MediaQuery.of(context).size.height *
+                    0.5, // Defina a altura com base na altura da tela
                 child: Stack(
                   children: [
                     Card(
@@ -53,14 +54,17 @@ class _PerfilEventState extends State<PerfilEvent> {
                                 children: [
                                   CircleAvatar(
                                     // Aqui você pode adicionar a foto do perfil do usuário
-                                    backgroundColor: Colors.grey, // Placeholder para a foto
+                                    backgroundColor:
+                                        Colors.grey, // Placeholder para a foto
                                     radius: 20,
                                   ),
                                   SizedBox(width: 10),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Text('Nome do Usuário'), // Nome do usuário
+                                      Text(
+                                          'Nome do Usuário'), // Nome do usuário
                                       Text('Data do Evento'), // Data do evento
                                     ],
                                   ),
