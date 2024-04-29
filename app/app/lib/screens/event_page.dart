@@ -36,14 +36,29 @@ class _EventPageState extends State<EventPage> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AspectRatio(
-                    aspectRatio: 2,
-                    child: imageUrl != null
-                      ? Image.network(
-                          imageUrl,
-                          fit: BoxFit.cover,
-                        )
-                      : Center(child: Text('No images for this event')),
+                  Stack(
+                    children: [
+                      AspectRatio(
+                        aspectRatio: 2,
+                        child: imageUrl != null
+                          ? Image.network(
+                              imageUrl,
+                              fit: BoxFit.cover,
+                            )
+                          : Center(child: Text('No images for this event')),
+                      ),
+                      Positioned(
+                        top: 10.0,
+                        left: 10.0,
+                        child: IconButton(
+                          iconSize: 30,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(Icons.arrow_back),
+                        ),
+                      ),
+                    ],
                   ),
                   Container(
                     child: Padding(
