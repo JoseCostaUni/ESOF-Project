@@ -66,58 +66,53 @@ class _CreateEventState extends State<CreateEvent> {
   }
 
   Future<void> _createEvent() async {
-    if (_titleController.text.isEmpty ||
-        _dateController.text.isEmpty ||
-        _locationController.text.isEmpty ||
-        _attendanceLimitsController.text.isEmpty ||
-        _descriptionController.text.isEmpty) {
-      return;
-    }
-
-    // Adicione as imagens selecionadas à lista de imagens
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImages.add(File(pickedFile.path));
-      });
-    }
-
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      try {
-        List<String> imageUrls = [];
-        for (File imageFile in _selectedImages) {
-          String? imageUrl = await _uploadImageToFirebaseStorage(imageFile);
-          if (imageUrl != null) {
-            imageUrls.add(imageUrl);
-          }
-        }
-
-        await FirebaseFirestore.instance.collection("event").add({
-          "title": _titleController.text,
-          "dateTime": _dateController.text,
-          "location": _locationController.text,
-          "attendanceLimit": _attendanceLimitsController.text,
-          "description": _descriptionController.text,
-          "imageUrls":
-              imageUrls, // Adicione as URLs das imagens ao documento do evento
-          "createdAt": DateTime.now(),
-        });
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomePage(title: 'Home'),
-          ),
-        );
-      } catch (e) {
-        print('Erro ao criar o evento: $e');
-        // Handle error (show a snackbar, dialog, etc.)
-      }
-    } else {
-      // Handle case when user is not logged in
-    }
+  if (_titleController.text.isEmpty ||
+      _dateController.text.isEmpty ||
+      _locationController.text.isEmpty ||
+      _attendanceLimitsController.text.isEmpty ||
+      _descriptionController.text.isEmpty) {
+    return;
   }
+
+  // Obtenha o usuário atualmente autenticado
+  final user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    try {
+      List<String> imageUrls = [];
+      for (File imageFile in _selectedImages) {
+        String? imageUrl = await _uploadImageToFirebaseStorage(imageFile);
+        if (imageUrl != null) {
+          imageUrls.add(imageUrl);
+        }
+      }
+
+      // Crie o documento do evento com o e-mail do usuário
+      await FirebaseFirestore.instance.collection("event").add({
+        "title": _titleController.text,
+        "dateTime": _dateController.text,
+        "location": _locationController.text,
+        "attendanceLimit": _attendanceLimitsController.text,
+        "description": _descriptionController.text,
+        "imageUrls": imageUrls,
+        "userEmail": user.email, // Adicione o e-mail do usuário ao documento do evento
+        "createdAt": DateTime.now(),
+      });
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomePage(title: 'Home'),
+        ),
+      );
+    } catch (e) {
+      print('Erro ao criar o evento: $e');
+      // Handle error (show a snackbar, dialog, etc.)
+    }
+  } else {
+    // Handle case when user is not logged in
+  }
+}
+
+
 
   @override
   Widget build(BuildContext context) {

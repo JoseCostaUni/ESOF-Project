@@ -4,6 +4,7 @@ import 'package:app/screens/perfil_do_evento.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:app/screens/eventsearch.dart';
+import 'package:app/screens/event_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title});
