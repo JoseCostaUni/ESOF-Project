@@ -43,16 +43,14 @@ class _LoginPageState extends State<LoginPage> {
         // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const VerifyEmailPage()),
+          MaterialPageRoute(builder: (_) => const LoginPage()),
         );
-      }
-      else {
+      } else {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => const HomePage(title: 'Home')),
         );
       }
-
     }
   }
 
@@ -96,6 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(
                         color: Color.fromARGB(255, 0, 0, 0),
                         fontSize: 24.0,
+                        decoration: TextDecoration.underline,
                       ),
                     ),
                   ),
