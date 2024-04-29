@@ -27,7 +27,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
   User? currentuser = FirebaseAuth.instance.currentUser;
 
-  File? _image;
+  String _image = "";
 
   @override
   void initState() {
@@ -36,23 +36,22 @@ class _MyProfilePageState extends State<MyProfilePage> {
   }
 
   Future<void> _loadImage() async {
-    final user = currentuser;
-    if(user != null){
-      try{
-          final docSnapshot = await FirebaseFirestore.instance.collection("users").doc(user.email).get();
-          final String imageUrl = docSnapshot.get('profilepicture');
-          if (imageUrl != "") {
-            firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child(imageUrl);
-            final File imageFile = File(await ref.getDownloadURL());
-            setState(() {
-              _image = imageFile;
-            });
-          }
-        } catch (e) {
-          print('Failed to load image from Firebase Storage: $e');
-        }
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    try {
+      final docSnapshot = await FirebaseFirestore.instance.collection("users").doc(user.email).get();
+      final String imageUrl = docSnapshot.get('profilepicture');
+      if (imageUrl.isNotEmpty) {
+        setState(() {
+          _image = imageUrl;
+        });
+      }
+    } catch (e) {
+      print('Failed to load image from Firebase Storage: $e');
     }
   }
+}
+
 
   Future<String> getUsername() async {
     DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
@@ -121,9 +120,9 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                   child: SizedBox(
                                     width: 120,
                                     height: 120,
-                                    child: _image != null
-                                        ? Image.file(
-                                            _image!,
+                                    child: _image != ""
+                                        ? Image.network(
+                                            _image,
                                             fit: BoxFit.cover,
                                           )
                                         : Container(

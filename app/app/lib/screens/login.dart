@@ -234,7 +234,6 @@ class _LoginPageState extends State<LoginPage> {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('user_email', email);
       await prefs.setString('user_password', password);
-      // ignore: use_build_context_synchronously
       Navigator.push(context,MaterialPageRoute(builder: (_) => const HomePage(title: "home")));
     }
   }

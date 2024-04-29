@@ -8,7 +8,6 @@ import 'profile.dart';
 import 'package:app/screens/homepage.dart';
 import 'package:image_cropper/image_cropper.dart';
 
-
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
 
@@ -18,158 +17,19 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   File? _image;
+  String _tempImageUrl = "";
+  String _imageUrl = "";
+  bool resized = false;
 
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
 
+  @override
   void initState() {
-    super.initState();
+    _loadText();
     _loadImage();
-  }
-
-  void updateName() async {
-    showDialog(
-        context: context,
-        builder: (context) => const Center(
-              child: CircularProgressIndicator(),
-            ));
-    try {
-      User? userCredential = await FirebaseAuth.instance.currentUser;
-      Navigator.pop(context);
-
-      if (userCredential != null) {
-        updateUserDetails(userCredential);
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('User Details updated suscefully'),
-            duration: Duration(seconds: 2),
-          ),
-        );
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => const MyProfilePage(title: '', username: '')));
-      }
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to update user details: $e'),
-          duration: const Duration(seconds: 2),
-        ),
-      );
-    }
-  }
-
-  void updateProfilePicture() async{
-    showDialog(
-        context: context,
-        builder: (context) => const Center(
-              child: CircularProgressIndicator(),
-            ));
-
-    try {
-      User? userCredential = await FirebaseAuth.instance.currentUser;
-      Navigator.pop(context);
-
-      if (userCredential != null) {
-        updateUserDetails(userCredential);
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Profile Picture updated suscefully'),
-            duration: Duration(seconds: 2),
-          ),
-        );
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => const MyProfilePage(title: '', username: '')));
-      }
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to update profile picture: $e'),
-          duration: const Duration(seconds: 2),
-        ),
-      );
-    }
-
-
-  }
-
-  void updateDescription() async {
-    showDialog(
-        context: context,
-        builder: (context) => const Center(
-              child: CircularProgressIndicator(),
-            ));
-    try {
-      User? userCredential = await FirebaseAuth.instance.currentUser;
-      Navigator.pop(context);
-
-      if (userCredential != null) {
-        updateUserDetails(userCredential);
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('User Details updated suscefully'),
-            duration: Duration(seconds: 2),
-          ),
-        );
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => const MyProfilePage(title: '', username: '')));
-      }
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to update user details: $e'),
-          duration: const Duration(seconds: 2),
-        ),
-      );
-    }
-  }
-
-  void updateusername() async {
-    showDialog(
-        context: context,
-        builder: (context) => const Center(
-              child: CircularProgressIndicator(),
-            ));
-
-    try {
-      User? userCredential = await FirebaseAuth.instance.currentUser;
-      Navigator.pop(context);
-
-      if (userCredential != null) {
-        updateUserDetails(userCredential);
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('User Details updated suscefully'),
-            duration: Duration(seconds: 2),
-          ),
-        );
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => const MyProfilePage(title: '', username: '')));
-      }
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to update user details: $e'),
-          duration: const Duration(seconds: 2),
-        ),
-      );
-    }
+    super.initState();
   }
 
   Future<void> updateUserDetails(User? userCredential) async {
@@ -181,73 +41,104 @@ class _EditProfileState extends State<EditProfile> {
         'username': _usernameController.text,
         'name': _nameController.text,
         'description': _descriptionController.text,
+        'profilepicture': _tempImageUrl
       });
     }
   }
 
+  Future<void> _loadText() async{
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        final docSnapshot = await FirebaseFirestore.instance
+            .collection("users")
+            .doc(user.email)
+            .get();
+
+
+        setState(() {
+          final TextEditingController _nameController2 = TextEditingController(text: docSnapshot.get('name'));
+          final TextEditingController _usernameController2 = TextEditingController(text: docSnapshot.get('username'));
+          final TextEditingController _descriptionController2 = TextEditingController(text: docSnapshot.get('description'));
+            
+          _nameController = _nameController2;
+          _usernameController = _usernameController2;
+          _descriptionController = _descriptionController2;
+        });
+        
+      } catch (e) {
+        print('Failed to load profile details from Firebase Storage: $e');
+      }
+    }
+  }
+
   Future<void> _loadImage() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if(user != null){
-      try{
-        final docSnapshot = await FirebaseFirestore.instance.collection("users").doc(user.email).get();
-          final imageUrl = docSnapshot.get('profilepicture');
-          if (imageUrl != null) {
-            firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child(imageUrl);
-            _image = File(await ref.getDownloadURL());
-          }
-        } catch (e) {
-          print('Failed to load image from Firebase Storage: $e');
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        final docSnapshot = await FirebaseFirestore.instance
+            .collection("users")
+            .doc(user.email)
+            .get();
+
+        final String imageUrl = docSnapshot.get('profilepicture');
+        if (imageUrl.isNotEmpty) {
+          setState(() {
+            _tempImageUrl = imageUrl;
+          });
+        }
+      } catch (e) {
+        print('Failed to load image from Firebase Storage: $e');
       }
     }
   }
 
   Future<void> _cropImage() async {
-  if (_image != null) {
-    final croppedFile = await ImageCropper().cropImage(
-      sourcePath: _image!.path,
-      aspectRatioPresets: Platform.isAndroid 
-       ? [
-          CropAspectRatioPreset.square,
-          CropAspectRatioPreset.ratio3x2,
-          CropAspectRatioPreset.original,
-          CropAspectRatioPreset.ratio4x3,
-          CropAspectRatioPreset.ratio16x9
-        ] : 
-        [
-          CropAspectRatioPreset.original,
-          CropAspectRatioPreset.square,
-          CropAspectRatioPreset.ratio3x2,
-          CropAspectRatioPreset.ratio4x3,
-          CropAspectRatioPreset.ratio5x3,
-          CropAspectRatioPreset.ratio5x4,
-          CropAspectRatioPreset.ratio7x5,
-          CropAspectRatioPreset.ratio16x9
-        ],
+    if (_image != null) {
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: _image!.path,
+        aspectRatioPresets: Platform.isAndroid
+            ? [
+                CropAspectRatioPreset.square,
+                CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio16x9
+              ]
+            : [
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.square,
+                CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio5x3,
+                CropAspectRatioPreset.ratio5x4,
+                CropAspectRatioPreset.ratio7x5,
+                CropAspectRatioPreset.ratio16x9
+              ],
         uiSettings: [
-        AndroidUiSettings(
-            toolbarTitle: 'Resize your image',
-            toolbarColor: const Color.fromARGB(255, 202, 178, 172),
-            toolbarWidgetColor: Colors.white,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false),
-        IOSUiSettings(
-          title: 'Cropper',
-        ),
-        WebUiSettings(
-          context: context,
-        ),
-      ],
-    );
+          AndroidUiSettings(
+              toolbarTitle: 'Resize your image',
+              toolbarColor: const Color.fromARGB(255, 202, 178, 172),
+              toolbarWidgetColor: Colors.white,
+              initAspectRatio: CropAspectRatioPreset.original,
+              lockAspectRatio: false),
+          IOSUiSettings(
+            title: 'Cropper',
+          ),
+          WebUiSettings(
+            context: context,
+          ),
+        ],
+      );
 
-    if (croppedFile != null) {
-      setState(() {
-        _image = File(croppedFile.path!);
-      });
+      if (croppedFile != null) {
+        setState(() {
+          _image = File(croppedFile.path!);
+          resized = true;
+        });
+      }
     }
   }
-}
-
-
 
   Future<void> getImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
@@ -261,50 +152,67 @@ class _EditProfileState extends State<EditProfile> {
 
   Future<void> _removeImage() async {
     setState(() {
+      _imageUrl = _tempImageUrl;
+      _tempImageUrl = "";
+      resized = false;
       _image = null;
     });
+  }
 
+  Future<void> _saveImage() async {
     try {
-      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child('user_profile').child(DateTime.now().millisecondsSinceEpoch.toString() + '.jpg');
-
-      await ref.putFile(_image!);
-
-      final String imageUrl = await ref.getDownloadURL();
-
-      final user = FirebaseAuth.instance.currentUser;
+      User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        await FirebaseFirestore.instance
-            .collection("users")
-            .doc(user.email)
-            .update({'profilepicture': null});
-        final imageUrl = user.photoURL;
-        if (imageUrl != null) {
-          final ref = firebase_storage.FirebaseStorage.instance.refFromURL(imageUrl);
-          await ref.delete();
+        String userEmail = user.email!;
+
+        firebase_storage.Reference ref =
+            firebase_storage.FirebaseStorage.instance.ref();
+        final userImageRef = ref.child("user_profile").child('$userEmail.jpg');
+
+        if (_image != null) {
+          await userImageRef.putFile(_image!);
+
+          _tempImageUrl = await userImageRef.getDownloadURL();
+
+          await FirebaseFirestore.instance
+              .collection("users")
+              .doc(userEmail)
+              .update({'profilepicture': _tempImageUrl});
+
+        } else {
+          print('Image is null.');
         }
+      } else {
+        print('No user signed in.');
       }
     } catch (e) {
       print('Failed to upload image to Firebase Storage: $e');
     }
   }
 
-  Future<void> _saveImage() async {
-    try {
-      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child('user_profile').child(DateTime.now().millisecondsSinceEpoch.toString() + '.jpg');
-
-      await ref.putFile(_image!);
-
-      final String imageUrl = await ref.getDownloadURL();
-
-      final user = FirebaseAuth.instance.currentUser;
+  Future<void> _changeImageAfterSave() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (_tempImageUrl == "") {
+      try {
+        if (user != null) {
+          final ref =
+              firebase_storage.FirebaseStorage.instance.refFromURL(_imageUrl);
+          await ref.delete();
+          await FirebaseFirestore.instance
+              .collection("users")
+              .doc(user.email)
+              .update({'profilepicture': ""});
+        }
+      } catch (e) {
+        print('Failed to upload image to Firebase Storage: $e');
+      }
+    } else {
       if (user != null) {
         await FirebaseFirestore.instance
             .collection("users")
             .doc(user.email)
-            .update({'profilepicture': imageUrl});
+            .update({'profilepicture': _tempImageUrl});
       }
-    } catch (e) {
-      print('Failed to upload image to Firebase Storage: $e');
     }
   }
 
@@ -350,19 +258,23 @@ class _EditProfileState extends State<EditProfile> {
                           Column(
                             children: [
                               ClipOval(
-                                child: SizedBox(
-                                  width: 120,
-                                  height: 120,
-                                  child: _image != null 
-                                  ? Image.file(
-                                    _image!,
-                                    fit: BoxFit.cover,
-                                    )
-                                  : Container(
-                                    color: Colors.grey[200],
-                                  )
-                                )
-                              ),
+                                  child: SizedBox(
+                                      width: 120,
+                                      height: 120,
+                                      child: Container(
+                                        color: Colors.grey[200],
+                                        child: !resized
+                                            ? (_tempImageUrl == ""
+                                                ? Container(color: Colors.grey[200]) 
+                                                : Image.network(
+                                                    _tempImageUrl,
+                                                    fit: BoxFit.cover,
+                                                  ))
+                                            : Image.file(
+                                                _image!,
+                                                fit: BoxFit.cover,
+                                              ),
+                                      ))),
                               InkWell(
                                 onTap: _removeImage,
                                 child: const Text(
@@ -374,12 +286,14 @@ class _EditProfileState extends State<EditProfile> {
                                 children: [
                                   IconButton(
                                     icon: const Icon(Icons.photo),
-                                    onPressed: () => getImage(ImageSource.gallery),
+                                    onPressed: () =>
+                                        getImage(ImageSource.gallery),
                                   ),
                                   const SizedBox(width: 10),
                                   IconButton(
                                     icon: const Icon(Icons.camera_alt),
-                                    onPressed: () => getImage(ImageSource.camera),
+                                    onPressed: () =>
+                                        getImage(ImageSource.camera),
                                   ),
                                 ],
                               ),
@@ -412,11 +326,13 @@ class _EditProfileState extends State<EditProfile> {
                           hintText: 'New Description',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.black),
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.black),
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
                           ),
                         ),
                       ),
@@ -425,7 +341,8 @@ class _EditProfileState extends State<EditProfile> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           ElevatedButton(
-                            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red),
                             onPressed: () {
                               Navigator.pop(context);
                             },
@@ -433,14 +350,23 @@ class _EditProfileState extends State<EditProfile> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              updateDescription();
-                              updateName();
-                              updateusername();
+                              updateUserDetails(
+                                  FirebaseAuth.instance.currentUser);
                               _saveImage();
+                              _changeImageAfterSave();
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => const MyProfilePage(title: "Profile", username: '',),
+                                  builder: (_) => const MyProfilePage(
+                                    title: "Profile",
+                                    username: '',
+                                  ),
+                                ),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Updated user details'),
+                                  duration: Duration(seconds: 2),
                                 ),
                               );
                             },
@@ -499,7 +425,10 @@ class _EditProfileState extends State<EditProfile> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (_) => const MyProfilePage(title: "Profile", username: '',)),
+                          builder: (_) => const MyProfilePage(
+                                title: "Profile",
+                                username: '',
+                              )),
                     );
                   },
                 ),
