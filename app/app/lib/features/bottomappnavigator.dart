@@ -1,5 +1,5 @@
-import 'package:app/screens/massage.dart';
 import 'package:flutter/material.dart';
+import 'package:app/screens/massage.dart';
 import 'package:app/screens/createevent.dart';
 import 'package:app/screens/homepage.dart';
 import 'package:app/screens/profile.dart';
@@ -7,12 +7,14 @@ import 'package:app/screens/profile.dart';
 class CustomBottomNavigationBar extends StatefulWidget {
   final int currentIndex;
   final Function(int) onTap;
+  final VoidCallback? onEventCreated; // Adicione este parâmetro
 
   const CustomBottomNavigationBar({
-    super.key,
+    Key? key,
     required this.currentIndex,
     required this.onTap,
-  });
+    this.onEventCreated, // Marque este parâmetro como opcional
+  }) : super(key: key);
 
   @override
   State<CustomBottomNavigationBar> createState() =>
@@ -57,7 +59,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => const CreateEvent()),
-                    );
+                    ).then((_) {
+                      // Verifique se onEventCreated não é nulo antes de chamar
+                      widget.onEventCreated?.call();
+                    });
                   }
                 },
               ),
@@ -67,7 +72,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 onPressed: () {
                   if (widget.currentIndex != 2) {
                     widget.onTap(2);
-                     Navigator.push(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => const ChatPage()),
                     );
