@@ -1,10 +1,10 @@
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/features/searchbar.dart';
-import 'package:app/read%20data/Read_event.dart';
-import 'package:app/screens/perfil_do_evento.dart';
+import 'package:app/read%20data/firestore_read_changes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:app/screens/eventsearch.dart';
+import 'package:app/screens/event_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title});
@@ -15,27 +15,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<String> eventsID = [];
   int _currentIndex = 0;
   final TextEditingController _searchcontroller = TextEditingController();
+  Map<String, dynamic>? _createdEvent;
 
-  // Método para buscar os eventos
-  Future<List<Map<String, dynamic>>> getEvents() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+  Future<void> getEventsId() async {
+    eventsID.clear();
+    await FirebaseFirestore.instance
         .collection('event')
-        .orderBy('createdAt', descending: true)
-        .get();
-    return querySnapshot.docs
-        .map((doc) => doc.data() as Map<String, dynamic>)
-        .toList();
-  }
-
-  void checkScreen(String currentScreen) {
-    if (currentScreen != 'EventSearch') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => EventSearch()),
-      );
-    }
+        .get()
+        .then((snapshot) => snapshot.docs.forEach((element) {
+              print(element.reference);
+              eventsID.add(element.reference.id);
+            }));
   }
 
   @override
@@ -46,53 +39,41 @@ class _HomePageState extends State<HomePage> {
         children: [
           CustomSearchBar(
             search: _searchcontroller,
-            currentScreen: 'homepage',
-            onTapMenu: () => checkScreen('homepage'),
-            onChanged: () => {},
+            onTapMenu: () {},
+            // Adicione ação ao menu aqui
           ),
           Expanded(
-            child: FutureBuilder<List<Map<String, dynamic>>>(
-              future: getEvents(),
+            child: FutureBuilder(
+              future: getEventsId(),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text('Error: ${snapshot.error}'),
-                  );
-                } else {
-                  return ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      final event = snapshot.data![index];
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => const PerfilEvent()));
-                          },
-                          child: Card(
-                            elevation: 4,
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                    event['imageUrl'] ??
-                                        ''), // Exibição da foto
+                return ListView.builder(
+                  itemCount: eventsID.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          // Ação ao clicar no cartão
+                          print('Clicou no evento ${eventsID[index]}');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EventPage(
+                                eventId: eventsID[index],
                               ),
-                              title: Text(event['title'] ?? ''),
-                              subtitle: Text(event['location'] ?? ''),
                             ),
+                          );
+                        },
+                        child: Card(
+                          elevation: 4,
+                          child: ListTile(
+                            title: GetEvents(documentId: eventsID[index]),
                           ),
                         ),
-                      );
-                    },
-                  );
-                }
+                      ),
+                    );
+                  },
+                );
               },
             ),
           ),
