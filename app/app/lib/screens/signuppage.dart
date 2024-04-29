@@ -13,6 +13,7 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUp extends State<SignUp> {
+  double passwordStrength = 0;
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
@@ -187,6 +188,32 @@ class _SignUp extends State<SignUp> {
               child: TextField(
                 key: const ValueKey('Password'),
                 controller: _passwordController,
+                onChanged: (value) => {
+                  if (value.isEmpty)
+                    {
+                      setState(() {
+                        passwordStrength = 0;
+                      })
+                    }
+                  else if (value.length < 8)
+                    {
+                      setState(() {
+                        passwordStrength = 1 / 3;
+                      })
+                    }
+                  else if (value.length < 12)
+                    {
+                      setState(() {
+                        passwordStrength = 2 / 3;
+                      })
+                    }
+                  else
+                    {
+                      setState(() {
+                        passwordStrength = 1;
+                      })
+                    }
+                },
                 obscureText: true,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -200,6 +227,16 @@ class _SignUp extends State<SignUp> {
                   labelText: 'Password',
                 ),
               ),
+            ),
+            LinearProgressIndicator(
+              value: passwordStrength,
+              color: passwordStrength == 0
+                  ? Colors.red
+                  : passwordStrength == 1 / 3
+                      ? Colors.orange
+                      : passwordStrength == 2 / 3
+                          ? Colors.yellow
+                          : Colors.green,
             ),
             SizedBox(
               width: 360,
