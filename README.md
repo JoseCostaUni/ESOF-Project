@@ -28,7 +28,8 @@ Best regards, 2LEIC04T4
   * [Logical architecture](#Logical-Architeture)
   * [Physical architecture](#Physical-Architeture)
   * [Vertical prototype](#Vertical-Prototype)
- * [Sprint 1](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/blob/Sprint1/README.md#sprint-1-app-version-101) 
+ * [Sprint 1](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/blob/Sprint1/README.md#sprint-1-app-version-101)
+ * [Sprint 2](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/blob/Sprint2/README.md#sprint-2-app-version-102) 
 
 ---
 
@@ -107,6 +108,9 @@ At first glance , the sprint went really well as almost everything that was plan
 
 To sum up, we agree that the sprint was well planned, well executed and that almost everything went according the plan.
 
+### Happiness Meter
+
+![image](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/ecbbfc50-bd06-4912-aced-0c2311046260)
 
 ### Sprint Retrospective:
 
