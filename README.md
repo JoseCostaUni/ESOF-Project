@@ -145,6 +145,8 @@ To sum up, we agree that the sprint was well planned, well executed and that alm
 
 ![Screenshot from 2024-04-30 10-51-56](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/b7abf97c-8754-4f0c-a8e5-fdb28bddab8d)
 
+### Happiness Meter
+![image](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/46bd353e-f698-412c-b4a5-f942a3e05137)
 
 ### Sprint 2 Review (v1.0.1)
 
