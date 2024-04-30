@@ -24,7 +24,11 @@ class _HomePageState extends State<HomePage> {
         .collection('event')
         .orderBy('createdAt', descending: true)
         .get();
-    return querySnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+    return querySnapshot.docs.map((doc) {
+      final data = doc.data() as Map<String, dynamic>;
+      data['id'] = doc.id;
+      return data;
+    }).toList();
   }
 
   @override
@@ -41,6 +45,7 @@ class _HomePageState extends State<HomePage> {
                 MaterialPageRoute(builder: (context) => EventSearch()),
               );
             },
+            onChanged: () {},
             currentScreen: '',
             // Adicione ação ao menu aqui
           ),
@@ -65,13 +70,19 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.all(8.0),
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (_) =>  PerfilEvent()));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) =>
+                                        EventPage(eventId: event['id'])));
                           },
                           child: Card(
                             elevation: 4,
                             child: ListTile(
                               leading: CircleAvatar(
-                                backgroundImage: NetworkImage(event['imageUrl'] ?? ''), // Exibição da foto
+                                backgroundImage: NetworkImage(
+                                    event['imageUrl'] ??
+                                        ''), // Exibição da foto
                               ),
                               title: Text(event['title'] ?? ''),
                               subtitle: Text(event['location'] ?? ''),

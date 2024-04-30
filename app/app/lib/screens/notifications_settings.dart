@@ -102,7 +102,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await NotificationService.showNotifications(
+          await notificationService.sendNotification(
               title: 'Notification Test', body: 'This is a test notification');
         },
         child: const Icon(Icons.notifications),
