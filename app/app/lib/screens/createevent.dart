@@ -22,6 +22,7 @@ class CreateEvent extends StatefulWidget {
 
 class _CreateEventState extends State<CreateEvent> {
   int _currentIndex = 1;
+  List<File> _selectedImages = [];
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
@@ -65,45 +66,53 @@ class _CreateEventState extends State<CreateEvent> {
   }
 
   Future<void> _createEvent() async {
-    if (_titleController.text.isEmpty ||
-        _dateController.text.isEmpty ||
-        _locationController.text.isEmpty ||
-        _attendanceLimitsController.text.isEmpty ||
-        _descriptionController.text.isEmpty) {
-      return;
-    }
-    if (_image != null) {
-      String? imageUrl = await _uploadImageToFirebaseStorage(_image!);
-      if (imageUrl != null) {
-        final user = FirebaseAuth.instance.currentUser;
-        if (user != null) {
-          try {
-            // Salve o evento no Firestore junto com a URL da imagem
-            await FirebaseFirestore.instance.collection("event").add({
-              "title": _titleController.text,
-              "dateTime": _dateController.text,
-              "location": _locationController.text,
-              "attendanceLimit": _attendanceLimitsController.text,
-              "description": _descriptionController.text,
-              "imageUrl": imageUrl,
-              "createdAt": DateTime.now(),
-            });
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const HomePage(title: 'Home'),
-              ),
-            );
-          } catch (e) {
-            print('Erro ao criar o evento: $e');
-            // Handle error (show a snackbar, dialog, etc.)
-          }
-        } else {
-          // Handle case when user is not logged in
+  if (_titleController.text.isEmpty ||
+      _dateController.text.isEmpty ||
+      _locationController.text.isEmpty ||
+      _attendanceLimitsController.text.isEmpty ||
+      _descriptionController.text.isEmpty) {
+    return;
+  }
+
+  // Obtenha o usuário atualmente autenticado
+  final user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    try {
+      List<String> imageUrls = [];
+      for (File imageFile in _selectedImages) {
+        String? imageUrl = await _uploadImageToFirebaseStorage(imageFile);
+        if (imageUrl != null) {
+          imageUrls.add(imageUrl);
         }
       }
+
+      // Crie o documento do evento com o e-mail do usuário
+      await FirebaseFirestore.instance.collection("event").add({
+        "title": _titleController.text,
+        "dateTime": _dateController.text,
+        "location": _locationController.text,
+        "attendanceLimit": _attendanceLimitsController.text,
+        "description": _descriptionController.text,
+        "imageUrls": imageUrls,
+        "userEmail": user.email, // Adicione o e-mail do usuário ao documento do evento
+        "createdAt": DateTime.now(),
+      });
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomePage(title: 'Home'),
+        ),
+      );
+    } catch (e) {
+      print('Erro ao criar o evento: $e');
+      // Handle error (show a snackbar, dialog, etc.)
     }
+  } else {
+    // Handle case when user is not logged in
   }
+}
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -175,13 +184,13 @@ class _CreateEventState extends State<CreateEvent> {
                                     .data() as Map<String, dynamic>;
                                 return Text(
                                   data['username'],
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
                                 );
                               }
 
-                              return CircularProgressIndicator();
+                              return const CircularProgressIndicator();
                             },
                           ),
                         ],
@@ -191,6 +200,12 @@ class _CreateEventState extends State<CreateEvent> {
                         controller: _titleController,
                         decoration: const InputDecoration(
                           hintText: 'Event Title',
+                          hintStyle: TextStyle(
+                              color: Color.fromARGB(255, 167, 166, 166)),
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black)),
+                          disabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black)),
                           prefixIcon: Icon(Icons.text_fields),
                         ),
                       ),
@@ -224,7 +239,7 @@ class _CreateEventState extends State<CreateEvent> {
                                 borderSide: BorderSide(color: Colors.black)),
                           ),
                           enabled: false,
-                          style: TextStyle(color: Colors.black),
+                          style: const TextStyle(color: Colors.black),
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -232,6 +247,12 @@ class _CreateEventState extends State<CreateEvent> {
                         controller: _locationController,
                         decoration: InputDecoration(
                           hintText: 'Location',
+                          hintStyle: const TextStyle(
+                              color: Color.fromARGB(255, 167, 166, 166)),
+                          enabledBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black)),
+                          disabledBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black)),
                           prefixIcon: GestureDetector(
                             onTap: () {
                               Navigator.push(
@@ -249,6 +270,12 @@ class _CreateEventState extends State<CreateEvent> {
                         controller: _attendanceLimitsController,
                         decoration: const InputDecoration(
                           hintText: 'Attendance limit',
+                          hintStyle: TextStyle(
+                              color: Color.fromARGB(255, 167, 166, 166)),
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black)),
+                          disabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black)),
                           prefixIcon: Icon(Icons.text_fields),
                         ),
                       ),
@@ -257,6 +284,8 @@ class _CreateEventState extends State<CreateEvent> {
                         controller: _descriptionController,
                         decoration: const InputDecoration(
                           hintText: 'Events Description',
+                          hintStyle: TextStyle(
+                              color: Color.fromARGB(255, 167, 166, 166)),
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.black),
                             borderRadius:
@@ -286,18 +315,22 @@ class _CreateEventState extends State<CreateEvent> {
                                         .pickImage(source: ImageSource.camera);
                                     if (pickedCameraFile != null) {
                                       setState(() {
-                                        _image = File(pickedCameraFile.path);
+                                        _selectedImages.add(File(pickedCameraFile
+                                            .path)); // Utilize pickedCameraFile.path para a câmera
                                       });
                                     }
                                   } else {
                                     setState(() {
-                                      _image = File(pickedFile.path);
+                                      _selectedImages
+                                          .add(File(pickedFile.path));
                                     });
                                   }
                                 },
-                                icon: Icon(Icons.add),
+                                icon: const Icon(Icons.add),
                               ),
-                              Text("Add photos"),
+                              const Text("Add photos"),
+                              SizedBox(width: 10),
+                              Text(_selectedImages.length.toString()),
                             ],
                           ),
                           ElevatedButton(

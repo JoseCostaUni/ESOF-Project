@@ -1,5 +1,6 @@
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/features/searchbar.dart';
+import 'package:app/screens/perfil_do_evento.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:app/screens/eventsearch.dart';
