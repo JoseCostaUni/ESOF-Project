@@ -22,3 +22,26 @@
 
 ---
 
+
+# Sprint 2 (Version 1.0.2)
+
+---
+
+### Features added
+
+- Search Events (US 02)
+
+- Receive notifications (US 25)
+
+- Turning off/on notification (US 29)
+
+- Delete,change password and log out from your current logged in account (US10)
+
+- Change name,username and description from the user's account (US04)
+
+- Search users by their name (US 04)
+
+- Sorting event by their date of creation
+
+---
+

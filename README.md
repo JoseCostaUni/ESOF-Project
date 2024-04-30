@@ -129,3 +129,9 @@ To sum up, we agree that the sprint was well planned, well executed and that alm
 #### What are we going to do to improve?
 - We will try to organise the code in a better way
 - Work in more focused way, since we explored the language and now we know how to work with it a little better
+
+## Sprint 2 (App Version 1.0.2)
+
+### Sprint 2 Review (v1.0.1)
+
+At first glance , the sprint went better than the first one , since almost all planned increments were actually implemented , apart from some minor tweaks that will be left for the next sprint. We were able to complete 15 features from the 11 that were initially planned. Summarizing, we could probably have done further progress but we had lots of other side projects and tests that difficulted our full focus in this sole project, but we are optimistic of our progress and our method/organization, in the end, it went smoothly and was all according to the plan.

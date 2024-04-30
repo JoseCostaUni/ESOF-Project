@@ -36,16 +36,6 @@ class _EventPageState extends State<EventPage> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
-                  AspectRatio(
-                    aspectRatio: 2,
-                    child: imageUrl != null
-                      ? Image.network(
-                          imageUrl,
-                          fit: BoxFit.cover,
-                        )
-                      : Center(child: Text('No images for this event')),
-
                   Stack(
                     children: [
                       AspectRatio(
