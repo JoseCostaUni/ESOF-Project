@@ -45,7 +45,7 @@
 
 - See event's page
 
-- Password strenght meter
+- Password strength meter
 
 - Email verification after creating an account
 
