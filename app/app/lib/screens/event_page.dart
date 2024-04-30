@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:app/features/bottomappnavigator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class EventPage extends StatefulWidget {
   final String eventId;
@@ -9,6 +10,18 @@ class EventPage extends StatefulWidget {
 
   @override
   State<EventPage> createState() => _EventPageState();
+}
+
+Future<String> getUserName(String userEmail) async {
+  DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(userEmail).get();
+  Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+  return userData['username'] ?? 'Unknown user';
+}
+
+Future<String> getUserProfilePicture(String userEmail) async {
+  DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(userEmail).get();
+  Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+  return userData['profilepicture'] ?? 'default_picture_url';
 }
 
 class _EventPageState extends State<EventPage> {
@@ -32,6 +45,7 @@ class _EventPageState extends State<EventPage> {
               String? dateTime = data['dateTime'];
               String? attendanceLimit = data['attendanceLimit'];
               String? imageUrl = data['imageUrl'];
+              String? userEmail = data['userEmail'];
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,12 +85,63 @@ class _EventPageState extends State<EventPage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Created by: '),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 10.0),
+                                  child: userEmail != null ? FutureBuilder<String>(
+                                    future: getUserProfilePicture(userEmail),
+                                    builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                                      if (snapshot.connectionState == ConnectionState.waiting) {
+                                        return CircularProgressIndicator();
+                                      } else {
+                                        if (snapshot.hasError)
+                                          return Icon(Icons.error);
+                                        else
+                                          return CircleAvatar(
+                                            backgroundImage: NetworkImage(snapshot.data!),
+                                            radius: 30.0,
+                                          );
+                                      }
+                                    },
+                                  ) : Icon(
+                                    Icons.account_circle,
+                                    size: 60.0,
+                                  ),
+                                ),
+                                Column(
+                                  children: <Widget>[
+                                    userEmail != null ? FutureBuilder<String>(
+                                    future: getUserName(userEmail),
+                                    builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                                      if (snapshot.connectionState == ConnectionState.waiting) {
+                                        return CircularProgressIndicator();
+                                      } else {
+                                        if (snapshot.hasError)
+                                          return Text('Error: ${snapshot.error}');
+                                        else
+                                          return Text(
+                                            '@${snapshot.data}', // dá display do username
+                                            style: TextStyle(
+                                              fontSize: 25.0,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          );
+                                      }
+                                    },
+                                  ) : Text(
+                                    'Unknown user',
+                                    style: TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                    Text('created by'),
+                                  ],
+                                ),
                                 ElevatedButton(
                                   onPressed: () {
                                     // Add code to handle the button press
                                   },
-                                  child: Text('Join Event'),
+                                  child: Text(FirebaseAuth.instance.currentUser?.email == userEmail ? 'Edit Event' : 'Join Event'),
                                 ),
                               ],
                             ),
