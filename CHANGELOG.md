@@ -43,5 +43,15 @@
 
 - Sorting event by their date of creation
 
+- See event's page
+
+- Password strenght meter
+
+- Email verification after creating an account
+
+- See other person's profile
+
+- Profile information connected to the database and optimized for better storage management
+
 ---
 
