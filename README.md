@@ -141,7 +141,7 @@ To sum up, we agree that the sprint was well planned, well executed and that alm
 ![Screenshot from 2024-04-27 14-35-52](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/0d4cafa5-3f89-4ed6-8799-b6a1aeb83660)
 
 
-### End of Sprint 1 Board
+### End of Sprint 2 Board
 
 ![Screenshot from 2024-04-30 10-51-56](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/b7abf97c-8754-4f0c-a8e5-fdb28bddab8d)
 
