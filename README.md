@@ -28,8 +28,8 @@ Best regards, 2LEIC04T4
   * [Logical architecture](#Logical-Architeture)
   * [Physical architecture](#Physical-Architeture)
   * [Vertical prototype](#Vertical-Prototype)
- * [Sprint 1](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/blob/Sprint1/README.md#sprint-1-app-version-101)
- * [Sprint 2](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/blob/Sprint2/README.md#sprint-2-app-version-102) 
+ * [Sprint 1](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/blob/main/README.md#sprint-1-app-version-101)
+ * [Sprint 2](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/blob/main/README.md#sprint-2-app-version-102) 
 
 ---
 
