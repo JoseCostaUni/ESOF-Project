@@ -5,7 +5,6 @@ import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/features/searchbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:app/read%20data/Read_event.dart';
-import 'package:app/screens/perfil_do_evento.dart';
 
 class CustomSearchBar extends StatefulWidget {
   final TextEditingController search;

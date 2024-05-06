@@ -1,26 +1,12 @@
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/features/searchbar.dart';
-import 'package:app/screens/createevent.dart';
-import 'package:app/screens/profile.dart';
-import 'package:flutter/material.dart';
-import 'package:app/screens/eventsearch.dart';
+import 'package:app/screens/event_page.dart';
 import 'package:flutter/material.dart';
 import 'package:app/backend/Search_Bar/Search_Bar_Algo.dart';
-import 'package:app/features/bottomappnavigator.dart';
-import 'package:app/features/searchbar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:app/screens/eventsearch.dart';
-import 'package:app/features/bottomappnavigator.dart';
-import 'package:app/features/searchbar.dart';
-import 'package:app/read%20data/Read_event.dart';
 import 'package:app/screens/searched_profile.dart';
-import 'package:app/screens/perfil_do_evento.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:app/screens/eventsearch.dart';
 
 class EventSearch extends StatefulWidget {
+  // ignore: use_super_parameters
   const EventSearch({Key? key}) : super(key: key);
 
   @override
@@ -38,8 +24,9 @@ class _EventSearchState extends State<EventSearch> {
   final TextEditingController _searchcontroller = TextEditingController();
   String selectedOption = "Events";
 
+  // ignore: unused_element
   Future<List<Map<String, dynamic>>> _loadEvents(String query) async {
-    return Future.delayed(Duration(seconds: 2), () {
+    return Future.delayed(const Duration(seconds: 2), () {
       return List.generate(10, (index) => {'title': 'Event $index'});
     });
   }
@@ -52,21 +39,24 @@ class _EventSearchState extends State<EventSearch> {
     return users;
   }
 
+  // ignore: no_leading_underscores_for_local_identifiers
   void calcReccomendations(String _selectedOption) async {
     if (selectedOption == 'Events') {
       users.clear();
       String input = _searchcontroller.text;
       await eventHandler.calcEvents(input);
-      suggestions = await eventHandler.getEvents();
+      suggestions = eventHandler.getEvents();
       events = [...suggestions];
+      // ignore: unused_local_variable
       String a = "a";
       setState(() {});
     } else {
       events.clear();
       String input = _searchcontroller.text;
       await eventHandler.calcUsers(input);
-      suggestions = await eventHandler.getEvents();
+      suggestions = eventHandler.getEvents();
       users = [...suggestions];
+      // ignore: unused_local_variable
       String a = "a";
       setState(() {});
     }
@@ -76,11 +66,12 @@ class _EventSearchState extends State<EventSearch> {
     if (currentScreen != 'EventSearch') {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => EventSearch()),
+        MaterialPageRoute(builder: (context) => const EventSearch()),
       );
     }
   }
 
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,14 +90,14 @@ class _EventSearchState extends State<EventSearch> {
             },
           ),
           if (events.isEmpty && selectedOption == 'Events')
-            Center(child: Text('No events found')),
+            const Center(child: Text('No events found')),
           if (events.isNotEmpty)
             Expanded(
               child: FutureBuilder<List<Map<String, dynamic>>>(
                 future: Future.value(getEvents()),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
+                    return const Center(
                       child: CircularProgressIndicator(),
                     );
                   } else if (snapshot.hasData) {
@@ -122,7 +113,7 @@ class _EventSearchState extends State<EventSearch> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (_) => PerfilEvent()),
+                                    builder: (_) => EventPage(eventId: event['id'])),
                               );
                             },
                             child: Card(
@@ -142,7 +133,7 @@ class _EventSearchState extends State<EventSearch> {
                       },
                     );
                   } else {
-                    return Center(
+                    return const Center(
                       child: Text('No events found'),
                     );
                   }
@@ -150,14 +141,14 @@ class _EventSearchState extends State<EventSearch> {
               ),
             ),
           if (users.isEmpty && selectedOption == 'People')
-            Center(child: Text('No people found')),
+            const Center(child: Text('No people found')),
           if (users.isNotEmpty)
             Expanded(
               child: FutureBuilder<List<Map<String, dynamic>>>(
                 future: Future.value(getUsers()),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
+                    return const Center(
                       child: CircularProgressIndicator(),
                     );
                   } else if (snapshot.hasData) {
@@ -194,7 +185,7 @@ class _EventSearchState extends State<EventSearch> {
                       },
                     );
                   } else {
-                    return Center(
+                    return const Center(
                       child: Text('No events found'),
                     );
                   }

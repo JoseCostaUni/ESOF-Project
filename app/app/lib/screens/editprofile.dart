@@ -133,7 +133,7 @@ class _EditProfileState extends State<EditProfile> {
 
       if (croppedFile != null) {
         setState(() {
-          _image = File(croppedFile.path!);
+          _image = File(croppedFile.path);
           resized = true;
         });
       }
