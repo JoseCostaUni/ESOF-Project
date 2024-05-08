@@ -93,7 +93,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(239, 255, 228, 225),
-      body: Stack(
+      body:SafeArea(
+        child: Stack(
         children: [
           FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
             future: getuserdetails(),
@@ -384,7 +385,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
             ),
           ),
         ],
-      ),
+      ),),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {

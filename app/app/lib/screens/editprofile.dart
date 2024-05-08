@@ -9,7 +9,7 @@ import 'package:app/screens/homepage.dart';
 import 'package:image_cropper/image_cropper.dart';
 
 class EditProfile extends StatefulWidget {
-  const EditProfile({super.key});
+  const EditProfile({Key? key}) : super(key: key);
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -46,7 +46,7 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
-  Future<void> _loadText() async{
+  Future<void> _loadText() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       try {
@@ -55,17 +55,11 @@ class _EditProfileState extends State<EditProfile> {
             .doc(user.email)
             .get();
 
-
         setState(() {
-          final TextEditingController _nameController2 = TextEditingController(text: docSnapshot.get('name'));
-          final TextEditingController _usernameController2 = TextEditingController(text: docSnapshot.get('username'));
-          final TextEditingController _descriptionController2 = TextEditingController(text: docSnapshot.get('description'));
-            
-          _nameController = _nameController2;
-          _usernameController = _usernameController2;
-          _descriptionController = _descriptionController2;
+          _nameController.text = docSnapshot.get('name') ?? '';
+          _usernameController.text = docSnapshot.get('username') ?? '';
+          _descriptionController.text = docSnapshot.get('description') ?? '';
         });
-        
       } catch (e) {
         print('Failed to load profile details from Firebase Storage: $e');
       }
@@ -163,7 +157,7 @@ class _EditProfileState extends State<EditProfile> {
     try {
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        String userEmail = user.email!;
+        String userEmail = user.email ?? '';
 
         firebase_storage.Reference ref =
             firebase_storage.FirebaseStorage.instance.ref();
@@ -178,7 +172,6 @@ class _EditProfileState extends State<EditProfile> {
               .collection("users")
               .doc(userEmail)
               .update({'profilepicture': _tempImageUrl});
-
         } else {
           print('Image is null.');
         }
@@ -220,165 +213,171 @@ class _EditProfileState extends State<EditProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 253, 241, 238),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  const SizedBox(width: 10),
-                  const Text(
-                    "Edit Profile",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Card(
-                elevation: 12,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    const SizedBox(width: 10),
+                    const Text(
+                      "Edit Profile",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ],
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            children: [
-                              ClipOval(
+                const SizedBox(height: 10),
+                Card(
+                  elevation: 12,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              children: [
+                                ClipOval(
                                   child: SizedBox(
-                                      width: 120,
-                                      height: 120,
-                                      child: Container(
-                                        color: Colors.grey[200],
-                                        child: !resized
-                                            ? (_tempImageUrl == ""
-                                                ? Container(color: Colors.grey[200]) 
-                                                : Image.network(
-                                                    _tempImageUrl,
-                                                    fit: BoxFit.cover,
-                                                  ))
-                                            : Image.file(
-                                                _image!,
-                                                fit: BoxFit.cover,
-                                              ),
-                                      ))),
-                              InkWell(
-                                onTap: _removeImage,
-                                child: const Text(
-                                  "Remove",
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.photo),
-                                    onPressed: () =>
-                                        getImage(ImageSource.gallery),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  IconButton(
-                                    icon: const Icon(Icons.camera_alt),
-                                    onPressed: () =>
-                                        getImage(ImageSource.camera),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      TextField(
-                        controller: _usernameController,
-                        decoration: const InputDecoration(
-                          hintText: 'Change Username',
-                          prefixIcon: Icon(Icons.text_fields),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      TextField(
-                        controller: _nameController,
-                        decoration: const InputDecoration(
-                          hintText: 'Change Name',
-                          prefixIcon: Icon(Icons.text_fields),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      TextField(
-                        controller: _descriptionController,
-                        maxLines: null,
-                        maxLength: 100,
-                        decoration: const InputDecoration(
-                          hintText: 'New Description',
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text("Cancel"),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              updateUserDetails(
-                                  FirebaseAuth.instance.currentUser);
-                              _saveImage();
-                              _changeImageAfterSave();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const MyProfilePage(
-                                    title: "Profile",
-                                    username: '',
+                                    width: 120,
+                                    height: 120,
+                                    child: Container(
+                                      color: Colors.grey[200],
+                                      child: !resized
+                                          ? (_tempImageUrl == ""
+                                              ? Container(
+                                                  color: Colors.grey[200],
+                                                )
+                                              : Image.network(
+                                                  _tempImageUrl,
+                                                  fit: BoxFit.cover,
+                                                ))
+                                          : Image.file(
+                                              _image!,
+                                              fit: BoxFit.cover,
+                                            ),
+                                    ),
                                   ),
                                 ),
-                              );
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Updated user details'),
-                                  duration: Duration(seconds: 2),
+                                InkWell(
+                                  onTap: _removeImage,
+                                  child: const Text(
+                                    "Remove",
+                                    style: TextStyle(color: Colors.red),
+                                  ),
                                 ),
-                              );
-                            },
-                            child: const Text("Save"),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.photo),
+                                      onPressed: () =>
+                                          getImage(ImageSource.gallery),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    IconButton(
+                                      icon: const Icon(Icons.camera_alt),
+                                      onPressed: () =>
+                                          getImage(ImageSource.camera),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        TextField(
+                          controller: _usernameController,
+                          decoration: const InputDecoration(
+                            hintText: 'Change Username',
+                            prefixIcon: Icon(Icons.text_fields),
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                        const SizedBox(height: 10),
+                        TextField(
+                          controller: _nameController,
+                          decoration: const InputDecoration(
+                            hintText: 'Change Name',
+                            prefixIcon: Icon(Icons.text_fields),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        TextField(
+                          controller: _descriptionController,
+                          maxLines: null,
+                          maxLength: 100,
+                          decoration: const InputDecoration(
+                            hintText: 'New Description',
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text("Cancel"),
+                            ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                await updateUserDetails(
+                                    FirebaseAuth.instance.currentUser);
+                                await _saveImage();
+                                await _changeImageAfterSave();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const MyProfilePage(
+                                      title: "Profile",
+                                      username: '',
+                                    ),
+                                  ),
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Updated user details'),
+                                    duration: Duration(seconds: 2),
+                                  ),
+                                );
+                              },
+                              child: const Text("Save"),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

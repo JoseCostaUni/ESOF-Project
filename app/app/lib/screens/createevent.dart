@@ -34,32 +34,30 @@ class _CreateEventState extends State<CreateEvent> {
     }
   }
 
-  Future<void> _loadImage() async {
-    final prefs = await SharedPreferences.getInstance();
-    final imagePath = prefs.getString('profile_image');
-
-    if (imagePath != null) {
-      setState(() {
-        _image = File(imagePath);
-      });
-    } else {
-      // Se a imagem não estiver salva localmente, você pode carregar do Firestore
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        final imageUrl = await getUserProfilePicture(user.email!);
-        if (imageUrl != 'default_picture_url') {
-          setState(() {
-            _image = File(imageUrl);
-          });
-        }
-      }
-    }
-  }
-
   @override
   void initState() {
     super.initState();
     _loadImage();
+  }
+
+  Future<void> _loadImage() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        final docSnapshot = await FirebaseFirestore.instance
+            .collection("users")
+            .doc(user.email)
+            .get();
+        final String imageUrl = docSnapshot.get('profilepicture');
+        if (imageUrl.isNotEmpty) {
+          setState(() {
+            __image = imageUrl;
+          });
+        }
+      } catch (e) {
+        print('Failed to load image from Firebase Storage: $e');
+      }
+    }
   }
 
   final TextEditingController _titleController = TextEditingController();
@@ -69,6 +67,7 @@ class _CreateEventState extends State<CreateEvent> {
       TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   File? _image;
+  String __image = '';
 
   Future<String> getUserProfilePicture(String userEmail) async {
     DocumentSnapshot userDoc = await FirebaseFirestore.instance
@@ -152,7 +151,7 @@ class _CreateEventState extends State<CreateEvent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 253, 241, 238),
+      backgroundColor: const Color.fromARGB(255, 233, 191, 180),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
@@ -176,7 +175,8 @@ class _CreateEventState extends State<CreateEvent> {
               ),
               const SizedBox(height: 10),
               Card(
-                elevation: 12,
+                elevation: 4,
+                color: Color.fromARGB(255, 243, 190, 177),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
                 ),
@@ -192,8 +192,8 @@ class _CreateEventState extends State<CreateEvent> {
                               width: 120,
                               height: 120,
                               child: _image != null
-                                  ? Image.file(
-                                      _image!,
+                                  ? Image.network(
+                                    __image,
                                       fit: BoxFit.cover,
                                     )
                                   : FutureBuilder<DocumentSnapshot>(
@@ -209,7 +209,6 @@ class _CreateEventState extends State<CreateEvent> {
                                           return Text(
                                               "Error: ${snapshot.error}");
                                         }
-
                                         if (snapshot.connectionState ==
                                             ConnectionState.done) {
                                           Map<String, dynamic> data =

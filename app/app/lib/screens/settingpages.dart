@@ -74,7 +74,7 @@ class _SettingPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(239, 255, 228, 225),
-      body: Column(
+      body: SafeArea(child:  Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
@@ -234,7 +234,7 @@ class _SettingPageState extends State<SettingsPage> {
             endIndent: 20,
           ),
         ],
-      ),
+      ),),
       bottomNavigationBar: CustomBottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: (index) {
