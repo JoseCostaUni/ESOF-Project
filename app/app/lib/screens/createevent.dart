@@ -23,14 +23,16 @@ class CreateEvent extends StatefulWidget {
 class _CreateEventState extends State<CreateEvent> {
   int _currentIndex = 1;
   List<File> _selectedImages = [];
-
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
-  final TextEditingController _attendanceLimitsController =
-      TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  File? _image;
+  Future<void> updateOrganizedEventsCount() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final userRef =
+          FirebaseFirestore.instance.collection('users').doc(user.email);
+      await userRef.update({
+        'organizedEventsCount': FieldValue.increment(1),
+      });
+    }
+  }
 
   Future<void> _loadImage() async {
     final prefs = await SharedPreferences.getInstance();
@@ -40,7 +42,41 @@ class _CreateEventState extends State<CreateEvent> {
       setState(() {
         _image = File(imagePath);
       });
+    } else {
+      // Se a imagem não estiver salva localmente, você pode carregar do Firestore
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final imageUrl = await getUserProfilePicture(user.email!);
+        if (imageUrl != 'default_picture_url') {
+          setState(() {
+            _image = File(imageUrl);
+          });
+        }
+      }
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadImage();
+  }
+
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
+  final TextEditingController _attendanceLimitsController =
+      TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  File? _image;
+
+  Future<String> getUserProfilePicture(String userEmail) async {
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userEmail)
+        .get();
+    Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+    return userData['profilepicture'] ?? 'default_picture_url';
   }
 
   Future<String?> _uploadImageToFirebaseStorage(File imageFile) async {
@@ -66,53 +102,52 @@ class _CreateEventState extends State<CreateEvent> {
   }
 
   Future<void> _createEvent() async {
-  if (_titleController.text.isEmpty ||
-      _dateController.text.isEmpty ||
-      _locationController.text.isEmpty ||
-      _attendanceLimitsController.text.isEmpty ||
-      _descriptionController.text.isEmpty) {
-    return;
-  }
-
-  // Obtenha o usuário atualmente autenticado
-  final user = FirebaseAuth.instance.currentUser;
-  if (user != null) {
-    try {
-      List<String> imageUrls = [];
-      for (File imageFile in _selectedImages) {
-        String? imageUrl = await _uploadImageToFirebaseStorage(imageFile);
-        if (imageUrl != null) {
-          imageUrls.add(imageUrl);
-        }
-      }
-
-      // Crie o documento do evento com o e-mail do usuário
-      await FirebaseFirestore.instance.collection("event").add({
-        "title": _titleController.text,
-        "dateTime": _dateController.text,
-        "location": _locationController.text,
-        "attendanceLimit": _attendanceLimitsController.text,
-        "description": _descriptionController.text,
-        "imageUrls": imageUrls,
-        "userEmail": user.email, // Adicione o e-mail do usuário ao documento do evento
-        "createdAt": DateTime.now(),
-      });
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomePage(title: 'Home'),
-        ),
-      );
-    } catch (e) {
-      print('Erro ao criar o evento: $e');
-      // Handle error (show a snackbar, dialog, etc.)
+    if (_titleController.text.isEmpty ||
+        _dateController.text.isEmpty ||
+        _locationController.text.isEmpty ||
+        _attendanceLimitsController.text.isEmpty ||
+        _descriptionController.text.isEmpty) {
+      return;
     }
-  } else {
-    // Handle case when user is not logged in
+
+    // Obtenha o usuário atualmente autenticado
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        List<String> imageUrls = [];
+        for (File imageFile in _selectedImages) {
+          String? imageUrl = await _uploadImageToFirebaseStorage(imageFile);
+          if (imageUrl != null) {
+            imageUrls.add(imageUrl);
+          }
+        }
+
+        // Crie o documento do evento com o e-mail do usuário
+        await FirebaseFirestore.instance.collection("event").add({
+          "title": _titleController.text,
+          "dateTime": _dateController.text,
+          "location": _locationController.text,
+          "attendanceLimit": _attendanceLimitsController.text,
+          "description": _descriptionController.text,
+          "imageUrls": imageUrls,
+          "userEmail":
+              user.email, // Adicione o e-mail do usuário ao documento do evento
+          "createdAt": DateTime.now(),
+        });
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomePage(title: 'Home'),
+          ),
+        );
+      } catch (e) {
+        print('Erro ao criar o evento: $e');
+        // Handle error (show a snackbar, dialog, etc.)
+      }
+    } else {
+      // Handle case when user is not logged in
+    }
   }
-}
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -161,8 +196,39 @@ class _CreateEventState extends State<CreateEvent> {
                                       _image!,
                                       fit: BoxFit.cover,
                                     )
-                                  : Container(
-                                      color: Colors.grey[200],
+                                  : FutureBuilder<DocumentSnapshot>(
+                                      future: FirebaseFirestore.instance
+                                          .collection("users")
+                                          .doc(FirebaseAuth
+                                              .instance.currentUser?.email)
+                                          .get(),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<DocumentSnapshot>
+                                              snapshot) {
+                                        if (snapshot.hasError) {
+                                          return Text(
+                                              "Error: ${snapshot.error}");
+                                        }
+
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.done) {
+                                          Map<String, dynamic> data =
+                                              snapshot.data!.data()
+                                                  as Map<String, dynamic>;
+                                          final profilePictureUrl =
+                                              data['profilepicture'];
+                                          if (profilePictureUrl != null) {
+                                            return Image.network(
+                                              profilePictureUrl,
+                                              fit: BoxFit.cover,
+                                            );
+                                          }
+                                        }
+
+                                        return Container(
+                                          color: Colors.grey[200],
+                                        );
+                                      },
                                     ),
                             ),
                           ),
@@ -334,7 +400,10 @@ class _CreateEventState extends State<CreateEvent> {
                             ],
                           ),
                           ElevatedButton(
-                            onPressed: _createEvent,
+                            onPressed: () async {
+                              await _createEvent();
+                              await updateOrganizedEventsCount();
+                            },
                             child: const Text("Create Event"),
                           ),
                         ],

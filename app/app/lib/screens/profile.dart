@@ -2,12 +2,11 @@ import 'dart:async';
 
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/screens/editprofile.dart';
+import 'package:app/screens/event_page.dart';
 import 'package:app/screens/settingpages.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
 
 class MyProfilePage extends StatefulWidget {
   const MyProfilePage({Key? key, required this.title, required this.username})
@@ -36,22 +35,24 @@ class _MyProfilePageState extends State<MyProfilePage> {
   }
 
   Future<void> _loadImage() async {
-  User? user = FirebaseAuth.instance.currentUser;
-  if (user != null) {
-    try {
-      final docSnapshot = await FirebaseFirestore.instance.collection("users").doc(user.email).get();
-      final String imageUrl = docSnapshot.get('profilepicture');
-      if (imageUrl.isNotEmpty) {
-        setState(() {
-          _image = imageUrl;
-        });
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        final docSnapshot = await FirebaseFirestore.instance
+            .collection("users")
+            .doc(user.email)
+            .get();
+        final String imageUrl = docSnapshot.get('profilepicture');
+        if (imageUrl.isNotEmpty) {
+          setState(() {
+            _image = imageUrl;
+          });
+        }
+      } catch (e) {
+        print('Failed to load image from Firebase Storage: $e');
       }
-    } catch (e) {
-      print('Failed to load image from Firebase Storage: $e');
     }
   }
-}
-
 
   Future<String> getUsername() async {
     DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
@@ -66,7 +67,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
     }
   }
 
-
   Future<String> getUserDescription() async {
     DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
         .instance
@@ -80,8 +80,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
     }
   }
 
-
   final User? _currentuser = FirebaseAuth.instance.currentUser;
+
   Future<DocumentSnapshot<Map<String, dynamic>>> getuserdetails() async {
     return await FirebaseFirestore.instance
         .collection('users')
@@ -120,7 +120,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                   child: SizedBox(
                                     width: 120,
                                     height: 120,
-                                    child: _image != ""
+                                    child: _image.isNotEmpty
                                         ? Image.network(
                                             _image,
                                             fit: BoxFit.cover,
@@ -139,42 +139,76 @@ class _MyProfilePageState extends State<MyProfilePage> {
                               child: FutureBuilder<String>(
                                 future: getUsername(),
                                 builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-                                    }
-                                    if (snapshot.hasError) {
-                                      return Text(
-                                          "Error: ${snapshot.error}");
-                                    }
-                                    String description =
-                                        snapshot.data ?? "No description";
-                                    return Padding(
-                                      padding: const EdgeInsets.all(25),
-                                      child: Text(description),
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
                                     );
-                                  }),),
+                                  }
+                                  if (snapshot.hasError) {
+                                    return Text("Error: ${snapshot.error}");
+                                  }
+                                  String description =
+                                      snapshot.data ?? "No description";
+                                  return Padding(
+                                    padding: const EdgeInsets.all(25),
+                                    child: Text(description),
+                                  );
+                                },
+                              ),
+                            ),
                             const SizedBox(height: 10),
-                            const Row(
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Padding(
-                                  padding:
-                                      EdgeInsets.only(right: 145, left: 10),
-                                  child: Text(
-                                    '12', // Fazer a ligação à base de dados
-                                    style: TextStyle(
-                                        fontSize: 16, color: Colors.grey),
+                                  padding: const EdgeInsets.only(right: 145, left: 10),
+                                  child: FutureBuilder<int>(
+                                    future: getRegisteredEventsCount(
+                                        _currentuser!.email!),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
+                                      if (snapshot.hasError) {
+                                        return Text("Error: ${snapshot.error}");
+                                      }
+                                      int registeredEventsCount =
+                                          snapshot.data ?? 0;
+                                      return Text(
+                                        '$registeredEventsCount',
+                                        style: const TextStyle(
+                                            fontSize: 16, color: Colors.grey),
+                                      );
+                                    },
                                   ),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(right: 20, left: 30),
-                                  child: Text(
-                                    '2', // Fazer a ligação à base de dados
-                                    style: TextStyle(
-                                        fontSize: 16, color: Colors.grey),
+                                  child: FutureBuilder<
+                                      DocumentSnapshot<Map<String, dynamic>>>(
+                                    future: getuserdetails(),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<
+                                                DocumentSnapshot<
+                                                    Map<String, dynamic>>>
+                                            snapshot) {
+                                      if (!snapshot.hasData) {
+                                        return const SizedBox();
+                                      }
+                                      int organizedEventsCount =
+                                          snapshot.data!.data()?[
+                                                  'organizedEventsCount'] ??
+                                              0;
+                                      return Text(
+                                        '$organizedEventsCount',
+                                        style: const TextStyle(
+                                            fontSize: 16, color: Colors.grey),
+                                      );
+                                    },
                                   ),
                                 ),
                               ],
@@ -183,15 +217,15 @@ class _MyProfilePageState extends State<MyProfilePage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.only(right: 70, left: 10),
+                                  padding: EdgeInsets.only(right: 50, left: 20),
                                   child: Text(
-                                    'Participations', // Fazer a ligação à base de dados
+                                    'Joined', // Fazer a ligação à base de dados
                                     style: TextStyle(
                                         fontSize: 16, color: Colors.grey),
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(right: 30, left: 30),
+                                  padding: EdgeInsets.only(right: 20, left: 70),
                                   child: Text(
                                     'Organized', // Fazer a ligação à base de dados
                                     style: TextStyle(
@@ -232,25 +266,25 @@ class _MyProfilePageState extends State<MyProfilePage> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 25),
                               child: FutureBuilder<String>(
-                                  future: getUserDescription(),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-                                    }
-                                    if (snapshot.hasError) {
-                                      return Text(
-                                          "Error: ${snapshot.error}");
-                                    }
-                                    String description =
-                                        snapshot.data ?? "No description";
-                                    return Padding(
-                                      padding: const EdgeInsets.all(25),
-                                      child: Text(description),
+                                future: getUserDescription(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
                                     );
-                                  }),
+                                  }
+                                  if (snapshot.hasError) {
+                                    return Text("Error: ${snapshot.error}");
+                                  }
+                                  String description =
+                                      snapshot.data ?? "No description";
+                                  return Padding(
+                                    padding: const EdgeInsets.all(25),
+                                    child: Text(description),
+                                  );
+                                },
+                              ),
                             ),
                             const SizedBox(height: 15),
                             const Padding(
@@ -344,10 +378,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
             child: IconButton(
               icon: const Icon(Icons.settings),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const SettingsPage()),
-                );
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const SettingsPage()));
               },
             ),
           ),

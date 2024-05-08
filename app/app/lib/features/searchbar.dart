@@ -53,7 +53,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
     if (widget.currentScreen != 'EventSearch') {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => EventSearch()),
+        MaterialPageRoute(builder: (context) => const EventSearch()),
       );
     }
   }

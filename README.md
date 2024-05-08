@@ -28,8 +28,8 @@ Best regards, 2LEIC04T4
   * [Logical architecture](#Logical-Architeture)
   * [Physical architecture](#Physical-Architeture)
   * [Vertical prototype](#Vertical-Prototype)
- * [Sprint 1](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/blob/Sprint1/README.md#sprint-1-app-version-101)
- * [Sprint 2](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/blob/Sprint2/README.md#sprint-2-app-version-102) 
+ * [Sprint 1](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/blob/main/README.md#sprint-1-app-version-101)
+ * [Sprint 2](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/blob/main/README.md#sprint-2-app-version-102) 
 
 ---
 
@@ -140,12 +140,36 @@ To sum up, we agree that the sprint was well planned, well executed and that alm
 
 ![Screenshot from 2024-04-27 14-35-52](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/0d4cafa5-3f89-4ed6-8799-b6a1aeb83660)
 
-
 ### End of Sprint 2 Board
 
 ![Screenshot from 2024-04-30 10-51-56](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/b7abf97c-8754-4f0c-a8e5-fdb28bddab8d)
 
-
 ### Sprint 2 Review (v1.0.1)
 
 At first glance , the sprint went better than the first one , since almost all planned increments were actually implemented , apart from some minor tweaks that will be left for the next sprint. We were able to complete 15 features from the 11 that were initially planned. Summarizing, we could probably have done further progress but we had lots of other side projects and tests that difficulted our full focus in this sole project, but we are optimistic of our progress and our method/organization, in the end, it went smoothly and was all according to the plan.
+
+### Happiness Meter
+![image](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/46bd353e-f698-412c-b4a5-f942a3e05137)
+
+### Sprint Retrospective:
+
+#### What went well ?
+- We fixed the issues with the remote database not being able to store/display images it in a correct way.
+- We were able to do more work than what we expected in the start of sprint.
+- All the group members did what they were destined to do, with a lot of spare time.
+
+#### What went wrong ?
+- We didn't add the .feature files to the issues.
+- We forgot to create the issues in some work items/user stories and they were kept as draft issues only.
+- The events were order by the event creation date and not by the event actual date.
+- We didn't assign any work item/user story to more than one member, so none of them were made with a actual person that only coded and one that only reviewed the code.
+
+#### What puzzles us ?
+- Adding more than one image to a certain event
+- Search bar algorithm was not so trivial and took a lot more effort than expected
+- Downloading images from database to local to be able to display them with a specified flutter widget, so we went with another route
+
+#### What are we going to do to improve?
+- Divide the work in a way that groups of 2/3 are assigned to each task
+- Organise/Write code in a way that in the end leads to a lot less polishing needed
+- Explore and research more options to test certain functions with other libraries

@@ -1,6 +1,7 @@
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/features/searchbar.dart';
 import 'package:app/screens/event_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:app/backend/Search_Bar/Search_Bar_Algo.dart';
 import 'package:app/screens/searched_profile.dart';
@@ -39,6 +40,20 @@ class _EventSearchState extends State<EventSearch> {
     return users;
   }
 
+   Future<List<Map<String, dynamic>>> getEvents1({
+    String? orderBy,
+    bool descending = true,
+  }) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('event')
+        .orderBy(orderBy ?? 'createdAt', descending: true)
+        .get();
+    return querySnapshot.docs.map((doc) {
+      final data = doc.data() as Map<String, dynamic>;
+      data['id'] = doc.id;
+      return data;
+    }).toList();
+  }
   // ignore: no_leading_underscores_for_local_identifiers
   void calcReccomendations(String _selectedOption) async {
     if (selectedOption == 'Events') {
@@ -71,7 +86,6 @@ class _EventSearchState extends State<EventSearch> {
     }
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,7 +108,7 @@ class _EventSearchState extends State<EventSearch> {
           if (events.isNotEmpty)
             Expanded(
               child: FutureBuilder<List<Map<String, dynamic>>>(
-                future: Future.value(getEvents()),
+                future: Future.value(getEvents1()),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
@@ -110,11 +124,12 @@ class _EventSearchState extends State<EventSearch> {
                           padding: const EdgeInsets.all(8.0),
                           child: GestureDetector(
                             onTap: () {
+                              print(event['id']);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (_) => EventPage(eventId: event['id'])),
-                              );
+                                    builder: (_) =>
+                                        EventPage(eventId: event['id'])));
                             },
                             child: Card(
                               elevation: 4,

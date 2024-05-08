@@ -17,8 +17,27 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   final TextEditingController _searchcontroller = TextEditingController();
+  List<Map<String, dynamic>> _sortedEvents =
+      []; // Defina esta variável na sua classe HomePage
 
-  // Método para buscar os eventos
+  Future<String> getUserName(String userEmail) async {
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userEmail)
+        .get();
+    Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+    return userData['username'] ?? 'Unknown user';
+  }
+
+  Future<String> getUserProfilePicture(String userEmail) async {
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userEmail)
+        .get();
+    Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+    return userData['profilepicture'] ?? 'default_picture_url';
+  }
+
   Future<List<Map<String, dynamic>>> getEvents({
     String? orderBy,
     bool descending = true,
@@ -123,23 +142,134 @@ class _HomePageState extends State<HomePage> {
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 16.0, vertical: 10),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Row(
-                                        children: [
-                                          Column(
+                                  child: FutureBuilder<DocumentSnapshot>(
+                                    future: FirebaseFirestore.instance
+                                        .collection('users')
+                                        .doc(event['userEmail'])
+                                        .get(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return CircularProgressIndicator();
+                                      } else if (snapshot.hasError) {
+                                        return Text('Error: ${snapshot.error}');
+                                      } else {
+                                        Map<String, dynamic>? userData =
+                                            snapshot.data?.data()
+                                                as Map<String, dynamic>?;
+
+                                        if (userData != null) {
+                                          return Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
-                                            children: [
-                                            Text(event['title'] ?? ''),
-                                            Text(event['location'] ?? ''),
-                                            Text(event['dateTime'] ?? ''),
-                                        ])
-                                        ],
-                                      )
-                                    ],
+                                            children: <Widget>[
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: <Widget>[
+                                                  CircleAvatar(
+                                                    backgroundColor: Colors
+                                                        .grey, // You can set a default color here
+                                                    backgroundImage:
+                                                        NetworkImage(userData[
+                                                                'profilepicture'] ??
+                                                            ''),
+                                                  ),
+                                                  const SizedBox(
+                                                      width:
+                                                          10), // Espaçamento entre o avatar e o nome de usuário
+                                                  Text(userData['username'] ??
+                                                      ''),
+                                                ],
+                                              ),
+                                              const SizedBox(
+                                                  height:
+                                                      10), // Espaçamento entre o nome de usuário e os detalhes do evento
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 0),
+                                                child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      IconButton(
+                                                        onPressed: () {},
+                                                        icon: const Icon(
+                                                            Icons.event_sharp),
+                                                        iconSize: 20,
+                                                      ),
+                                                      Text(
+                                                          event['title'] ?? ''),
+                                                    ]),
+                                              ),
+
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 0),
+                                                child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      IconButton(
+                                                        onPressed: () {},
+                                                        icon: const Icon(
+                                                            Icons.location_on),
+                                                        iconSize: 20,
+                                                      ),
+                                                      Text(event['location'])
+                                                    ]),
+                                              ),
+
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 0),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween, // Ajuste o alinhamento conforme necessário
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        IconButton(
+                                                          onPressed: () {},
+                                                          icon: const Icon(Icons
+                                                              .date_range_rounded),
+                                                          iconSize: 20,
+                                                        ),
+                                                        Text(
+                                                            event['dateTime'] ??
+                                                                ''),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        IconButton(
+                                                          onPressed: () {},
+                                                          icon: const Icon(
+                                                              Icons.people),
+                                                          iconSize: 20,
+                                                        ),
+                                                        Text(
+                                                          '${event['numeroPessoasInscritas']}/${event['attendanceLimit']}',
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        } else {
+                                          return Text('User data not found');
+                                        }
+                                      }
+                                    },
                                   ),
                                 ),
                               ],
@@ -176,11 +306,15 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     ElevatedButton(
-                      onPressed: () {
-                        getEvents(
-                            orderBy: 'dateTime',
-                            descending: true); // Passa o parâmetro descending
-                        Navigator.pop(context);
+                      onPressed: () async {
+                        // Obtém a lista de eventos ordenados por data de forma decrescente
+                        List<Map<String, dynamic>> sortedEvents =
+                            await getEvents(
+                                orderBy: 'dateTime', descending: true);
+
+                        setState(() {
+                          _sortedEvents = sortedEvents;
+                        });
                       },
                       child: Text('Por Data'),
                     ),

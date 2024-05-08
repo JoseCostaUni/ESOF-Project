@@ -2,15 +2,60 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:app/features/bottomappnavigator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class EventPage extends StatefulWidget {
   final String eventId;
 
-  const EventPage({super.key, required this.eventId});
+  EventPage({required this.eventId});
 
   @override
   State<EventPage> createState() => _EventPageState();
 }
+
+Future<String> getUserName(String userEmail) async {
+  DocumentSnapshot userDoc =
+      await FirebaseFirestore.instance.collection('users').doc(userEmail).get();
+  Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+  return userData['username'] ?? 'Unknown user';
+}
+
+Future<String> getUserProfilePicture(String userEmail) async {
+  DocumentSnapshot userDoc =
+      await FirebaseFirestore.instance.collection('users').doc(userEmail).get();
+  Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+  return userData['profilepicture'] ?? 'default_picture_url';
+}
+
+Future<void> joinEvent(String eventId) async {
+  final eventRef = FirebaseFirestore.instance.collection('event').doc(eventId);
+  final user = FirebaseAuth.instance.currentUser;
+  
+  // Atualiza o número de pessoas inscritas no evento
+  await eventRef.update({
+    'numeroPessoasInscritas': FieldValue.increment(1),
+  });
+
+  // Adiciona o ID do evento à lista de eventos inscritos pelo usuário
+  if (user != null) {
+    await FirebaseFirestore.instance.collection('users').doc(user.email).update({
+      'eventosInscritos': FieldValue.arrayUnion([eventId]),
+    });
+  }
+}
+
+Future<int> getRegisteredEventsCount(String userEmail) async {
+  final userDoc = await FirebaseFirestore.instance.collection('users').doc(userEmail).get();
+  final userData = userDoc.data() as Map<String, dynamic>?;
+
+  if (userData != null) {
+    final List<dynamic>? eventosInscritos = userData['eventosInscritos'];
+    return eventosInscritos?.length ?? 0;
+  }
+
+  return 0;
+}
+
 
 class _EventPageState extends State<EventPage> {
   int _currentIndex = 0;
@@ -34,6 +79,7 @@ class _EventPageState extends State<EventPage> {
               String? dateTime = data['dateTime'];
               String? attendanceLimit = data['attendanceLimit'];
               List<dynamic>? imageUrls = data['imageUrls'];
+              String? userEmail = data['userEmail'];
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,23 +87,22 @@ class _EventPageState extends State<EventPage> {
                   Stack(
                     children: [
                       CarouselSlider(
-                                              items: imageUrls?.map((imageUrl) {
-                      return Container(
-                        width: MediaQuery.of(context).size.width,
-                        margin: const EdgeInsets.symmetric(horizontal: 5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                            image: NetworkImage(imageUrl),
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      );
-                                              }).toList(),
-                                              options: CarouselOptions(
-                      
-                                              ),
-                                            ),
+                        items: (imageUrls as List<dynamic>?)
+                            ?.map<Widget>((imageUrl) {
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: const EdgeInsets.symmetric(horizontal: 5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                image: NetworkImage(imageUrl),
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        options: CarouselOptions(),
+                      ),
                       Positioned(
                         top: 10.0,
                         left: 10.0,
@@ -81,12 +126,71 @@ class _EventPageState extends State<EventPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text('Created by: '),
+                              FutureBuilder<String>(
+                                future: userEmail != null
+                                    ? getUserProfilePicture(userEmail)
+                                    : null,
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<String> snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  } else {
+                                    if (snapshot.hasError)
+                                      return const Icon(Icons.error);
+                                    return CircleAvatar(
+                                      backgroundImage: NetworkImage(
+                                          snapshot.data ??
+                                              'default_picture_url'),
+                                      radius: 30.0,
+                                    );
+                                  }
+                                },
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  const Text('created by'),
+                                  FutureBuilder<String>(
+                                    future: userEmail != null
+                                        ? getUserName(userEmail)
+                                        : null,
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<String> snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const CircularProgressIndicator();
+                                      } else {
+                                        if (snapshot.hasError)
+                                          return Text(
+                                              'Error: ${snapshot.error}');
+                                        return Text(
+                                          '@${snapshot.data ?? 'Unknown user'}', // display do username
+                                          style: const TextStyle(
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
                               ElevatedButton(
                                 onPressed: () {
-                                  // Add code to handle the button press
+                                  if (FirebaseAuth
+                                          .instance.currentUser?.email ==
+                                      userEmail) {
+                                    // Se o usuário atual é o criador do evento, execute a ação de edição
+                                  } else {
+                                    // Caso contrário, incremente o número de inscritos
+                                    joinEvent(widget.eventId);
+                                  }
                                 },
-                                child: const Text('Join Event'),
+                                child: Text(
+                                    FirebaseAuth.instance.currentUser?.email ==
+                                            userEmail
+                                        ? 'Edit Event'
+                                        : 'Join Event'),
                               ),
                             ],
                           ),
@@ -106,12 +210,12 @@ class _EventPageState extends State<EventPage> {
                           child: Row(
                             children: [
                               const Icon(
-                                Icons.calendar_today, //  calendar icon
+                                Icons.calendar_today, // calendar icon
                                 color: Colors.black,
                                 size: 20.0,
                               ),
                               const SizedBox(width: 5.0),
-                              Text(dateTime ?? ''),
+                              Text('${dateTime ?? ''}'),
                             ],
                           ),
                         ),
@@ -120,12 +224,12 @@ class _EventPageState extends State<EventPage> {
                           child: Row(
                             children: [
                               const Icon(
-                                Icons.location_on, //location icon
+                                Icons.location_on, // location icon
                                 color: Colors.black,
                                 size: 20.0,
                               ),
                               const SizedBox(width: 5.0),
-                              Text(location ?? ''),
+                              Text('${location ?? ''}'),
                             ],
                           ),
                         ),
@@ -139,7 +243,7 @@ class _EventPageState extends State<EventPage> {
                                 size: 20.0,
                               ),
                               const SizedBox(width: 5.0),
-                              Text(attendanceLimit ?? ''),
+                              Text('${attendanceLimit ?? ''}'),
                             ],
                           ),
                         ),
@@ -156,7 +260,7 @@ class _EventPageState extends State<EventPage> {
               return const Text('Data not found');
             }
           }
-          return const Text('Loading...');
+          return const Center(child: CircularProgressIndicator());
         },
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
