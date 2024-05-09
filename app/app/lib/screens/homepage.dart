@@ -185,16 +185,12 @@ class _HomePageState extends State<HomePage> {
                                                                   'profilepicture'] ??
                                                               ''),
                                                     ),
-                                                    const SizedBox(
-                                                        width:
-                                                            10), 
+                                                    const SizedBox(width: 10),
                                                     Text(userData['username'] ??
                                                         ''),
                                                   ],
                                                 ),
-                                                const SizedBox(
-                                                    height:
-                                                        2),
+                                                const SizedBox(height: 2),
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.only(
@@ -206,15 +202,14 @@ class _HomePageState extends State<HomePage> {
                                                       children: [
                                                         IconButton(
                                                           onPressed: () {},
-                                                          icon: const Icon(
-                                                              Icons.event_sharp),
+                                                          icon: const Icon(Icons
+                                                              .event_sharp),
                                                           iconSize: 20,
                                                         ),
-                                                        Text(
-                                                            event['title'] ?? ''),
+                                                        Text(event['title'] ??
+                                                            ''),
                                                       ]),
                                                 ),
-
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.only(
@@ -226,14 +221,13 @@ class _HomePageState extends State<HomePage> {
                                                       children: [
                                                         IconButton(
                                                           onPressed: () {},
-                                                          icon: const Icon(
-                                                              Icons.location_on),
+                                                          icon: const Icon(Icons
+                                                              .location_on),
                                                           iconSize: 20,
                                                         ),
                                                         Text(event['location'])
                                                       ]),
                                                 ),
-
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.only(
@@ -254,9 +248,9 @@ class _HomePageState extends State<HomePage> {
                                                                 .date_range_rounded),
                                                             iconSize: 20,
                                                           ),
-                                                          Text(
-                                                              event['dateTime'] ??
-                                                                  ''),
+                                                          Text(event[
+                                                                  'dateTime'] ??
+                                                              ''),
                                                         ],
                                                       ),
                                                       Row(
@@ -271,8 +265,8 @@ class _HomePageState extends State<HomePage> {
                                                             iconSize: 20,
                                                           ),
                                                           Text(
-                                                            '${event['numeroPessoasInscritas']?? 0}/${event['attendanceLimit']}',
-                                                          ),
+                                                            '${event['eventosInscritos']?.length ?? 0}/${event['attendanceLimit']}',
+                                                          )
                                                         ],
                                                       ),
                                                     ],

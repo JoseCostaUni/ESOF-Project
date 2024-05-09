@@ -15,36 +15,23 @@ class EventPage extends StatefulWidget {
 }
 
 Future<String> getUserName(String userEmail) async {
-  DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(userEmail).get();
+  DocumentSnapshot userDoc =
+      await FirebaseFirestore.instance.collection('users').doc(userEmail).get();
   Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
   return userData['username'] ?? 'Unknown user';
 }
 
 Future<String> getUserProfilePicture(String userEmail) async {
-  DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(userEmail).get();
+  DocumentSnapshot userDoc =
+      await FirebaseFirestore.instance.collection('users').doc(userEmail).get();
   Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
   return userData['profilepicture'] ?? 'default_picture_url';
 }
 
-Future<void> joinEvent(String eventId) async {
-  final eventRef = FirebaseFirestore.instance.collection('event').doc(eventId);
-  final user = FirebaseAuth.instance.currentUser;
-
-  // Atualiza o número de pessoas inscritas no evento
-  await eventRef.update({
-    'numeroPessoasInscritas': FieldValue.increment(1),
-  });
-
-  // Adiciona o ID do evento à lista de eventos inscritos pelo usuário
-  if (user != null) {
-    await FirebaseFirestore.instance.collection('users').doc(user.email).update({
-      'eventosInscritos': FieldValue.arrayUnion([eventId]),
-    });
-  }
-}
 
 Future<int> getRegisteredEventsCount(String userEmail) async {
-  final userDoc = await FirebaseFirestore.instance.collection('users').doc(userEmail).get();
+  final userDoc =
+      await FirebaseFirestore.instance.collection('users').doc(userEmail).get();
   final userData = userDoc.data() as Map<String, dynamic>?;
 
   if (userData != null) {
@@ -57,6 +44,27 @@ Future<int> getRegisteredEventsCount(String userEmail) async {
 
 class _EventPageState extends State<EventPage> {
   int _currentIndex = 0;
+  bool _isJoined = false;
+
+  @override
+  void initState() {
+    super.initState();
+    checkIfUserJoinedEvent();
+  }
+
+  Future<void> checkIfUserJoinedEvent() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final userData = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.email)
+          .get();
+      final List<dynamic>? eventosInscritos = userData['eventosInscritos'];
+      setState(() {
+        _isJoined = eventosInscritos?.contains(widget.eventId) ?? false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +76,8 @@ class _EventPageState extends State<EventPage> {
           future: event.doc(widget.eventId).get(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              Map<String, dynamic>? data = snapshot.data?.data() as Map<String, dynamic>?;
+              Map<String, dynamic>? data =
+                  snapshot.data?.data() as Map<String, dynamic>?;
 
               if (data != null) {
                 String? title = data['title'];
@@ -78,6 +87,9 @@ class _EventPageState extends State<EventPage> {
                 String? attendanceLimit = data['attendanceLimit'];
                 List<dynamic>? imageUrls = data['imageUrls'];
                 String? userEmail = data['userEmail'];
+
+                final currentUser = FirebaseAuth.instance.currentUser;
+                final isCreator = currentUser?.email == userEmail;
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,14 +137,21 @@ class _EventPageState extends State<EventPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 FutureBuilder<String>(
-                                  future: userEmail != null ? getUserProfilePicture(userEmail) : null,
-                                  builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                  future: userEmail != null
+                                      ? getUserProfilePicture(userEmail)
+                                      : null,
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<String> snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
                                       return const CircularProgressIndicator();
                                     } else {
-                                      if (snapshot.hasError) return const Icon(Icons.error);
+                                      if (snapshot.hasError)
+                                        return const Icon(Icons.error);
                                       return CircleAvatar(
-                                        backgroundImage: NetworkImage(snapshot.data ?? 'default_picture_url'),
+                                        backgroundImage: NetworkImage(
+                                            snapshot.data ??
+                                                'default_picture_url'),
                                         radius: 30.0,
                                       );
                                     }
@@ -142,12 +161,19 @@ class _EventPageState extends State<EventPage> {
                                   children: <Widget>[
                                     const Text('created by'),
                                     FutureBuilder<String>(
-                                      future: userEmail != null ? getUserName(userEmail) : null,
-                                      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                                        if (snapshot.connectionState == ConnectionState.waiting) {
+                                      future: userEmail != null
+                                          ? getUserName(userEmail)
+                                          : null,
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<String> snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
                                           return const CircularProgressIndicator();
                                         } else {
-                                          if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+                                          if (snapshot.hasError) {
+                                            return Text(
+                                                'Error: ${snapshot.error}');
+                                          }
                                           return Text(
                                             '@${snapshot.data ?? 'Unknown user'}', // display do username
                                             style: const TextStyle(
@@ -162,15 +188,33 @@ class _EventPageState extends State<EventPage> {
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
-                                    if (FirebaseAuth.instance.currentUser?.email == userEmail) {
-                                      Navigator.push(context, MaterialPageRoute(builder: (_) => EditeventPage()));
-                                    } else {
-                                      joinEvent(widget.eventId);
+                                    final currentUser =
+                                        FirebaseAuth.instance.currentUser;
+                                    if (currentUser != null) {
+                                      if (currentUser.email == userEmail) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => EditeventPage(),
+                                          ),
+                                        );
+                                      } else {
+                                        if (_isJoined) {
+                                          leaveEvent(widget.eventId);
+                                        } else {
+                                          joinEvent(widget.eventId);
+                                        }
+                                      }
                                     }
                                   },
                                   child: Text(
-                                    FirebaseAuth.instance.currentUser?.email == userEmail ? 'Edit Event' : 'Join Event',
+                                    isCreator
+                                        ? 'Edit Event'
+                                        : _isJoined
+                                            ? 'Leave Event'
+                                            : 'Join Event',
                                   ),
+                                  
                                 ),
                               ],
                             ),
@@ -253,5 +297,63 @@ class _EventPageState extends State<EventPage> {
         },
       ),
     );
+  }
+
+
+Future<void> joinEvent(String eventId) async {
+  final user = FirebaseAuth.instance.currentUser;
+  final eventRef = FirebaseFirestore.instance.collection('event').doc(eventId);
+
+  if (user != null) {
+    // Verifica se o evento existe
+    final eventDoc = await eventRef.get();
+
+    if (eventDoc.exists) {
+      // Atualiza o evento para adicionar o usuário à lista de inscritos
+      await eventRef.update({
+        'eventosInscritos': FieldValue.arrayUnion([user.email]),
+      });
+
+      // Adiciona o evento à lista de eventos inscritos do usuário
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.email)
+          .update({
+        'eventosInscritos': FieldValue.arrayUnion([eventId]),
+      });
+      
+      // Atualiza o estado para refletir que o usuário se juntou ao evento
+      setState(() {
+        _isJoined = true;
+      });
+    } else {
+      // Se o evento não existir, você pode optar por criar um novo evento aqui
+      print('Evento não encontrado.');
+    }
+  }
+}
+
+
+  Future<void> leaveEvent(String eventId) async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      // Remove o evento da lista de eventos inscritos do usuário
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.email)
+          .update({
+        'eventosInscritos': FieldValue.arrayRemove([eventId]),
+      });
+
+      // Remove o usuário da lista de inscritos no evento
+      await FirebaseFirestore.instance.collection('event').doc(eventId).update({
+        'eventosInscritos': FieldValue.arrayRemove([user.email]),
+      });
+
+      setState(() {
+        _isJoined = false;
+      });
+    }
   }
 }

@@ -341,7 +341,7 @@ class _CreateEventState extends State<CreateEvent> {
                               borderSide: BorderSide(color: Colors.black)),
                           disabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.black)),
-                          prefixIcon: Icon(Icons.text_fields),
+                          prefixIcon: Icon(Icons.person_add_rounded),
                         ),
                       ),
                       const SizedBox(height: 10),
