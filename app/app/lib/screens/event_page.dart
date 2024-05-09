@@ -28,7 +28,6 @@ Future<String> getUserProfilePicture(String userEmail) async {
   return userData['profilepicture'] ?? 'default_picture_url';
 }
 
-
 Future<int> getRegisteredEventsCount(String userEmail) async {
   final userDoc =
       await FirebaseFirestore.instance.collection('users').doc(userEmail).get();
@@ -214,7 +213,6 @@ class _EventPageState extends State<EventPage> {
                                             ? 'Leave Event'
                                             : 'Join Event',
                                   ),
-                                  
                                 ),
                               ],
                             ),
@@ -267,7 +265,33 @@ class _EventPageState extends State<EventPage> {
                                   size: 20.0,
                                 ),
                                 const SizedBox(width: 5.0),
-                                Text('${attendanceLimit ?? ''}'),
+                                FutureBuilder<DocumentSnapshot>(
+                                  future: event.doc(widget.eventId).get(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const CircularProgressIndicator();
+                                    } else if (snapshot.hasData) {
+                                      final data = snapshot.data?.data()
+                                          as Map<String, dynamic>?;
+
+                                      if (data != null) {
+                                        final inscritos =
+                                            data['eventosInscritos'] ?? [];
+                                        final attendanceLimit =
+                                            data['attendanceLimit'];
+
+                                        return Text(
+                                          '${inscritos.length}/${attendanceLimit ?? 0}',
+                                        );
+                                      } else {
+                                        return const Text('Data not found');
+                                      }
+                                    } else {
+                                      return const Text('Data not found');
+                                    }
+                                  },
+                                ),
                               ],
                             ),
                           ),
@@ -299,40 +323,39 @@ class _EventPageState extends State<EventPage> {
     );
   }
 
+  Future<void> joinEvent(String eventId) async {
+    final user = FirebaseAuth.instance.currentUser;
+    final eventRef =
+        FirebaseFirestore.instance.collection('event').doc(eventId);
 
-Future<void> joinEvent(String eventId) async {
-  final user = FirebaseAuth.instance.currentUser;
-  final eventRef = FirebaseFirestore.instance.collection('event').doc(eventId);
+    if (user != null) {
+      // Verifica se o evento existe
+      final eventDoc = await eventRef.get();
 
-  if (user != null) {
-    // Verifica se o evento existe
-    final eventDoc = await eventRef.get();
+      if (eventDoc.exists) {
+        // Atualiza o evento para adicionar o usuário à lista de inscritos
+        await eventRef.update({
+          'eventosInscritos': FieldValue.arrayUnion([user.email]),
+        });
 
-    if (eventDoc.exists) {
-      // Atualiza o evento para adicionar o usuário à lista de inscritos
-      await eventRef.update({
-        'eventosInscritos': FieldValue.arrayUnion([user.email]),
-      });
+        // Adiciona o evento à lista de eventos inscritos do usuário
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.email)
+            .update({
+          'eventosInscritos': FieldValue.arrayUnion([eventId]),
+        });
 
-      // Adiciona o evento à lista de eventos inscritos do usuário
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.email)
-          .update({
-        'eventosInscritos': FieldValue.arrayUnion([eventId]),
-      });
-      
-      // Atualiza o estado para refletir que o usuário se juntou ao evento
-      setState(() {
-        _isJoined = true;
-      });
-    } else {
-      // Se o evento não existir, você pode optar por criar um novo evento aqui
-      print('Evento não encontrado.');
+        // Atualiza o estado para refletir que o usuário se juntou ao evento
+        setState(() {
+          _isJoined = true;
+        });
+      } else {
+        // Se o evento não existir, você pode optar por criar um novo evento aqui
+        print('Evento não encontrado.');
+      }
     }
   }
-}
-
 
   Future<void> leaveEvent(String eventId) async {
     final user = FirebaseAuth.instance.currentUser;

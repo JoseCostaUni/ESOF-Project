@@ -37,6 +37,39 @@ class _HomePageState extends State<HomePage> {
     return userData['profilepicture'] ?? 'default_picture_url';
   }
 
+  void _showSortOptionsSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                title: Text('Sort by Created At'),
+                onTap: () {
+                  setState(() {
+                    _sortedEvents = [];
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: Text('Sort by Date Time'),
+                onTap: () {
+                  setState(() {
+                    _sortedEvents = [];
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   Future<List<Map<String, dynamic>>> getEvents({
     String? orderBy,
     bool descending = true,
@@ -45,12 +78,12 @@ class _HomePageState extends State<HomePage> {
     if (orderBy == 'dateTime') {
       querySnapshot = await FirebaseFirestore.instance
           .collection('event')
-          .orderBy('dateTime', descending: descending)
+          .orderBy('dateTime', descending:descending)
           .get();
     } else {
       querySnapshot = await FirebaseFirestore.instance
           .collection('event')
-          .orderBy('createdAt', descending: descending)
+          .orderBy('createdAt', descending: false)
           .get();
     }
 
@@ -68,16 +101,27 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: Column(
           children: [
-            CustomSearchBar(
-              search: _searchcontroller,
-              onTapMenu: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => EventSearch()),
-                );
-              },
-              onChanged: () {},
-              currentScreen: '',
+            Row(
+              children: [
+                IconButton(
+                  onPressed: _showSortOptionsSheet,
+                  icon: const Icon(Icons.sort),
+                ),
+                Expanded(
+                  child: CustomSearchBar(
+                    search: _searchcontroller,
+                    onTapMenu: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const EventSearch()),
+                      );
+                    },
+                    onChanged: () {},
+                    currentScreen: '',
+                  ),
+                ),
+              ],
             ),
             Expanded(
               child: FutureBuilder<List<Map<String, dynamic>>>(
@@ -108,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                             },
                             child: Card(
                               elevation: 4,
-                              color: Color.fromARGB(255, 243, 190, 177),
+                              color: const Color.fromARGB(255, 243, 190, 177),
                               margin: const EdgeInsets.symmetric(
                                   vertical: 8.0, horizontal: 16.0),
                               child: Column(
@@ -133,8 +177,9 @@ class _HomePageState extends State<HomePage> {
                                               width: MediaQuery.of(context)
                                                   .size
                                                   .width,
-                                              margin: EdgeInsets.symmetric(
-                                                  horizontal: 5),
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 5),
                                               decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(10),
@@ -159,7 +204,7 @@ class _HomePageState extends State<HomePage> {
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState ==
                                             ConnectionState.waiting) {
-                                          return CircularProgressIndicator();
+                                          return const CircularProgressIndicator();
                                         } else if (snapshot.hasError) {
                                           return Text(
                                               'Error: ${snapshot.error}');
@@ -275,7 +320,8 @@ class _HomePageState extends State<HomePage> {
                                               ],
                                             );
                                           } else {
-                                            return Text('User data not found');
+                                            return const Text(
+                                                'User data not found');
                                           }
                                         }
                                       },
@@ -294,44 +340,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            builder: (BuildContext context) {
-              return Container(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        List<Map<String, dynamic>> sortedEvents =
-                            await getEvents(orderBy: 'dateTime');
-
-                        setState(() {
-                          _sortedEvents = sortedEvents;
-                        });
-                        Navigator.pop(context);
-                      },
-                      child: Text('Por Data do Evento'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        getEvents(orderBy: 'Location');
-                        Navigator.pop(context);
-                      },
-                      child: Text('Por Perímetro'),
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
-        },
-        child: const Icon(Icons.sort),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _currentIndex,

@@ -94,7 +94,7 @@ class _EditProfileState extends State<EditeventPage> {
   final TextEditingController _attendanceLimitsController =
       TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  List<File> _selectedImages = [];
+  final List<File> _selectedImages = [];
   Future<void> updateOrganizedEventsCount() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -109,10 +109,10 @@ class _EditProfileState extends State<EditeventPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 233, 191, 180),
+      backgroundColor: const Color.fromARGB(255, 233, 191, 180),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20.0),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,21 +123,21 @@ class _EditProfileState extends State<EditeventPage> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      icon: Icon(Icons.arrow_back),
+                      icon: const Icon(Icons.arrow_back),
                     ),
-                    SizedBox(width: 20.0),
-                    Text(
+                    const SizedBox(width: 20.0),
+                    const Text(
                       'Edit Event',
                       style: TextStyle(fontSize: 20),
                     )
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Card(
                   elevation: 4,
-                  color: Color.fromARGB(255, 243, 190, 177),
+                  color: const Color.fromARGB(255, 243, 190, 177),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
                   ),
@@ -192,7 +192,7 @@ class _EditProfileState extends State<EditeventPage> {
                                       ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 5,
                             ),
                             FutureBuilder<DocumentSnapshot>(
@@ -213,26 +213,26 @@ class _EditProfileState extends State<EditeventPage> {
                                       .data() as Map<String, dynamic>;
                                   return Text(
                                     data['username'],
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold),
                                   );
                                 }
 
-                                return CircularProgressIndicator();
+                                return const CircularProgressIndicator();
                               },
                             ),
-                            Spacer(),
+                            const Spacer(),
                             ElevatedButton(
                               onPressed: () {},
-                              child: Text('Delete event'),
+                              child: const Text('Delete event'),
                             )
                           ],
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         TextField(
                           controller: _titleController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Event Title',
                             hintStyle: TextStyle(
                               color: Color.fromARGB(255, 167, 166, 166),
@@ -246,16 +246,16 @@ class _EditProfileState extends State<EditeventPage> {
                             prefixIcon: Icon(Icons.text_fields),
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         GestureDetector(
                           onTap: () async {
                             DateTime? dateTime = await showOmniDateTimePicker(
                               context: context,
                               initialDate: DateTime.now(),
                               firstDate:
-                                  DateTime(1600).subtract(Duration(days: 3652)),
+                                  DateTime(1600).subtract(const Duration(days: 3652)),
                               lastDate:
-                                  DateTime.now().add(Duration(days: 3652)),
+                                  DateTime.now().add(const Duration(days: 3652)),
                             );
                             if (dateTime != null) {
                               String formattedDateTime =
@@ -268,7 +268,7 @@ class _EditProfileState extends State<EditeventPage> {
                           },
                           child: TextField(
                             controller: _dateController,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               hintText: 'Select Date and Time',
                               prefixIcon: Icon(Icons.calendar_today),
                               enabledBorder: UnderlineInputBorder(
@@ -279,21 +279,21 @@ class _EditProfileState extends State<EditeventPage> {
                               ),
                             ),
                             enabled: false,
-                            style: TextStyle(color: Colors.black),
+                            style: const TextStyle(color: Colors.black),
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         TextField(
                           controller: _locationController,
                           decoration: InputDecoration(
                             hintText: 'Location',
-                            hintStyle: TextStyle(
+                            hintStyle: const TextStyle(
                               color: Color.fromARGB(255, 167, 166, 166),
                             ),
-                            enabledBorder: UnderlineInputBorder(
+                            enabledBorder: const UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.black),
                             ),
-                            disabledBorder: UnderlineInputBorder(
+                            disabledBorder: const UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.black),
                             ),
                             prefixIcon: GestureDetector(
@@ -305,14 +305,14 @@ class _EditProfileState extends State<EditeventPage> {
                                   ),
                                 );
                               },
-                              child: Icon(Icons.location_on_outlined),
+                              child: const Icon(Icons.location_on_outlined),
                             ),
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         TextField(
                           controller: _attendanceLimitsController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Attendance limit',
                             hintStyle: TextStyle(
                               color: Color.fromARGB(255, 167, 166, 166),
@@ -326,10 +326,10 @@ class _EditProfileState extends State<EditeventPage> {
                             prefixIcon: Icon(Icons.text_fields),
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         TextField(
                           controller: _descriptionController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Events Description',
                             hintStyle: TextStyle(
                               color: Color.fromARGB(255, 167, 166, 166),
@@ -346,7 +346,7 @@ class _EditProfileState extends State<EditeventPage> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -373,10 +373,10 @@ class _EditProfileState extends State<EditeventPage> {
                                       });
                                     }
                                   },
-                                  icon: Icon(Icons.add),
+                                  icon: const Icon(Icons.add),
                                 ),
-                                Text("Add photos"),
-                                SizedBox(width: 10),
+                                const Text("Add photos"),
+                                const SizedBox(width: 10),
                                 Text(_selectedImages.length.toString()),
                               ],
                             ),
@@ -389,11 +389,11 @@ class _EditProfileState extends State<EditeventPage> {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              child: Text("Cancel"),
+                              child: const Text("Cancel"),
                             ),
                             ElevatedButton(
                               onPressed: () async {},
-                              child: Text("Update event"),
+                              child: const Text("Update event"),
                             ),
                           ],
                         )
