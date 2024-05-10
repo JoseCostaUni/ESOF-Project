@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:app/screens/event_page.dart';
 import 'package:intl/intl.dart';
 
 import 'package:app/features/bottomappnavigator.dart';
@@ -45,6 +46,21 @@ class _EditProfileState extends State<EditeventPage> {
     _loadImage();
     _loadText();
     super.initState();
+  }
+
+   Future<void> _updateEventDetails(String eventId) async {
+    if (eventId != null) {
+      await FirebaseFirestore.instance
+          .collection("event")
+          .doc(eventId)
+          .update({
+        'title': _titleController.text,
+        'description': _descriptionController.text,
+        'location': _locationController.text,
+        'attendanceLimit': _attendanceLimitsController.text,
+        'dateTime' : _dateController.text,
+      });
+    }
   }
 
   Future<void> _loadText() async {
@@ -385,7 +401,15 @@ class _EditProfileState extends State<EditeventPage> {
                               child: const Text("Cancel"),
                             ),
                             ElevatedButton(
-                              onPressed: () async {},
+                              onPressed: () async {
+                                await _updateEventDetails(eventId);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => EventPage(eventId: eventId),
+                                  ),
+                                );
+                              },
                               child: const Text("Update event"),
                             ),
                           ],
