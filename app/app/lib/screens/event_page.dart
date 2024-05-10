@@ -44,9 +44,11 @@ Future<int> getRegisteredEventsCount(String userEmail) async {
 class _EventPageState extends State<EventPage> {
   int _currentIndex = 0;
   bool _isJoined = false;
+  late String eventIdValue;
 
   @override
   void initState() {
+    eventIdValue = widget.eventId;
     super.initState();
     checkIfUserJoinedEvent();
   }
@@ -194,7 +196,7 @@ class _EventPageState extends State<EventPage> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (_) => EditeventPage(),
+                                            builder: (_) => EditeventPage(eventId: widget.eventId),
                                           ),
                                         );
                                       } else {

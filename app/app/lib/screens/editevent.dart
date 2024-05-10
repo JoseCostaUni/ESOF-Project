@@ -10,7 +10,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
 class EditeventPage extends StatefulWidget {
-  const EditeventPage({super.key});
+  final String eventId;
+
+  const EditeventPage({required this.eventId, Key? key}) : super(key: key);
 
   @override
   State<EditeventPage> createState() => _EditProfileState();
@@ -18,6 +20,14 @@ class EditeventPage extends StatefulWidget {
 
 class _EditProfileState extends State<EditeventPage> {
   int _currentIndex = 0;
+  late String eventId;
+
+  TextEditingController _titleController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
+  final TextEditingController _attendanceLimitsController =
+      TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   Future<String> getUserProfilePicture(String userEmail) async {
     DocumentSnapshot userDoc = await FirebaseFirestore.instance
@@ -32,39 +42,29 @@ class _EditProfileState extends State<EditeventPage> {
   File? _image;
   @override
   void initState() {
-    super.initState();
     _loadImage();
+    _loadText();
+    super.initState();
   }
 
   Future<void> _loadText() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      try {
-        final querySnapshot =
-            await FirebaseFirestore.instance.collection("event").get();
+    eventId = widget.eventId;
+    try {
+      final docSnapshot = await FirebaseFirestore.instance
+          .collection("event")
+          .doc(eventId)
+          .get();
 
-        // Aqui você precisa decidir como deseja lidar com múltiplos documentos
-        // Vou apenas usar o primeiro documento encontrado como exemplo
-        final docSnapshot =
-            querySnapshot.docs.isNotEmpty ? querySnapshot.docs.first : null;
-
-        if (docSnapshot != null) {
-          setState(() {
-            final TextEditingController _nameController2 =
-                TextEditingController(text: docSnapshot['title']);
-            final TextEditingController _usernameController2 =
-                TextEditingController(text: docSnapshot['username']);
-            final TextEditingController _descriptionController2 =
-                TextEditingController(text: docSnapshot['description']);
-
-            _titleController = _nameController2;
-            //_usernameController = _usernameController2;
-            //_descriptionController = _descriptionController2;
-          });
-        }
-      } catch (e) {
-        print('Failed to load profile details from Firebase Storage: $e');
-      }
+      setState(() {
+        _titleController.text = docSnapshot.get('title') ?? '';
+        _dateController.text = docSnapshot.get('dateTime') ?? '';
+        _locationController.text = docSnapshot.get('location') ?? '';
+        _attendanceLimitsController.text =
+            docSnapshot.get('attendanceLimit') ?? '';
+        _descriptionController.text = docSnapshot.get('description') ?? '';
+      });
+    } catch (e) {
+      print('Failed to load profile details from Firebase Storage: $e');
     }
   }
 
@@ -88,12 +88,6 @@ class _EditProfileState extends State<EditeventPage> {
     }
   }
 
-  TextEditingController _titleController = TextEditingController();
-  final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
-  final TextEditingController _attendanceLimitsController =
-      TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
   final List<File> _selectedImages = [];
   Future<void> updateOrganizedEventsCount() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -198,8 +192,7 @@ class _EditProfileState extends State<EditeventPage> {
                             FutureBuilder<DocumentSnapshot>(
                               future: FirebaseFirestore.instance
                                   .collection("users")
-                                  .doc(FirebaseAuth
-                                      .instance.currentUser?.email)
+                                  .doc(FirebaseAuth.instance.currentUser?.email)
                                   .get(),
                               builder: (BuildContext context,
                                   AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -249,21 +242,21 @@ class _EditProfileState extends State<EditeventPage> {
                         const SizedBox(height: 10),
                         GestureDetector(
                           onTap: () async {
+                             DateTime initialDateTime = _dateController.text.isNotEmpty? DateFormat('yyyy-MM-dd HH:mm').parse(_dateController.text): DateTime.now();
                             DateTime? dateTime = await showOmniDateTimePicker(
                               context: context,
-                              initialDate: DateTime.now(),
-                              firstDate:
-                                  DateTime(1600).subtract(const Duration(days: 3652)),
-                              lastDate:
-                                  DateTime.now().add(const Duration(days: 3652)),
+                              initialDate: initialDateTime,
+                              firstDate: DateTime(1600)
+                                  .subtract(const Duration(days: 3652)),
+                              lastDate: DateTime.now()
+                                  .add(const Duration(days: 3652)),
                             );
                             if (dateTime != null) {
                               String formattedDateTime =
                                   DateFormat('yyyy-MM-dd HH:mm')
                                       .format(dateTime);
-                              setState(() {
-                                _dateController.text = formattedDateTime;
-                              });
+                              _dateController.text =
+                                  formattedDateTime;
                             }
                           },
                           child: TextField(
@@ -362,8 +355,8 @@ class _EditProfileState extends State<EditeventPage> {
                                               source: ImageSource.camera);
                                       if (pickedCameraFile != null) {
                                         setState(() {
-                                          _selectedImages.add(File(
-                                              pickedCameraFile.path));
+                                          _selectedImages
+                                              .add(File(pickedCameraFile.path));
                                         });
                                       }
                                     } else {
