@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class EditeventPage extends StatefulWidget {
   final String eventId;
@@ -29,6 +30,7 @@ class _EditProfileState extends State<EditeventPage> {
   final TextEditingController _attendanceLimitsController =
       TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  List<dynamic>? imageUrls;
 
   Future<String> getUserProfilePicture(String userEmail) async {
     DocumentSnapshot userDoc = await FirebaseFirestore.instance
@@ -48,17 +50,14 @@ class _EditProfileState extends State<EditeventPage> {
     super.initState();
   }
 
-   Future<void> _updateEventDetails(String eventId) async {
+  Future<void> _updateEventDetails(String eventId) async {
     if (eventId != null) {
-      await FirebaseFirestore.instance
-          .collection("event")
-          .doc(eventId)
-          .update({
+      await FirebaseFirestore.instance.collection("event").doc(eventId).update({
         'title': _titleController.text,
         'description': _descriptionController.text,
         'location': _locationController.text,
         'attendanceLimit': _attendanceLimitsController.text,
-        'dateTime' : _dateController.text,
+        'dateTime': _dateController.text,
       });
     }
   }
@@ -78,6 +77,7 @@ class _EditProfileState extends State<EditeventPage> {
         _attendanceLimitsController.text =
             docSnapshot.get('attendanceLimit') ?? '';
         _descriptionController.text = docSnapshot.get('description') ?? '';
+        imageUrls = docSnapshot.get('imageUrls');
       });
     } catch (e) {
       print('Failed to load profile details from Firebase Storage: $e');
@@ -258,7 +258,11 @@ class _EditProfileState extends State<EditeventPage> {
                         const SizedBox(height: 10),
                         GestureDetector(
                           onTap: () async {
-                             DateTime initialDateTime = _dateController.text.isNotEmpty? DateFormat('yyyy-MM-dd HH:mm').parse(_dateController.text): DateTime.now();
+                            DateTime initialDateTime =
+                                _dateController.text.isNotEmpty
+                                    ? DateFormat('yyyy-MM-dd HH:mm')
+                                        .parse(_dateController.text)
+                                    : DateTime.now();
                             DateTime? dateTime = await showOmniDateTimePicker(
                               context: context,
                               initialDate: initialDateTime,
@@ -271,8 +275,7 @@ class _EditProfileState extends State<EditeventPage> {
                               String formattedDateTime =
                                   DateFormat('yyyy-MM-dd HH:mm')
                                       .format(dateTime);
-                              _dateController.text =
-                                  formattedDateTime;
+                              _dateController.text = formattedDateTime;
                             }
                           },
                           child: TextField(
@@ -391,6 +394,46 @@ class _EditProfileState extends State<EditeventPage> {
                             ),
                           ],
                         ),
+                        const SizedBox(height: 10),
+                        CarouselSlider(
+                          items: imageUrls?.map<Widget>((imageUrl) {
+                                return Stack(
+                                  children: [
+                                    Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 5),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        image: DecorationImage(
+                                          image: NetworkImage(imageUrl),
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 5,
+                                      right: 5,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            imageUrls?.remove(imageUrl);
+                                          });
+                                        },
+                                        child: const Icon(
+                                          Icons.close,
+                                          color: Colors.white,
+                                          size: 20,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }).toList() ??
+                              [],
+                          options: CarouselOptions(),
+                        ),
+                        const SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -413,7 +456,7 @@ class _EditProfileState extends State<EditeventPage> {
                               child: const Text("Update event"),
                             ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),
