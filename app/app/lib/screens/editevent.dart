@@ -50,8 +50,21 @@ class _EditProfileState extends State<EditeventPage> {
     super.initState();
   }
 
+  List<String> deletedImageUrls = [];
+
+  void removeImageFromCarouselAndDelete(String imageUrl) {
+    setState(() {
+      imageUrls?.remove(imageUrl);
+      deletedImageUrls.add(imageUrl);
+    });
+  }
+
   Future<void> _updateEventDetails(String eventId) async {
     if (eventId != null) {
+      for (String deletedImageUrl in deletedImageUrls) {
+
+      }
+
       await FirebaseFirestore.instance.collection("event").doc(eventId).update({
         'title': _titleController.text,
         'description': _descriptionController.text,
@@ -59,6 +72,14 @@ class _EditProfileState extends State<EditeventPage> {
         'attendanceLimit': _attendanceLimitsController.text,
         'dateTime': _dateController.text,
       });
+
+       await FirebaseFirestore.instance
+          .collection("event")
+          .doc(eventId)
+          .update({
+        'imageUrls': FieldValue.arrayRemove(deletedImageUrls),
+      });
+
     }
   }
 
@@ -74,8 +95,7 @@ class _EditProfileState extends State<EditeventPage> {
         _titleController.text = docSnapshot.get('title') ?? '';
         _dateController.text = docSnapshot.get('dateTime') ?? '';
         _locationController.text = docSnapshot.get('location') ?? '';
-        _attendanceLimitsController.text =
-            docSnapshot.get('attendanceLimit') ?? '';
+        _attendanceLimitsController.text = docSnapshot.get('attendanceLimit') ?? '';
         _descriptionController.text = docSnapshot.get('description') ?? '';
         imageUrls = docSnapshot.get('imageUrls');
       });
@@ -105,6 +125,7 @@ class _EditProfileState extends State<EditeventPage> {
   }
 
   final List<File> _selectedImages = [];
+
   Future<void> updateOrganizedEventsCount() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -374,14 +395,12 @@ class _EditProfileState extends State<EditeventPage> {
                                               source: ImageSource.camera);
                                       if (pickedCameraFile != null) {
                                         setState(() {
-                                          _selectedImages
-                                              .add(File(pickedCameraFile.path));
+                                          _selectedImages.add(File(pickedCameraFile.path));
                                         });
                                       }
                                     } else {
                                       setState(() {
-                                        _selectedImages
-                                            .add(File(pickedFile.path));
+                                        _selectedImages.add(File(pickedFile.path));
                                       });
                                     }
                                   },
@@ -389,7 +408,7 @@ class _EditProfileState extends State<EditeventPage> {
                                 ),
                                 const Text("Add photos"),
                                 const SizedBox(width: 10),
-                                Text(_selectedImages.length.toString()),
+                                Text((imageUrls?.length ?? 0).toString()),
                               ],
                             ),
                           ],
@@ -417,7 +436,7 @@ class _EditProfileState extends State<EditeventPage> {
                                       child: GestureDetector(
                                         onTap: () {
                                           setState(() {
-                                            imageUrls?.remove(imageUrl);
+                                            removeImageFromCarouselAndDelete(imageUrl);
                                           });
                                         },
                                         child: const Icon(
