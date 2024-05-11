@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:app/screens/event_page.dart';
 import 'package:intl/intl.dart';
 
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/features/maps_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -23,6 +24,7 @@ class EditeventPage extends StatefulWidget {
 class _EditProfileState extends State<EditeventPage> {
   int _currentIndex = 0;
   late String eventId;
+  final List<String> _selectedImages = [];
 
   TextEditingController _titleController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
@@ -52,18 +54,68 @@ class _EditProfileState extends State<EditeventPage> {
 
   List<String> deletedImageUrls = [];
 
-  void removeImageFromCarouselAndDelete(String imageUrl) {
+  void removeImageFromCarouselAndDelete(String imageUrl) async {
+
+      String fileName = imageUrl.split('%2F').last.split('?').first.replaceAll('%20', ' ');
+      
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child('event_images').child(fileName);
+      try {
+        await ref.delete();
+        print('Deleted file: $fileName');
+      } catch (e) {
+        print('Error deleting file: $fileName, Error: $e');
+      }
+
     setState(() {
       imageUrls?.remove(imageUrl);
       deletedImageUrls.add(imageUrl);
+      if (_selectedImages.contains(imageUrl)) {
+        _selectedImages.remove(imageUrl);
+      }
     });
+  }
+
+  Future<String> _uploadImageToStorage(File imageFile) async {
+    try {
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('event_images')
+          .child('${DateTime.now().millisecondsSinceEpoch}');
+      firebase_storage.UploadTask uploadTask = ref.putFile(imageFile);
+      firebase_storage.TaskSnapshot snapshot = await uploadTask;
+      String downloadUrl = await snapshot.ref.getDownloadURL();
+      imageUrls!.add(downloadUrl);
+      return downloadUrl;
+    } catch (e) {
+      print('Error uploading image: $e');
+      return '';
+    }
+  }
+
+  Future<void> _cancelEventDetails(String eventId) async {
+    if (eventId != null) {
+
+      await FirebaseFirestore.instance.collection("event").doc(eventId).update({
+        'imageUrls': FieldValue.arrayRemove(_selectedImages),
+      });
+
+      for (String imageUrl in _selectedImages) {
+      String fileName = imageUrl.split('%2F').last.split('?').first.replaceAll('%20', ' ');
+      
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child('event_images').child(fileName);
+      try {
+        await ref.delete();
+        print('Deleted file: $fileName');
+      } catch (e) {
+        print('Error deleting file: $fileName, Error: $e');
+      }
+    }
+    }
   }
 
   Future<void> _updateEventDetails(String eventId) async {
     if (eventId != null) {
-      for (String deletedImageUrl in deletedImageUrls) {
-
-      }
+      for (String deletedImageUrl in deletedImageUrls) {}
 
       await FirebaseFirestore.instance.collection("event").doc(eventId).update({
         'title': _titleController.text,
@@ -73,13 +125,25 @@ class _EditProfileState extends State<EditeventPage> {
         'dateTime': _dateController.text,
       });
 
-       await FirebaseFirestore.instance
-          .collection("event")
-          .doc(eventId)
-          .update({
+      await FirebaseFirestore.instance.collection("event").doc(eventId).update({
         'imageUrls': FieldValue.arrayRemove(deletedImageUrls),
       });
 
+      await FirebaseFirestore.instance.collection("event").doc(eventId).update({
+        'imageUrls': FieldValue.arrayUnion(_selectedImages),
+      });
+    }
+
+    for (String imageUrl in deletedImageUrls) {
+      String fileName = imageUrl.split('%2F').last.split('?').first.replaceAll('%20', ' ');
+      
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child('event_images').child(fileName);
+      try {
+        await ref.delete();
+        print('Deleted file: $fileName');
+      } catch (e) {
+        print('Error deleting file: $fileName, Error: $e');
+      }
     }
   }
 
@@ -95,7 +159,8 @@ class _EditProfileState extends State<EditeventPage> {
         _titleController.text = docSnapshot.get('title') ?? '';
         _dateController.text = docSnapshot.get('dateTime') ?? '';
         _locationController.text = docSnapshot.get('location') ?? '';
-        _attendanceLimitsController.text = docSnapshot.get('attendanceLimit') ?? '';
+        _attendanceLimitsController.text =
+            docSnapshot.get('attendanceLimit') ?? '';
         _descriptionController.text = docSnapshot.get('description') ?? '';
         imageUrls = docSnapshot.get('imageUrls');
       });
@@ -124,7 +189,6 @@ class _EditProfileState extends State<EditeventPage> {
     }
   }
 
-  final List<File> _selectedImages = [];
 
   Future<void> updateOrganizedEventsCount() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -394,13 +458,20 @@ class _EditProfileState extends State<EditeventPage> {
                                           await ImagePicker().pickImage(
                                               source: ImageSource.camera);
                                       if (pickedCameraFile != null) {
+                                        String imageUrl =
+                                            await _uploadImageToStorage(
+                                                File(pickedCameraFile.path));
                                         setState(() {
-                                          _selectedImages.add(File(pickedCameraFile.path));
+                                          _selectedImages.add(
+                                              imageUrl);
                                         });
                                       }
                                     } else {
+                                      String imageUrl =
+                                          await _uploadImageToStorage(
+                                              File(pickedFile.path));
                                       setState(() {
-                                        _selectedImages.add(File(pickedFile.path));
+                                        _selectedImages.add(imageUrl);
                                       });
                                     }
                                   },
@@ -436,7 +507,8 @@ class _EditProfileState extends State<EditeventPage> {
                                       child: GestureDetector(
                                         onTap: () {
                                           setState(() {
-                                            removeImageFromCarouselAndDelete(imageUrl);
+                                            removeImageFromCarouselAndDelete(
+                                                imageUrl);
                                           });
                                         },
                                         child: const Icon(
@@ -457,7 +529,8 @@ class _EditProfileState extends State<EditeventPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             ElevatedButton(
-                              onPressed: () {
+                              onPressed: () async {
+                                await _cancelEventDetails(eventId);
                                 Navigator.pop(context);
                               },
                               child: const Text("Cancel"),
