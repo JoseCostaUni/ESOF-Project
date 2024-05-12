@@ -97,7 +97,6 @@ class _CreateEventState extends State<CreateEvent> {
           "userEmail":
               user.email, // Adicione o e-mail do usuário ao documento do evento
           "createdAt": DateTime.now(),
-          "messages": [],
         });
         Navigator.pushReplacement(
           context,

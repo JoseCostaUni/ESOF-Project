@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app/screens/event_page.dart';
+import 'package:app/screens/chat_page.dart';
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/screens/homepage.dart';
 import 'package:app/screens/login.dart';
@@ -62,7 +63,7 @@ class _ListChatPage extends State<ListChatPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (_) =>
-                                        EventPage(eventId: event['id'])));
+                                        ChatPage(eventId: event['id'])));
                           },
                           child: Card(
                             elevation: 4,

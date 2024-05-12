@@ -2,18 +2,16 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Message {
-  String messageId = "";
-  String message = "";
-  String senderId = "";
-  Message(this.messageId, this.senderId, this.message);
-}
-
 class ChatFirestore {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  CollectionReference eventCollection =
+      FirebaseFirestore.instance.collection("event");
+  CollectionReference messageCollection =
+      FirebaseFirestore.instance.collection("Message");
+  CollectionReference userCollection =
+      FirebaseFirestore.instance.collection("users");
 
   Future<List<Map<String, dynamic>>> getCurUserChatListSnapshot() async {
-    CollectionReference eventCollection = firestore.collection("event");
     QuerySnapshot querySnapshot_2 = await eventCollection
         .where('eventosInscritos',
             arrayContains: FirebaseAuth.instance.currentUser!.email)
@@ -34,24 +32,39 @@ class ChatFirestore {
         }).toList();
   }
 
-  Future<Message> getMesssageById(String messageId) async {
-    CollectionReference messageCollection = firestore.collection("Message");
+  Future<Map<String, dynamic>> getUserDataById(String userId) async {
+    DocumentSnapshot docSnapshot = await userCollection.doc(userId).get();
+    return docSnapshot.data() as Map<String, dynamic>;
+  }
 
+  Future<Map<String, dynamic>> getMesssageDataById(String messageId) async {
     DocumentSnapshot docSnapshot = await messageCollection.doc(messageId).get();
+    return docSnapshot.data() as Map<String, dynamic>;
+  }
 
-    if (docSnapshot.exists) {
-      Map<String, dynamic>? messageData =
-          docSnapshot.data() as Map<String, dynamic>?;
-      if (messageData != null) {
-        Message message = Message(
-          messageId,
-          messageData['senderId'],
-          messageData['message'],
-        );
-        return message;
-      }
-    }
+  Future<Map<String, dynamic>> getEventDataById(String eventId) async {
+    DocumentSnapshot docSnapshot = await eventCollection.doc(eventId).get();
+    return docSnapshot.data() as Map<String, dynamic>;
+  }
 
-    return Message(messageId, "", "");
+  Future<List<Map<String, dynamic>>> getEventMessageData(String eventId) async {
+    QuerySnapshot querySnapshot = await messageCollection
+        .where('eventId', isEqualTo: eventId)
+        .orderBy('sent')
+        .get();
+    return querySnapshot.docs.map((doc) {
+      final data = doc.data() as Map<String, dynamic>;
+      data['id'] = doc.id;
+      return data;
+    }).toList();
+  }
+
+  Future<void> storeMessage(String message, String eventId) async {
+    await messageCollection.add({
+      'eventId': eventId,
+      'message': message,
+      'sent': DateTime.now(),
+      'userId': FirebaseAuth.instance.currentUser!.email,
+    });
   }
 }
