@@ -23,7 +23,8 @@ class _EventPageState extends State<EventPage> {
         future: event.doc(widget.eventId).get(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            Map<String, dynamic>? data = snapshot.data?.data() as Map<String, dynamic>?;
+            Map<String, dynamic>? data =
+                snapshot.data?.data() as Map<String, dynamic>?;
 
             if (data != null) {
               String? title = data['title'];
@@ -36,26 +37,25 @@ class _EventPageState extends State<EventPage> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   AspectRatio(
                     aspectRatio: 2,
                     child: imageUrl != null
-                      ? Image.network(
-                          imageUrl,
-                          fit: BoxFit.cover,
-                        )
-                      : Center(child: Text('No images for this event')),
-
+                        ? Image.network(
+                            imageUrl,
+                            fit: BoxFit.cover,
+                          )
+                        : Center(child: Text('No images for this event')),
+                  ),
                   Stack(
                     children: [
                       AspectRatio(
                         aspectRatio: 2,
                         child: imageUrl != null
-                          ? Image.network(
-                              imageUrl,
-                              fit: BoxFit.cover,
-                            )
-                          : Center(child: Text('No images for this event')),
+                            ? Image.network(
+                                imageUrl,
+                                fit: BoxFit.cover,
+                              )
+                            : Center(child: Text('No images for this event')),
                       ),
                       Positioned(
                         top: 10.0,
@@ -134,11 +134,11 @@ class _EventPageState extends State<EventPage> {
                             child: Row(
                               children: [
                                 Icon(
-                                  Icons.people, 
-                                  color: Colors.black, 
-                                  size: 20.0, 
+                                  Icons.people,
+                                  color: Colors.black,
+                                  size: 20.0,
                                 ),
-                                SizedBox(width: 5.0), 
+                                SizedBox(width: 5.0),
                                 Text('${attendanceLimit ?? ''}'),
                               ],
                             ),

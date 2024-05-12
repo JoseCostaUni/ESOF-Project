@@ -29,11 +29,13 @@ class _SettingPageState extends State<SettingsPage> {
   TextEditingController _oldPasswordController = TextEditingController();
   TextEditingController _deletePasswordController = TextEditingController();
 
+  /* definido duas vezes, como nao sei qual e o correto vou deixar comentado
   Future<void> _deleteUser(String delpassword) async {
     final user = FirebaseAuth.instance.currentUser;
-    if(user != null){
-    try {
-        AuthCredential credential = EmailAuthProvider.credential(email: user.email!, password: delpassword);
+    if (user != null) {
+      try {
+        AuthCredential credential = EmailAuthProvider.credential(
+            email: user.email!, password: delpassword);
         await user.reauthenticateWithCredential(credential);
         await user.delete();
         final userEmail = user.email;
@@ -47,18 +49,20 @@ class _SettingPageState extends State<SettingsPage> {
             .child("user_profile")
             .child('$userEmail.jpg');
         await ref.delete();
-      print("Document successfully deleted");
-    } catch (e) {
-      print("Error deleting document: $e");
+        print("Document successfully deleted");
+      } catch (e) {
+        print("Error deleting document: $e");
+      }
     }
   }
-}
+  */
 
-  Future<void> _changePassword(String oldPassword,String new_password) async {
+  Future<void> _changePassword(String oldPassword, String new_password) async {
     final user = FirebaseAuth.instance.currentUser;
     try {
       if (user != null) {
-         AuthCredential credential = EmailAuthProvider.credential(email: user.email!, password: oldPassword);
+        AuthCredential credential = EmailAuthProvider.credential(
+            email: user.email!, password: oldPassword);
         await user.reauthenticateWithCredential(credential);
         await user.updatePassword(new_password);
         final prefs = await SharedPreferences.getInstance();
@@ -66,18 +70,28 @@ class _SettingPageState extends State<SettingsPage> {
       }
     } catch (e) {
       print("Error deleting document: $e");
-       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Passwords do not match.'),),);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Passwords do not match.'),
+        ),
+      );
     }
   }
 
-  Future<void> _deleteUser() async{
+  Future<void> _deleteUser() async {
     final user = FirebaseAuth.instance.currentUser;
     try {
-      if(user != null){
+      if (user != null) {
         final userEmail = user.email;
-        await FirebaseFirestore.instance.collection("users").doc(user.email).delete();
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(user.email)
+            .delete();
         await _removeLogIn();
-        final ref = firebase_storage.FirebaseStorage.instance.ref().child("user_profile").child('$userEmail.jpg');
+        final ref = firebase_storage.FirebaseStorage.instance
+            .ref()
+            .child("user_profile")
+            .child('$userEmail.jpg');
         await ref.delete();
       }
       print("Document successfully deleted");
@@ -276,7 +290,8 @@ class _SettingPageState extends State<SettingsPage> {
                     builder: (BuildContext context) {
                       return AlertDialog(
                         title: const Text('Are you sure?'),
-                        content: const Text("Deleting your account is permanent and your can't get it back"),
+                        content: const Text(
+                            "Deleting your account is permanent and your can't get it back"),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
