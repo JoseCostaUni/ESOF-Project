@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
     if (orderBy == 'dateTime') {
       querySnapshot = await FirebaseFirestore.instance
           .collection('event')
-          .orderBy('dateTime', descending:descending)
+          .orderBy('dateTime', descending: descending)
           .get();
     } else {
       querySnapshot = await FirebaseFirestore.instance

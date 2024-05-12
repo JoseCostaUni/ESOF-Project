@@ -26,6 +26,7 @@ class EventHandler {
 
     querySnapshot.docs.forEach((doc) {
       Map<String, dynamic> eventData = doc.data();
+      eventData['id'] = doc.id;
       events.add(eventData);
     });
 
@@ -156,7 +157,9 @@ class EventHandler {
 
       suggestions = recommendations;
     } else {
-      suggestions = [];
+      List<Map<String, dynamic>> allUsers = await getAllUsers();
+
+      suggestions = [...allUsers];
     }
 
     events = [...suggestions];
@@ -221,7 +224,9 @@ class EventHandler {
 
       suggestions = recommendations; // Update suggestions with the latest data
     } else {
-      suggestions = []; // Clear suggestions if input is empty
+      List<Map<String, dynamic>> allEvents = await getAllEvents();
+
+      suggestions = [...allEvents];
     }
 
     events = [...suggestions]; // Update events with the latest suggestions

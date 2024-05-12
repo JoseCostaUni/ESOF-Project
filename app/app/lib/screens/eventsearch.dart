@@ -1,6 +1,7 @@
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/features/searchbar.dart';
 import 'package:app/screens/event_page.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:app/backend/Search_Bar/Search_Bar_Algo.dart';
@@ -24,6 +25,8 @@ class _EventSearchState extends State<EventSearch> {
   List<Map<String, dynamic>> users = [];
   final TextEditingController _searchcontroller = TextEditingController();
   String selectedOption = "Events";
+  String orderBy = "createdAt";
+  List<Map<String, dynamic>> _sortedEvents = [];
 
   // ignore: unused_element
   Future<List<Map<String, dynamic>>> _loadEvents(String query) async {
@@ -33,6 +36,7 @@ class _EventSearchState extends State<EventSearch> {
   }
 
   List<Map<String, dynamic>> getEvents() {
+    sortEvents(orderBy_: orderBy);
     return events;
   }
 
@@ -40,7 +44,7 @@ class _EventSearchState extends State<EventSearch> {
     return users;
   }
 
-   Future<List<Map<String, dynamic>>> getEvents1({
+  Future<List<Map<String, dynamic>>> getEvents1({
     String? orderBy,
     bool descending = true,
   }) async {
@@ -54,26 +58,74 @@ class _EventSearchState extends State<EventSearch> {
       return data;
     }).toList();
   }
+
+  @override
+  void initState() {
+    super.initState();
+    calcReccomendations(selectedOption);
+  }
+
+  void _showSortOptionsSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                title: Text('Sort by Created At'),
+                onTap: () {
+                  setState(() {
+                    orderBy = 'createdAt';
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: Text('Sort by Date Time'),
+                onTap: () {
+                  setState(() {
+                    orderBy = 'dateTime';
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   // ignore: no_leading_underscores_for_local_identifiers
   void calcReccomendations(String _selectedOption) async {
     if (selectedOption == 'Events') {
-      users.clear();
       String input = _searchcontroller.text;
       await eventHandler.calcEvents(input);
       suggestions = eventHandler.getEvents();
       events = [...suggestions];
-      // ignore: unused_local_variable
-      String a = "a";
-      setState(() {});
     } else {
-      events.clear();
       String input = _searchcontroller.text;
       await eventHandler.calcUsers(input);
       suggestions = eventHandler.getEvents();
       users = [...suggestions];
-      // ignore: unused_local_variable
-      String a = "a";
-      setState(() {});
+    }
+    setState(() {});
+  }
+
+  void sortEvents({
+    String? orderBy_,
+    bool descending = true,
+  }) async {
+    if (orderBy_ == 'dateTime') {
+      events.sort((a, b) {
+        return a['dateTime'].compareTo(b['dateTime']);
+      });
+    } else {
+      events.sort((a, b) {
+        return a['createdAt'].compareTo(b['createdAt']);
+      });
     }
   }
 
@@ -90,124 +142,306 @@ class _EventSearchState extends State<EventSearch> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(239, 255, 228, 225),
-      body: Column(
-        children: [
-          CustomSearchBar(
-            search: _searchcontroller,
-            currentScreen: 'EventSearch',
-            onTapMenu: () => checkScreen(),
-            onChanged: () =>
-                {events.clear(), calcReccomendations(selectedOption)},
-            onOptionSelected: (value) {
-              selectedOption = value;
-              calcReccomendations(selectedOption);
-            },
-          ),
-          if (events.isEmpty && selectedOption == 'Events')
-            const Center(child: Text('No events found')),
-          if (events.isNotEmpty)
-            Expanded(
-              child: FutureBuilder<List<Map<String, dynamic>>>(
-                future: Future.value(getEvents1()),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (snapshot.hasData) {
-                    final events = snapshot.data!;
-                    return ListView.builder(
-                      itemCount: events.length,
-                      itemBuilder: (context, index) {
-                        final event = events[index];
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              print(event['id']);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) =>
-                                        EventPage(eventId: event['id'])));
-                            },
-                            child: Card(
-                              elevation: 4,
-                              child: ListTile(
-                                leading: CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                      event['imageUrl'] ??
-                                          ''), // Exibição da foto
+      body: SafeArea(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                IconButton(
+                  onPressed: _showSortOptionsSheet,
+                  icon: const Icon(Icons.sort),
+                ),
+                Expanded(
+                  child: CustomSearchBar(
+                    search: _searchcontroller,
+                    currentScreen: 'EventSearch',
+                    onTapMenu: () => checkScreen(),
+                    onChanged: () =>
+                        {events.clear(), calcReccomendations(selectedOption)},
+                    onOptionSelected: (value) {
+                      selectedOption = value;
+                      calcReccomendations(selectedOption);
+                    },
+                  ),
+                ),
+              ],
+            ),
+            if (events.isEmpty && selectedOption == 'Events')
+              const Center(child: Text('No events found')),
+            if (events.isNotEmpty && selectedOption == 'Events')
+              Expanded(
+                child: FutureBuilder<List<Map<String, dynamic>>>(
+                  future: Future.value(getEvents()),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error: ${snapshot.error}'),
+                      );
+                    } else {
+                      return ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          final event = snapshot.data![index];
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) =>
+                                            EventPage(eventId: event['id'])));
+                              },
+                              child: Card(
+                                elevation: 4,
+                                color: const Color.fromARGB(255, 243, 190, 177),
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 8.0, horizontal: 16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Container(
+                                      width: double.infinity,
+                                      height: 200,
+                                      decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(15.0),
+                                          topRight: Radius.circular(15.0),
+                                        ),
+                                      ),
+                                      clipBehavior: Clip.antiAlias,
+                                      child: Container(
+                                        child: CarouselSlider(
+                                            items: (event['imageUrls']
+                                                    as List<dynamic>?)
+                                                ?.map<Widget>((imageUrl) {
+                                              return Container(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 5),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  image: DecorationImage(
+                                                    image:
+                                                        NetworkImage(imageUrl),
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              );
+                                            }).toList(),
+                                            options: CarouselOptions()),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16.0, vertical: 10),
+                                      child: FutureBuilder<DocumentSnapshot>(
+                                        future: FirebaseFirestore.instance
+                                            .collection('users')
+                                            .doc(event['userEmail'])
+                                            .get(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return const CircularProgressIndicator();
+                                          } else if (snapshot.hasError) {
+                                            return Text(
+                                                'Error: ${snapshot.error}');
+                                          } else {
+                                            Map<String, dynamic>? userData =
+                                                snapshot.data?.data()
+                                                    as Map<String, dynamic>?;
+
+                                            if (userData != null) {
+                                              return Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: <Widget>[
+                                                      CircleAvatar(
+                                                        backgroundColor:
+                                                            Colors.grey,
+                                                        backgroundImage:
+                                                            NetworkImage(userData[
+                                                                    'profilepicture'] ??
+                                                                ''),
+                                                      ),
+                                                      const SizedBox(width: 10),
+                                                      Text(userData[
+                                                              'username'] ??
+                                                          ''),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 2),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 0),
+                                                    child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          IconButton(
+                                                            onPressed: () {},
+                                                            icon: const Icon(Icons
+                                                                .event_sharp),
+                                                            iconSize: 20,
+                                                          ),
+                                                          Text(event['title'] ??
+                                                              ''),
+                                                        ]),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 0),
+                                                    child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          IconButton(
+                                                            onPressed: () {},
+                                                            icon: const Icon(Icons
+                                                                .location_on),
+                                                            iconSize: 20,
+                                                          ),
+                                                          Text(
+                                                              event['location'])
+                                                        ]),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 0),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            IconButton(
+                                                              onPressed: () {},
+                                                              icon: const Icon(Icons
+                                                                  .date_range_rounded),
+                                                              iconSize: 20,
+                                                            ),
+                                                            Text(event[
+                                                                    'dateTime'] ??
+                                                                ''),
+                                                          ],
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            IconButton(
+                                                              onPressed: () {},
+                                                              icon: const Icon(
+                                                                  Icons.people),
+                                                              iconSize: 20,
+                                                            ),
+                                                            Text(
+                                                              '${event['eventosInscritos']?.length ?? 0}/${event['attendanceLimit']}',
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              );
+                                            } else {
+                                              return const Text(
+                                                  'User data not found');
+                                            }
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                title: Text(event['title'] ?? ''),
-                                subtitle: Text(event['location'] ?? ''),
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    );
-                  } else {
-                    return const Center(
-                      child: Text('No events found'),
-                    );
-                  }
-                },
+                          );
+                        },
+                      );
+                    }
+                  },
+                ),
               ),
-            ),
-          if (users.isEmpty && selectedOption == 'People')
-            const Center(child: Text('No people found')),
-          if (users.isNotEmpty)
-            Expanded(
-              child: FutureBuilder<List<Map<String, dynamic>>>(
-                future: Future.value(getUsers()),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (snapshot.hasData) {
-                    final users = snapshot.data!;
-                    return ListView.builder(
-                      itemCount: users.length,
-                      itemBuilder: (context, index) {
-                        final user = users[index];
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) =>
-                                        SearchedProfile(user: user)),
-                              );
-                            },
-                            child: Card(
-                              elevation: 4,
-                              child: ListTile(
-                                leading: CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                      user['profilepicture'] ??
-                                          ''), // Exibição da foto
+            if (users.isEmpty && selectedOption == 'People')
+              const Center(child: Text('No people found')),
+            if (users.isNotEmpty && selectedOption == 'People')
+              Expanded(
+                child: FutureBuilder<List<Map<String, dynamic>>>(
+                  future: Future.value(getUsers()),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (snapshot.hasData) {
+                      final users = snapshot.data!;
+                      return ListView.builder(
+                        itemCount: users.length,
+                        itemBuilder: (context, index) {
+                          final user = users[index];
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) =>
+                                          SearchedProfile(user: user)),
+                                );
+                              },
+                              child: Card(
+                                elevation: 4,
+                                child: ListTile(
+                                  leading: CircleAvatar(
+                                    backgroundImage: NetworkImage(
+                                        user['profilepicture'] ??
+                                            ''), // Exibição da foto
+                                  ),
+                                  title: Text(user['name'] ?? ''),
+                                  subtitle: Text(user['username'] ?? ''),
                                 ),
-                                title: Text(user['name'] ?? ''),
-                                subtitle: Text(user['username'] ?? ''),
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    );
-                  } else {
-                    return const Center(
-                      child: Text('No events found'),
-                    );
-                  }
-                },
+                          );
+                        },
+                      );
+                    } else {
+                      return const Center(
+                        child: Text('No events found'),
+                      );
+                    }
+                  },
+                ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _currentIndex,
