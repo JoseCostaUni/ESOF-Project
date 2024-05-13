@@ -57,6 +57,7 @@ class _SignUp extends State<SignUp> {
         'email': userCredential.user!.email,
         'name': _nameController.text,
         'username': _usernameController.text,
+        'blocked': [],
       });
     }
   }
