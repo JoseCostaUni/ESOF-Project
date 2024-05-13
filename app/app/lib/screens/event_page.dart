@@ -15,11 +15,10 @@ class EventPage extends StatefulWidget {
   State<EventPage> createState() => _EventPageState();
 }
 
-Map<String, dynamic> getUser (String userEmail) {
+Future<Map<String, dynamic>> getUser(String userEmail) async {
   Map<String, dynamic> userData = {};
-  FirebaseFirestore.instance.collection('users').doc(userEmail).get().then((DocumentSnapshot userDoc) {
-    userData = userDoc.data() as Map<String, dynamic>;
-  });
+  DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(userEmail).get();
+  userData = userDoc.data() as Map<String, dynamic>;
   return userData;
 }
 
