@@ -1,3 +1,4 @@
+import 'package:app/features/maps_screen.dart';
 import 'package:app/screens/editevent.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -245,10 +246,15 @@ class _EventPageState extends State<EventPage> {
                             padding: const EdgeInsets.only(top: 10.0),
                             child: Row(
                               children: [
-                                const Icon(
-                                  Icons.location_on, // location icon
-                                  color: Colors.black,
-                                  size: 20.0,
+                                GestureDetector(
+                                  onTap: () {
+                                    
+                                  },
+                                  child: const Icon(
+                                    Icons.location_on, // location icon
+                                    color: Colors.black,
+                                    size: 20.0,
+                                  ),
                                 ),
                                 const SizedBox(width: 5.0),
                                 Text('${location ?? ''}'),

@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'package:app/features/autocompletelocation.dart';
 import 'package:app/features/maps_screen.dart';
 import 'package:flutter/widgets.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -20,6 +22,7 @@ class CreateEvent extends StatefulWidget {
 }
 
 class _CreateEventState extends State<CreateEvent> {
+  String locationName = "";
   int _currentIndex = 1;
   List<File> _selectedImages = [];
   Future<void> updateOrganizedEventsCount() async {
@@ -102,7 +105,6 @@ class _CreateEventState extends State<CreateEvent> {
   Future<void> _createEvent() async {
     if (_titleController.text.isEmpty ||
         _dateController.text.isEmpty ||
-        _locationController.text.isEmpty ||
         _attendanceLimitsController.text.isEmpty ||
         _descriptionController.text.isEmpty) {
       return;
@@ -124,7 +126,7 @@ class _CreateEventState extends State<CreateEvent> {
         await FirebaseFirestore.instance.collection("event").add({
           "title": _titleController.text,
           "dateTime": _dateController.text,
-          "location": _locationController.text,
+          "location": locationName,
           "attendanceLimit": _attendanceLimitsController.text,
           "description": _descriptionController.text,
           "imageUrls": imageUrls,
@@ -144,6 +146,22 @@ class _CreateEventState extends State<CreateEvent> {
       }
     } else {
       // Handle case when user is not logged in
+    }
+  }
+
+  Future<void> getLocationCoordinates(String locationName) async {
+    try {
+      List<Location> locations = await locationFromAddress(locationName);
+      if (locations != null && locations.isNotEmpty) {
+        Location location = locations[0];
+        double latitude = location.latitude;
+        double longitude = location.longitude;
+        print('Latitude: $latitude, Longitude: $longitude');
+      } else {
+        print('Nenhuma coordenada encontrada para a localização fornecida.');
+      }
+    } catch (e) {
+      print('Erro ao obter coordenadas: $e');
     }
   }
 
@@ -192,7 +210,7 @@ class _CreateEventState extends State<CreateEvent> {
                               height: 120,
                               child: _image != null
                                   ? Image.network(
-                                    __image,
+                                      __image,
                                       fit: BoxFit.cover,
                                     )
                                   : FutureBuilder<DocumentSnapshot>(
@@ -307,26 +325,21 @@ class _CreateEventState extends State<CreateEvent> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      TextField(
-                        controller: _locationController,
-                        decoration: InputDecoration(
-                          hintText: 'Location',
-                          hintStyle: const TextStyle(
-                              color: Color.fromARGB(255, 167, 166, 166)),
-                          enabledBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black)),
-                          disabledBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black)),
-                          prefixIcon: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const MapsScreen()),
-                              );
-                            },
-                            child: const Icon(Icons.location_on_outlined),
-                          ),
+                      SizedBox(
+                        width: 6000, // Defina a largura desejada
+                        height: 65, // Defina a altura desejada
+                        child: LocationAutocomplete(
+                          locationName: locationName,
+                          onChanged: (value) async {
+                            setState(() {
+                              locationName = value;
+                            });
+                            if (value.isNotEmpty) {
+                              if (value.isNotEmpty) {
+                                getLocationCoordinates(value);
+                              }
+                            }
+                          },
                         ),
                       ),
                       const SizedBox(height: 10),

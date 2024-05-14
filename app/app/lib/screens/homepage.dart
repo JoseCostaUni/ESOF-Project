@@ -1,4 +1,5 @@
 import 'package:app/features/bottomappnavigator.dart';
+import 'package:app/features/maps_screen.dart';
 import 'package:app/features/searchbar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -265,7 +266,15 @@ class _HomePageState extends State<HomePage> {
                                                               .start,
                                                       children: [
                                                         IconButton(
-                                                          onPressed: () {},
+                                                          onPressed: () {
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (_) =>
+                                                                        MapsScreen(locationNames: [event['location']],
+                                                                          
+                                                                        )));
+                                                          },
                                                           icon: const Icon(Icons
                                                               .location_on),
                                                           iconSize: 20,

@@ -298,12 +298,7 @@ class _EditProfileState extends State<EditeventPage> {
                             ),
                             prefixIcon: GestureDetector(
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const MapsScreen(),
-                                  ),
-                                );
+                              
                               },
                               child: const Icon(Icons.location_on_outlined),
                             ),

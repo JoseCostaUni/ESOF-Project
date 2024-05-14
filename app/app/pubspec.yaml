@@ -44,7 +44,8 @@ dependencies:
   flutter_polyline_points: ^2.0.0
   flutter_expandable_fab: ^2.0.0
   carousel_slider: ^4.2.1
-
+  geolocator: ^11.0.0
+  geocoding: ^3.0.0
 
   #Notifications
   awesome_notifications: ^0.9.3+1
