@@ -2,7 +2,6 @@ import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/screens/about.dart';
 import 'package:app/screens/account_center_page.dart';
 import 'package:app/screens/blocked_page.dart';
-import 'package:app/screens/login.dart';
 import 'package:app/screens/notifications_settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,9 +24,7 @@ class _SettingPageState extends State<SettingsPage> {
     await prefs.remove('user_password');
   }
 
-  TextEditingController _newPasswordController = TextEditingController();
-  TextEditingController _oldPasswordController = TextEditingController();
-  TextEditingController _deletePasswordController = TextEditingController();
+
 
   Future<void> _deleteUser(String delpassword) async {
     final user = FirebaseAuth.instance.currentUser;

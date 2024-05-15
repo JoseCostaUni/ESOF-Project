@@ -26,7 +26,6 @@ class _EventSearchState extends State<EventSearch> {
   final TextEditingController _searchcontroller = TextEditingController();
   String selectedOption = "Events";
   String orderBy = "createdAt";
-  List<Map<String, dynamic>> _sortedEvents = [];
 
   // ignore: unused_element
   Future<List<Map<String, dynamic>>> _loadEvents(String query) async {

@@ -55,16 +55,19 @@ class _EditProfileState extends State<EditeventPage> {
   List<String> deletedImageUrls = [];
 
   void removeImageFromCarouselAndDelete(String imageUrl) async {
+    String fileName =
+        imageUrl.split('%2F').last.split('?').first.replaceAll('%20', ' ');
 
-      String fileName = imageUrl.split('%2F').last.split('?').first.replaceAll('%20', ' ');
-      
-      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child('event_images').child(fileName);
-      try {
-        await ref.delete();
-        print('Deleted file: $fileName');
-      } catch (e) {
-        print('Error deleting file: $fileName, Error: $e');
-      }
+    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('event_images')
+        .child(fileName);
+    try {
+      await ref.delete();
+      print('Deleted file: $fileName');
+    } catch (e) {
+      print('Error deleting file: $fileName, Error: $e');
+    }
 
     setState(() {
       imageUrls?.remove(imageUrl);
@@ -94,22 +97,26 @@ class _EditProfileState extends State<EditeventPage> {
 
   Future<void> _cancelEventDetails(String eventId) async {
     if (eventId != null) {
-
       await FirebaseFirestore.instance.collection("event").doc(eventId).update({
         'imageUrls': FieldValue.arrayRemove(_selectedImages),
       });
 
       for (String imageUrl in _selectedImages) {
-      String fileName = imageUrl.split('%2F').last.split('?').first.replaceAll('%20', ' ');
-      
-      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child('event_images').child(fileName);
-      try {
-        await ref.delete();
-        print('Deleted file: $fileName');
-      } catch (e) {
-        print('Error deleting file: $fileName, Error: $e');
+        String fileName =
+            imageUrl.split('%2F').last.split('?').first.replaceAll('%20', ' ');
+
+        firebase_storage.Reference ref = firebase_storage
+            .FirebaseStorage.instance
+            .ref()
+            .child('event_images')
+            .child(fileName);
+        try {
+          await ref.delete();
+          print('Deleted file: $fileName');
+        } catch (e) {
+          print('Error deleting file: $fileName, Error: $e');
+        }
       }
-    }
     }
   }
 
@@ -135,9 +142,13 @@ class _EditProfileState extends State<EditeventPage> {
     }
 
     for (String imageUrl in deletedImageUrls) {
-      String fileName = imageUrl.split('%2F').last.split('?').first.replaceAll('%20', ' ');
-      
-      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child('event_images').child(fileName);
+      String fileName =
+          imageUrl.split('%2F').last.split('?').first.replaceAll('%20', ' ');
+
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('event_images')
+          .child(fileName);
       try {
         await ref.delete();
         print('Deleted file: $fileName');
@@ -189,7 +200,6 @@ class _EditProfileState extends State<EditeventPage> {
     }
   }
 
-
   Future<void> updateOrganizedEventsCount() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -198,6 +208,18 @@ class _EditProfileState extends State<EditeventPage> {
       await userRef.update({
         'organizedEventsCount': FieldValue.increment(1),
       });
+    }
+  }
+
+  Future<void> _deleteEvent(String eventId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('event')
+          .doc(eventId)
+          .delete();
+      print('Evento deletado com sucesso.');
+    } catch (e) {
+      print('Erro ao deletar o evento: $e');
     }
   }
 
@@ -318,7 +340,10 @@ class _EditProfileState extends State<EditeventPage> {
                             ),
                             const Spacer(),
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                await _deleteEvent(eventId);
+                                Navigator.pop(context);
+                              },
                               child: const Text('Delete event'),
                             )
                           ],
@@ -394,9 +419,7 @@ class _EditProfileState extends State<EditeventPage> {
                               borderSide: BorderSide(color: Colors.black),
                             ),
                             prefixIcon: GestureDetector(
-                              onTap: () {
-                              
-                              },
+                              onTap: () {},
                               child: const Icon(Icons.location_on_outlined),
                             ),
                           ),
@@ -457,8 +480,7 @@ class _EditProfileState extends State<EditeventPage> {
                                             await _uploadImageToStorage(
                                                 File(pickedCameraFile.path));
                                         setState(() {
-                                          _selectedImages.add(
-                                              imageUrl);
+                                          _selectedImages.add(imageUrl);
                                         });
                                       }
                                     } else {

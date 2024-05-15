@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:app/backend/notifications/NotificationService.dart';
 import 'package:app/features/bottomappnavigator.dart';
 

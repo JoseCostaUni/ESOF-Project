@@ -2,7 +2,6 @@ import 'package:app/screens/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'verifyemail.dart';
 
 class SignUp extends StatefulWidget {
@@ -24,8 +23,7 @@ class _SignUp extends State<SignUp> {
   final TextEditingController _surnameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _descriptionwordController =
-      TextEditingController();
+
 
   void registeredUser() async {
     showDialog(
@@ -39,15 +37,14 @@ class _SignUp extends State<SignUp> {
               email: _emailController.text, password: _passwordController.text);
       CreateuserDocument(userCredential);
       Navigator.pop(context);
-      if (userCredential != null) {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (_) => const VerifyEmailPage()));
-      }
-    } on FirebaseAuthException catch (e) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (_) => const VerifyEmailPage()));
+        } on FirebaseAuthException {
       Navigator.pop(context);
     }
   }
 
+  // ignore: non_constant_identifier_names
   Future<void> CreateuserDocument(UserCredential? userCredential) async {
     if (userCredential != null && userCredential.user != null) {
       await FirebaseFirestore.instance

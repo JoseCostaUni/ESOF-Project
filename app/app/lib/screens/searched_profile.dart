@@ -1,18 +1,14 @@
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:app/features/bottomappnavigator.dart';
-import 'package:app/screens/editprofile.dart';
-import 'package:app/screens/settingpages.dart';
 
 class SearchedProfile extends StatefulWidget {
   final Map<String, dynamic> user;
 
   // Constructor with named parameter user
   const SearchedProfile({
-    Key? key,
+    super.key,
     required this.user,
-  }) : super(key: key); // Call the super constructor
+  }); // Call the super constructor
 
   @override
   State<StatefulWidget> createState() => _SearchedProfileState();
@@ -26,7 +22,7 @@ class _SearchedProfileState extends State<SearchedProfile> {
     Map<String, dynamic> user = widget.user;
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(239, 255, 228, 225),
+      backgroundColor: const Color.fromARGB(239, 255, 228, 225),
       body: Stack(
         children: [
           Column(
@@ -34,7 +30,7 @@ class _SearchedProfileState extends State<SearchedProfile> {
               SingleChildScrollView(
                 child: Column(
                   children: [
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     // Profile Picture
                     CircleAvatar(
                       radius: 60,
@@ -42,18 +38,18 @@ class _SearchedProfileState extends State<SearchedProfile> {
                         user['profilepicture'] ?? '',
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     // User Name
                     Text(
                       user['name'] ?? '',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     // Placeholder for number of participations
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
@@ -73,9 +69,9 @@ class _SearchedProfileState extends State<SearchedProfile> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     // Placeholder for number of organized events
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
@@ -95,23 +91,23 @@ class _SearchedProfileState extends State<SearchedProfile> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     // Buttons for Edit Profile and Share Profile
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         ElevatedButton(
                           onPressed: () {
                             // Implement share profile functionality
                           },
-                          child: Text('Share Profile'),
+                          child: const Text('Share Profile'),
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     // Placeholder for user description
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 25),
                       child: Text(
                         'User Description', // Placeholder for user description
@@ -121,9 +117,9 @@ class _SearchedProfileState extends State<SearchedProfile> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     // Placeholder for last attended events
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 25),
                       child: Text(
                         'Last Attended Events:', // Placeholder for last attended events
@@ -134,41 +130,41 @@ class _SearchedProfileState extends State<SearchedProfile> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     // Placeholder for last attended events list
                     Container(
                       width: 300,
                       height: 100,
                       decoration: BoxDecoration(
-                        color: Color.fromARGB(239, 255, 228, 225),
+                        color: const Color.fromARGB(239, 255, 228, 225),
                         borderRadius: BorderRadius.circular(10.0),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.5),
                             spreadRadius: 2,
                             blurRadius: 5,
-                            offset: Offset(0, 3),
+                            offset: const Offset(0, 3),
                           ),
                         ],
                       ),
                       child: Row(
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(bottom: 40, left: 10),
+                            padding: const EdgeInsets.only(bottom: 40, left: 10),
                             child: Container(
                               width: 40,
                               height: 40,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Colors.blue,
                               ),
-                              child: Padding(
+                              child: const Padding(
                                 padding: EdgeInsets.only(right: 8.0),
                               ),
                             ),
                           ),
-                          SizedBox(width: 20),
-                          Flexible(
+                          const SizedBox(width: 20),
+                          const Flexible(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -203,7 +199,7 @@ class _SearchedProfileState extends State<SearchedProfile> {
             top: 10,
             left: 10,
             child: IconButton(
-              icon: Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.pop(context);
               },

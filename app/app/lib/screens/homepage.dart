@@ -18,7 +18,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   final TextEditingController _searchcontroller = TextEditingController();
-  List<Map<String, dynamic>> _sortedEvents = [];
 
   Future<String> getUserName(String userEmail) async {
     DocumentSnapshot userDoc = await FirebaseFirestore.instance
@@ -50,7 +49,6 @@ class _HomePageState extends State<HomePage> {
                 title: Text('Sort by Created At'),
                 onTap: () {
                   setState(() {
-                    _sortedEvents = [];
                   });
                   Navigator.pop(context);
                 },
@@ -59,7 +57,6 @@ class _HomePageState extends State<HomePage> {
                 title: Text('Sort by Date Time'),
                 onTap: () {
                   setState(() {
-                    _sortedEvents = [];
                   });
                   Navigator.pop(context);
                 },

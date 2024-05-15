@@ -1,5 +1,5 @@
-import 'package:app/features/maps_screen.dart';
 import 'package:app/screens/editevent.dart';
+import 'package:app/screens/userpage.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -86,7 +86,6 @@ class _EventPageState extends State<EventPage> {
                 String? location = data['location'];
                 String? description = data['description'];
                 String? dateTime = data['dateTime'];
-                String? attendanceLimit = data['attendanceLimit'];
                 List<dynamic>? imageUrls = data['imageUrls'];
                 String? userEmail = data['userEmail'];
 
@@ -197,7 +196,8 @@ class _EventPageState extends State<EventPage> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (_) => EditeventPage(eventId: widget.eventId),
+                                            builder: (_) => EditeventPage(
+                                                eventId: widget.eventId),
                                           ),
                                         );
                                       } else {
@@ -249,9 +249,7 @@ class _EventPageState extends State<EventPage> {
                             child: Row(
                               children: [
                                 GestureDetector(
-                                  onTap: () {
-                                    
-                                  },
+                                  onTap: () {},
                                   child: const Icon(
                                     Icons.location_on, // location icon
                                     color: Colors.black,
@@ -263,8 +261,16 @@ class _EventPageState extends State<EventPage> {
                               ],
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10.0),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      UsersPage(eventId: widget.eventId),
+                                ),
+                              );
+                            },
                             child: Row(
                               children: [
                                 const Icon(
