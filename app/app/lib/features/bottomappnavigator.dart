@@ -3,6 +3,7 @@ import 'package:app/screens/massage.dart';
 import 'package:app/screens/createevent.dart';
 import 'package:app/screens/homepage.dart';
 import 'package:app/screens/profile.dart';
+import 'package:app/screens/list_chat_page.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   final int currentIndex;
@@ -74,7 +75,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                     widget.onTap(2);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const ChatPage()),
+                      MaterialPageRoute(builder: (_) => const ListChatPage()),
                     );
                   }
                 },

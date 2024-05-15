@@ -33,6 +33,14 @@ class MapsPage extends State<MapsScreen> {
     });
   }
 
+  Future<void> _goToCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    _mapController.animateCamera(CameraUpdate.newLatLng(
+      LatLng(position.latitude, position.longitude),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,6 +100,14 @@ class MapsPage extends State<MapsScreen> {
                   ),
                 ),
               ),
+            ),
+          ),
+          Positioned(
+            bottom: 16.0,
+            left: 16.0,
+            child: FloatingActionButton(
+              onPressed: _goToCurrentLocation,
+              child: Icon(Icons.my_location),
             ),
           ),
         ],
