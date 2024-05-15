@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:app/screens/searched_profile.dart';
 
 class EventPage extends StatefulWidget {
   final String eventId;
@@ -13,6 +14,13 @@ class EventPage extends StatefulWidget {
 
   @override
   State<EventPage> createState() => _EventPageState();
+}
+
+Future<Map<String, dynamic>> getUser(String userEmail) async {
+  Map<String, dynamic> userData = {};
+  DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(userEmail).get();
+  userData = userDoc.data() as Map<String, dynamic>;
+  return userData;
 }
 
 Future<String> getUserName(String userEmail) async {
@@ -158,7 +166,22 @@ class _EventPageState extends State<EventPage> {
                                     }
                                   },
                                 ),
-                                Column(
+                                GestureDetector(
+                                  onTap: () async {
+                                    if (userEmail != null) {
+                                      Map<String, dynamic>? user = await getUser(userEmail);
+                                      if (user != null) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => SearchedProfile(user: user),
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     const Text('created by'),
                                     FutureBuilder<String>(
@@ -186,6 +209,7 @@ class _EventPageState extends State<EventPage> {
                                       },
                                     ),
                                   ],
+                                  ),
                                 ),
                                 ElevatedButton(
                                   onPressed: () {

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class BlockedPage extends StatefulWidget {
   const BlockedPage({super.key});
@@ -37,6 +39,45 @@ class _BlockedPageState extends State<BlockedPage> {
                         },
                       ))
                 ],
+              ),
+              FutureBuilder<DocumentSnapshot>(
+                future: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.email).get(),
+                builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  if (snapshot.hasData) {
+                    Map<String, dynamic>? data = snapshot.data?.data() as Map<String, dynamic>?;
+                    List<String> blockedUsers = data != null && data['blocked'] != null ? List<String>.from(data['blocked']) : [];
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: blockedUsers.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          title: Text(blockedUsers[index]),
+                          trailing: ElevatedButton(
+                            onPressed: () async {
+                              String? currentUser = FirebaseAuth.instance.currentUser?.email;
+                              if (currentUser != null) {
+                                await FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(currentUser)
+                                  .update({
+                                    'blocked': FieldValue.arrayRemove([blockedUsers[index]])
+                                  });
+                                setState(() {
+                                  blockedUsers.removeAt(index);
+                                });
+                              }
+                            },
+                            child: Text('Unblock'),
+                          ),
+                        );
+                      },
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
               ),
             ],
           ),

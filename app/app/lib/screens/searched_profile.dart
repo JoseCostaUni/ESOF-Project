@@ -1,5 +1,11 @@
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:app/features/bottomappnavigator.dart';
+import 'package:app/screens/editprofile.dart';
+import 'package:app/screens/settingpages.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SearchedProfile extends StatefulWidget {
   final Map<String, dynamic> user;
@@ -12,6 +18,60 @@ class SearchedProfile extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => _SearchedProfileState();
+}
+
+class BlockUnblockButton extends StatefulWidget {
+  final String userEmail;
+
+  BlockUnblockButton({required this.userEmail});
+
+  @override
+  _BlockUnblockButtonState createState() => _BlockUnblockButtonState();
+}
+
+class _BlockUnblockButtonState extends State<BlockUnblockButton> {
+  bool isBlocked = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<DocumentSnapshot>(
+      future: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.email).get(),
+      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasData) {
+          Map<String, dynamic>? data = snapshot.data?.data() as Map<String, dynamic>?;
+          isBlocked = data != null && data['blocked'] != null && data['blocked'].contains(widget.userEmail);
+          return ElevatedButton(
+            onPressed: () async {
+              String? currentUser = FirebaseAuth.instance.currentUser?.email;
+              if (currentUser != null) {
+                if (isBlocked) {
+                  await FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(currentUser)
+                    .update({
+                      'blocked': FieldValue.arrayRemove([widget.userEmail])
+                    });
+                } else {
+                  await FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(currentUser)
+                    .update({
+                      'blocked': FieldValue.arrayUnion([widget.userEmail])
+                    });
+                }
+                setState(() {
+                  isBlocked = !isBlocked;
+                });
+              }
+            },
+            child: Text(isBlocked ? 'Unblock User' : 'Block User'),
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
+  }
 }
 
 class _SearchedProfileState extends State<SearchedProfile> {
@@ -96,12 +156,17 @@ class _SearchedProfileState extends State<SearchedProfile> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const SizedBox(width: 10),
-                        ElevatedButton(
-                          onPressed: () {
-                            // Implement share profile functionality
-                          },
-                          child: const Text('Share Profile'),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 50, left: 10),
+                          child: BlockUnblockButton(userEmail: user['email']),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              right: 10, left: 10),
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            child: const Text('Share Profile'),
+                          ),
                         ),
                       ],
                     ),

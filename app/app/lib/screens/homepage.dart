@@ -6,6 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:app/screens/eventsearch.dart';
 import 'package:app/screens/event_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title});
@@ -72,6 +74,14 @@ class _HomePageState extends State<HomePage> {
     String? orderBy,
     bool descending = true,
   }) async {
+    // gets the list of blocked users
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser?.email)
+        .get();
+    Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+    List<String> blockedUsers = List<String>.from(userData['blocked'] ?? []);
+    
     QuerySnapshot querySnapshot;
     if (orderBy == 'dateTime') {
       querySnapshot = await FirebaseFirestore.instance
@@ -89,7 +99,7 @@ class _HomePageState extends State<HomePage> {
       final data = doc.data() as Map<String, dynamic>;
       data['id'] = doc.id;
       return data;
-    }).toList();
+    }).toList().where((event) => !blockedUsers.contains(event['userEmail'])).toList();
   }
 
   @override
