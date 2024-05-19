@@ -16,21 +16,20 @@ class _ChatPage extends State<ChatPage> {
       backgroundColor: Color.fromARGB(255, 253, 241, 238),
       body: Padding(
         padding: EdgeInsets.all(10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-        children: [ 
+        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           Row(
-          children : [IconButton(
-            
-            iconSize: 30,
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(Icons.arrow_back
-            ),
-          ),   
-        ],),]
-      ),),
+            children: [
+              IconButton(
+                iconSize: 30,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.arrow_back),
+              ),
+            ],
+          ),
+        ]),
+      ),
       bottomNavigationBar: CustomBottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: (index) {

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -57,6 +56,18 @@ class ChatFirestore {
       data['id'] = doc.id;
       return data;
     }).toList();
+  }
+
+  Stream<List<Map<String, dynamic>>> getEventMessageStream(String eventId) {
+    return messageCollection
+        .where('eventId', isEqualTo: eventId)
+        .orderBy('sent')
+        .snapshots()
+        .map((querySnapshot) => querySnapshot.docs.map((doc) {
+              final data = doc.data() as Map<String, dynamic>;
+              data['id'] = doc.id;
+              return data;
+            }).toList());
   }
 
   Future<void> storeMessage(String message, String eventId) async {

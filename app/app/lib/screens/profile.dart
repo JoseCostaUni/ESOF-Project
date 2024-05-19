@@ -3,7 +3,7 @@ import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/screens/editprofile.dart';
 import 'package:app/screens/event_page.dart';
 import 'package:app/screens/homepage.dart';
-import 'package:app/screens/massage.dart';
+import 'package:app/screens/message.dart';
 import 'package:app/screens/settingpages.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:app/screens/massage.dart';
+import 'package:app/screens/message.dart';
 import 'package:app/screens/createevent.dart';
 import 'package:app/screens/homepage.dart';
 import 'package:app/screens/profile.dart';
