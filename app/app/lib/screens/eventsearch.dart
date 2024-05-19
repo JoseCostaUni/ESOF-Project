@@ -6,6 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:app/backend/Search_Bar/Search_Bar_Algo.dart';
 import 'package:app/screens/searched_profile.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class EventSearch extends StatefulWidget {
   // ignore: use_super_parameters
@@ -34,13 +36,39 @@ class _EventSearchState extends State<EventSearch> {
     });
   }
 
-  List<Map<String, dynamic>> getEvents() {
+  Future<List<Map<String, dynamic>>> getEvents() async {
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser?.email)
+        .get();
+    Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+    List<String> blockedUsers = List<String>.from(userData['blocked'] ?? []);
+
     sortEvents(orderBy_: orderBy);
-    return events;
+
+    // Filter out events created by blocked users
+    List<Map<String, dynamic>> filteredEvents = events.where((event) {
+      return !blockedUsers.contains(event['userEmail']);
+    }).toList();
+
+    return filteredEvents;
   }
 
-  List<Map<String, dynamic>> getUsers() {
-    return users;
+  Future<List<Map<String, dynamic>>> getUsers() async {
+  // Fetch the list of blocked users
+  DocumentSnapshot userDoc = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(FirebaseAuth.instance.currentUser?.email)
+      .get();
+  Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+  List<String> blockedUsers = List<String>.from(userData['blocked'] ?? []);
+
+  // Filter out blocked users
+  List<Map<String, dynamic>> filteredUsers = users.where((user) {
+    return !blockedUsers.contains(user['email']);
+  }).toList();
+
+  return filteredUsers;
   }
 
   Future<List<Map<String, dynamic>>> getEvents1({
