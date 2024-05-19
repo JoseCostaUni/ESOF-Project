@@ -256,6 +256,19 @@ class _MyProfilePageState extends State<MyProfilePage> {
                               },
                             ),
                             const SizedBox(height: 20),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        EditProfile(), // Ensure this points to your edit profile screen
+                                  ),
+                                );
+                              },
+                              child: Text('Edit Profile'),
+                            ),
+                            const SizedBox(height: 20),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
