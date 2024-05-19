@@ -8,7 +8,6 @@ import 'package:app/screens/eventsearch.dart';
 import 'package:app/screens/event_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title});
   final String title;
@@ -39,6 +38,10 @@ class _HomePageState extends State<HomePage> {
     return userData['profilepicture'] ?? 'default_picture_url';
   }
 
+  void refresh() {
+    setState(() {});
+  }
+
   void _showSortOptionsSheet() {
     showModalBottomSheet(
       context: context,
@@ -50,16 +53,14 @@ class _HomePageState extends State<HomePage> {
               ListTile(
                 title: Text('Sort by Created At'),
                 onTap: () {
-                  setState(() {
-                  });
+                  setState(() {});
                   Navigator.pop(context);
                 },
               ),
               ListTile(
                 title: Text('Sort by Date Time'),
                 onTap: () {
-                  setState(() {
-                  });
+                  setState(() {});
                   Navigator.pop(context);
                 },
               ),
@@ -81,7 +82,7 @@ class _HomePageState extends State<HomePage> {
         .get();
     Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
     List<String> blockedUsers = List<String>.from(userData['blocked'] ?? []);
-    
+
     QuerySnapshot querySnapshot;
     if (orderBy == 'dateTime') {
       querySnapshot = await FirebaseFirestore.instance
@@ -95,11 +96,15 @@ class _HomePageState extends State<HomePage> {
           .get();
     }
 
-    return querySnapshot.docs.map((doc) {
-      final data = doc.data() as Map<String, dynamic>;
-      data['id'] = doc.id;
-      return data;
-    }).toList().where((event) => !blockedUsers.contains(event['userEmail'])).toList();
+    return querySnapshot.docs
+        .map((doc) {
+          final data = doc.data() as Map<String, dynamic>;
+          data['id'] = doc.id;
+          return data;
+        })
+        .toList()
+        .where((event) => !blockedUsers.contains(event['userEmail']))
+        .toList();
   }
 
   @override
@@ -155,8 +160,9 @@ class _HomePageState extends State<HomePage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (_) =>
-                                          EventPage(eventId: event['id'])));
+                                      builder: (_) => EventPage(
+                                          eventId: event['id'],
+                                          onEventUpdated: refresh)));
                             },
                             child: Card(
                               elevation: 4,
@@ -278,8 +284,10 @@ class _HomePageState extends State<HomePage> {
                                                                 context,
                                                                 MaterialPageRoute(
                                                                     builder: (_) =>
-                                                                        MapsScreen(locationNames: [event['location']],
-                                                                          
+                                                                        MapsScreen(
+                                                                          locationNames: [
+                                                                            event['location']
+                                                                          ],
                                                                         )));
                                                           },
                                                           icon: const Icon(Icons

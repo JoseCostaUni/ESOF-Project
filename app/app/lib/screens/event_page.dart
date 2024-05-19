@@ -9,8 +9,8 @@ import 'package:app/screens/searched_profile.dart';
 
 class EventPage extends StatefulWidget {
   final String eventId;
-
-  EventPage({required this.eventId});
+  final VoidCallback? onEventUpdated;
+  EventPage({required this.eventId, this.onEventUpdated});
 
   @override
   State<EventPage> createState() => _EventPageState();
@@ -18,7 +18,8 @@ class EventPage extends StatefulWidget {
 
 Future<Map<String, dynamic>> getUser(String userEmail) async {
   Map<String, dynamic> userData = {};
-  DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(userEmail).get();
+  DocumentSnapshot userDoc =
+      await FirebaseFirestore.instance.collection('users').doc(userEmail).get();
   userData = userDoc.data() as Map<String, dynamic>;
   return userData;
 }
@@ -128,6 +129,7 @@ class _EventPageState extends State<EventPage> {
                           child: IconButton(
                             iconSize: 30,
                             onPressed: () {
+                              widget.onEventUpdated?.call();
                               Navigator.pop(context);
                             },
                             icon: const Icon(Icons.arrow_back),
@@ -169,46 +171,49 @@ class _EventPageState extends State<EventPage> {
                                 GestureDetector(
                                   onTap: () async {
                                     if (userEmail != null) {
-                                      Map<String, dynamic>? user = await getUser(userEmail);
+                                      Map<String, dynamic>? user =
+                                          await getUser(userEmail);
                                       if (user != null) {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (_) => SearchedProfile(user: user),
+                                            builder: (_) =>
+                                                SearchedProfile(user: user),
                                           ),
                                         );
                                       }
                                     }
                                   },
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    const Text('created by'),
-                                    FutureBuilder<String>(
-                                      future: userEmail != null
-                                          ? getUserName(userEmail)
-                                          : null,
-                                      builder: (BuildContext context,
-                                          AsyncSnapshot<String> snapshot) {
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return const CircularProgressIndicator();
-                                        } else {
-                                          if (snapshot.hasError) {
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      const Text('created by'),
+                                      FutureBuilder<String>(
+                                        future: userEmail != null
+                                            ? getUserName(userEmail)
+                                            : null,
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<String> snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return const CircularProgressIndicator();
+                                          } else {
+                                            if (snapshot.hasError) {
+                                              return Text(
+                                                  'Error: ${snapshot.error}');
+                                            }
                                             return Text(
-                                                'Error: ${snapshot.error}');
+                                              '@${snapshot.data ?? 'Unknown user'}', // display do username
+                                              style: const TextStyle(
+                                                fontSize: 18.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            );
                                           }
-                                          return Text(
-                                            '@${snapshot.data ?? 'Unknown user'}', // display do username
-                                            style: const TextStyle(
-                                              fontSize: 18.0,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          );
-                                        }
-                                      },
-                                    ),
-                                  ],
+                                        },
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 ElevatedButton(
