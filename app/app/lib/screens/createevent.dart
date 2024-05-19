@@ -5,7 +5,6 @@ import 'package:flutter/widgets.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/screens/homepage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
