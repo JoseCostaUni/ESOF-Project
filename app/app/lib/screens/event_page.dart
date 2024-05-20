@@ -291,14 +291,37 @@ class _EventPageState extends State<EventPage> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) =>
-                                      UsersPage(eventId: widget.eventId),
-                                ),
-                              );
+                            onTap: () async {
+                              final currentUser =
+                                  FirebaseAuth.instance.currentUser;
+                              if (currentUser != null &&
+                                  currentUser.email == userEmail) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        UsersPage(eventId: widget.eventId),
+                                  ),
+                                );
+                              } else {
+                                // Adicione aqui a lógica para exibir uma mensagem ou redirecionar para outra página
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: Text('Acesso negado'),
+                                    content: Text(
+                                        'Apenas o criador do evento pode acessar esta página.'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
                             },
                             child: Row(
                               children: [

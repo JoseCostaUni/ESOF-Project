@@ -346,9 +346,10 @@ class _EventSearchState extends State<EventSearch> {
                                                                 .location_on),
                                                             iconSize: 20,
                                                           ),
+                                                          Expanded(child: 
                                                           Text(
                                                               event['location'])
-                                                        ]),
+                                                  )]),
                                                   ),
                                                   Padding(
                                                     padding:
