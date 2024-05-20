@@ -1,7 +1,6 @@
 import 'package:app/features/bottomappnavigator.dart';
 import 'package:app/features/maps_screen.dart';
 import 'package:app/features/searchbar.dart';
-import 'package:app/screens/list_chat_page.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +19,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   final TextEditingController _searchcontroller = TextEditingController();
+  String _orderBy = 'createdAt';
+  bool _descending = true;
 
   Future<String> getUserName(String userEmail) async {
     DocumentSnapshot userDoc = await FirebaseFirestore.instance
@@ -54,14 +55,20 @@ class _HomePageState extends State<HomePage> {
               ListTile(
                 title: Text('Sort by Created At'),
                 onTap: () {
-                  setState(() {});
+                  setState(() {
+                    _orderBy = 'createdAt';
+                    _descending = false;
+                  });
                   Navigator.pop(context);
                 },
               ),
               ListTile(
                 title: Text('Sort by Date Time'),
                 onTap: () {
-                  setState(() {});
+                  setState(() {
+                    _orderBy = 'dateTime';
+                    _descending = false;
+                  });
                   Navigator.pop(context);
                 },
               ),
@@ -117,169 +124,208 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(239, 255, 228, 225),
       body: SafeArea(
-        child: GestureDetector(
-          onHorizontalDragEnd: (details) {
-            if (details.primaryVelocity! < 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ListChatPage(),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                IconButton(
+                  onPressed: _showSortOptionsSheet,
+                  icon: const Icon(Icons.sort),
                 ),
-              );
-            }
-          },
-          onHorizontalDragStart: (details) {},
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: _showSortOptionsSheet,
-                    icon: const Icon(Icons.sort),
+                Expanded(
+                  child: CustomSearchBar(
+                    search: _searchcontroller,
+                    onTapMenu: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const EventSearch()),
+                      );
+                    },
+                    onChanged: () {},
+                    currentScreen: '',
                   ),
-                  Expanded(
-                    child: CustomSearchBar(
-                      search: _searchcontroller,
-                      onTapMenu: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const EventSearch()),
-                        );
-                      },
-                      onChanged: () {},
-                      currentScreen: '',
-                    ),
-                  ),
-                ],
-              ),
-              Expanded(
-                child: RefreshIndicator(
-                  onRefresh: _refreshPage,
-                  child: FutureBuilder<List<Map<String, dynamic>>>(
-                    future: getEvents(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Center(
-                          child: Text('Error: ${snapshot.error}'),
-                        );
-                      } else {
-                        return ListView.builder(
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            final event = snapshot.data![index];
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) => EventPage(
-                                              eventId: event['id'],
-                                              onEventUpdated: refresh)));
-                                },
-                                child: Card(
-                                  elevation: 4,
-                                  color:
-                                      const Color.fromARGB(255, 243, 190, 177),
-                                  margin: const EdgeInsets.symmetric(
-                                      vertical: 8.0, horizontal: 16.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Container(
-                                        width: double.infinity,
-                                        height: 200,
-                                        decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(15.0),
-                                            topRight: Radius.circular(15.0),
-                                          ),
-                                        ),
-                                        clipBehavior: Clip.antiAlias,
-                                        child: Container(
-                                          child: CarouselSlider(
-                                              items: (event['imageUrls']
-                                                      as List<dynamic>?)
-                                                  ?.map<Widget>((imageUrl) {
-                                                return Container(
-                                                  width: MediaQuery.of(context)
-                                                      .size
-                                                      .width,
-                                                  margin: const EdgeInsets
-                                                      .symmetric(horizontal: 5),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    image: DecorationImage(
-                                                      image: NetworkImage(
-                                                          imageUrl),
-                                                      fit: BoxFit.contain,
-                                                    ),
-                                                  ),
-                                                );
-                                              }).toList(),
-                                              options: CarouselOptions()),
+                ),
+              ],
+            ),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: _refreshPage,
+                child: FutureBuilder<List<Map<String, dynamic>>>(
+                  future: getEvents(orderBy: _orderBy, descending: _descending),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error: ${snapshot.error}'),
+                      );
+                    } else {
+                      return ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          final event = snapshot.data![index];
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => EventPage(
+                                            eventId: event['id'],
+                                            onEventUpdated: refresh)));
+                              },
+                              child: Card(
+                                elevation: 4,
+                                color: const Color.fromARGB(255, 243, 190, 177),
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 8.0, horizontal: 16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Container(
+                                      width: double.infinity,
+                                      height: 200,
+                                      decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(15.0),
+                                          topRight: Radius.circular(15.0),
                                         ),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 16.0, vertical: 10),
-                                        child: FutureBuilder<DocumentSnapshot>(
-                                          future: FirebaseFirestore.instance
-                                              .collection('users')
-                                              .doc(event['userEmail'])
-                                              .get(),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.connectionState ==
-                                                ConnectionState.waiting) {
-                                              return const CircularProgressIndicator();
-                                            } else if (snapshot.hasError) {
-                                              return Text(
-                                                  'Error: ${snapshot.error}');
-                                            } else {
-                                              Map<String, dynamic>? userData =
-                                                  snapshot.data?.data()
-                                                      as Map<String, dynamic>?;
+                                      clipBehavior: Clip.antiAlias,
+                                      child: Container(
+                                        child: CarouselSlider(
+                                            items: (event['imageUrls']
+                                                    as List<dynamic>?)
+                                                ?.map<Widget>((imageUrl) {
+                                              return Container(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 5),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  image: DecorationImage(
+                                                    image:
+                                                        NetworkImage(imageUrl),
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              );
+                                            }).toList(),
+                                            options: CarouselOptions()),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16.0, vertical: 10),
+                                      child: FutureBuilder<DocumentSnapshot>(
+                                        future: FirebaseFirestore.instance
+                                            .collection('users')
+                                            .doc(event['userEmail'])
+                                            .get(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return const CircularProgressIndicator();
+                                          } else if (snapshot.hasError) {
+                                            return Text(
+                                                'Error: ${snapshot.error}');
+                                          } else {
+                                            Map<String, dynamic>? userData =
+                                                snapshot.data?.data()
+                                                    as Map<String, dynamic>?;
 
-                                              if (userData != null) {
-                                                return Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: <Widget>[
-                                                    Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: <Widget>[
-                                                        CircleAvatar(
-                                                          backgroundColor:
-                                                              Colors.grey,
-                                                          backgroundImage:
-                                                              NetworkImage(userData[
-                                                                      'profilepicture'] ??
-                                                                  ''),
-                                                        ),
-                                                        const SizedBox(
-                                                            width: 10),
-                                                        Text(userData[
-                                                                'username'] ??
-                                                            ''),
-                                                      ],
-                                                    ),
-                                                    const SizedBox(height: 2),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              top: 0),
-                                                      child: Row(
+                                            if (userData != null) {
+                                              return Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: <Widget>[
+                                                      CircleAvatar(
+                                                        backgroundColor:
+                                                            Colors.grey,
+                                                        backgroundImage:
+                                                            NetworkImage(userData[
+                                                                    'profilepicture'] ??
+                                                                ''),
+                                                      ),
+                                                      const SizedBox(width: 10),
+                                                      Text(userData[
+                                                              'username'] ??
+                                                          ''),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 2),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 0),
+                                                    child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          IconButton(
+                                                            onPressed: () {},
+                                                            icon: const Icon(Icons
+                                                                .event_sharp),
+                                                            iconSize: 20,
+                                                          ),
+                                                          Text(event['title'] ??
+                                                              ''),
+                                                        ]),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 0),
+                                                    child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          IconButton(
+                                                            onPressed: () {
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder: (_) =>
+                                                                          MapsScreen(
+                                                                            locationNames: [
+                                                                              event['location']
+                                                                            ],
+                                                                          )));
+                                                            },
+                                                            icon: const Icon(Icons
+                                                                .location_on),
+                                                            iconSize: 20,
+                                                          ),
+                                                          Expanded(
+                                                              child: Text(event[
+                                                                  'location']))
+                                                        ]),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 0),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Row(
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
                                                                   .start,
@@ -287,116 +333,56 @@ class _HomePageState extends State<HomePage> {
                                                             IconButton(
                                                               onPressed: () {},
                                                               icon: const Icon(Icons
-                                                                  .event_sharp),
+                                                                  .date_range_rounded),
                                                               iconSize: 20,
                                                             ),
                                                             Text(event[
-                                                                    'title'] ??
+                                                                    'dateTime'] ??
                                                                 ''),
-                                                          ]),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              top: 0),
-                                                      child: Row(
+                                                          ],
+                                                        ),
+                                                        Row(
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
                                                                   .start,
                                                           children: [
                                                             IconButton(
-                                                              onPressed: () {
-                                                                Navigator.push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                        builder: (_) =>
-                                                                            MapsScreen(
-                                                                              locationNames: [
-                                                                                event['location']
-                                                                              ],
-                                                                            )));
-                                                              },
-                                                              icon: const Icon(Icons
-                                                                  .location_on),
+                                                              onPressed: () {},
+                                                              icon: const Icon(
+                                                                  Icons.people),
                                                               iconSize: 20,
                                                             ),
-                                                            Expanded(
-                                                                child: Text(event[
-                                                                    'location']))
-                                                          ]),
+                                                            Text(
+                                                              '${event['eventosInscritos']?.length ?? 0}/${event['attendanceLimit']}',
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ],
                                                     ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              top: 0),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              IconButton(
-                                                                onPressed:
-                                                                    () {},
-                                                                icon: const Icon(
-                                                                    Icons
-                                                                        .date_range_rounded),
-                                                                iconSize: 20,
-                                                              ),
-                                                              Text(event[
-                                                                      'dateTime'] ??
-                                                                  ''),
-                                                            ],
-                                                          ),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              IconButton(
-                                                                onPressed:
-                                                                    () {},
-                                                                icon: const Icon(
-                                                                    Icons
-                                                                        .people),
-                                                                iconSize: 20,
-                                                              ),
-                                                              Text(
-                                                                '${event['eventosInscritos']?.length ?? 0}/${event['attendanceLimit']}',
-                                                              )
-                                                            ],
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                );
-                                              } else {
-                                                return const Text(
-                                                    'User data not found');
-                                              }
+                                                  ),
+                                                ],
+                                              );
+                                            } else {
+                                              return const Text(
+                                                  'User data not found');
                                             }
-                                          },
-                                        ),
+                                          }
+                                        },
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            );
-                          },
-                        );
-                      }
-                    },
-                  ),
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  },
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
