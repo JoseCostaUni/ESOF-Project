@@ -21,6 +21,8 @@ class _HomePageState extends State<HomePage>
   TabController? _tabController;
   final RestorableInt _tabIndex = RestorableInt(0);
   int _currentIndex = 0;
+  String _orderBy = 'createdAt';
+  bool _descending = true;
   final TextEditingController _searchcontroller = TextEditingController();
 
   @override
@@ -65,7 +67,7 @@ class _HomePageState extends State<HomePage>
     setState(() {});
   }
 
-  void _showSortOptionsSheet() {
+   void _showSortOptionsSheet() {
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -76,14 +78,20 @@ class _HomePageState extends State<HomePage>
               ListTile(
                 title: Text('Sort by Created At'),
                 onTap: () {
-                  setState(() {});
+                  setState(() {
+                    _orderBy = 'createdAt';
+                    _descending = false;
+                  });
                   Navigator.pop(context);
                 },
               ),
               ListTile(
                 title: Text('Sort by Date Time'),
                 onTap: () {
-                  setState(() {});
+                  setState(() {
+                    _orderBy = 'dateTime';
+                    _descending = false;
+                  });
                   Navigator.pop(context);
                 },
               ),
@@ -94,7 +102,8 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Future<List<Map<String, dynamic>>> getEvents({
+
+   Future<List<Map<String, dynamic>>> getEvents({
     String? orderBy,
     bool descending = true,
   }) async {
@@ -298,7 +307,7 @@ class _HomePageState extends State<HomePage>
                 onRefresh: _refreshPage,
                 child: TabBarView(controller: _tabController, children: [
                   FutureBuilder<List<Map<String, dynamic>>>(
-                    future: getEvents(),
+                    future: getEvents(orderBy: _orderBy, descending: _descending),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(
