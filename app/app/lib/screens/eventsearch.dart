@@ -130,12 +130,18 @@ class _EventSearchState extends State<EventSearch> {
       String input = _searchcontroller.text;
       await eventHandler.calcEvents(input);
       suggestions = eventHandler.getEvents();
-      events = [...suggestions];
+      events = suggestions
+          .where((event) =>
+              event["userEmail"] != FirebaseAuth.instance.currentUser?.email)
+          .toList();
     } else {
       String input = _searchcontroller.text;
       await eventHandler.calcUsers(input);
       suggestions = eventHandler.getEvents();
-      users = [...suggestions];
+      users = suggestions
+          .where((user) =>
+              user['email'] != FirebaseAuth.instance.currentUser?.email)
+          .toList();
     }
     setState(() {});
   }
