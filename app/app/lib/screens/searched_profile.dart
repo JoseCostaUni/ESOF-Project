@@ -83,8 +83,6 @@ class _BlockUnblockButtonState extends State<BlockUnblockButton> {
 class _SearchedProfileState extends State<SearchedProfile> {
   int _currentIndex = 1;
   String _image = "";
-  String _selectedEventType = 'created';
-  int __numberOfCreatedEvents = 0;
 
   @override
   void initState() {
@@ -139,11 +137,8 @@ class _SearchedProfileState extends State<SearchedProfile> {
     } else {
       return [];
     }
-
-    __numberOfCreatedEvents = querySnapshot.size;
-
     return querySnapshot.docs.map((doc) {
-      final data = doc.data() as Map<String, dynamic>;
+      final data = doc.data();
       data['id'] = doc.id;
       return data;
     }).toList();
@@ -329,21 +324,19 @@ class _SearchedProfileState extends State<SearchedProfile> {
                                       setState(() {});
                                     },
                                     child: Container(
-                                      color: _selectedEventType == 'created'
-                                          ? Colors.grey.shade200
-                                          : null,
-                                      padding: EdgeInsets.all(8),
-                                      child: Row(
+                                      color: Colors.grey.shade200,
+                                      padding: const EdgeInsets.all(8),
+                                      child: const Row(
                                         children: [
-                                          const Text(
+                                          Text(
                                             'Created Events',
                                             style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          const SizedBox(width: 5),
-                                          const Icon(Icons.event, size: 20),
+                                          SizedBox(width: 5),
+                                          Icon(Icons.event, size: 20),
                                         ],
                                       ),
                                     ),
@@ -357,7 +350,7 @@ class _SearchedProfileState extends State<SearchedProfile> {
                                     MediaQuery.of(context).size.height - 500,
                                 child:
                                     FutureBuilder<List<Map<String, dynamic>>>(
-                                  future: getEvents(_selectedEventType),
+                                  future: getEvents('created'),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState ==
                                         ConnectionState.waiting) {
@@ -417,42 +410,42 @@ class _SearchedProfileState extends State<SearchedProfile> {
                                                       ),
                                                       clipBehavior:
                                                           Clip.antiAlias,
-                                                      child: Container(
-                                                        child: CarouselSlider(
-                                                            items: (event[
-                                                                        'imageUrls']
-                                                                    as List<
-                                                                        dynamic>?)
-                                                                ?.map<Widget>(
-                                                                    (imageUrl) {
-                                                              return Container(
-                                                                width: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width,
-                                                                margin: const EdgeInsets
-                                                                    .symmetric(
-                                                                    horizontal:
-                                                                        5),
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              10),
-                                                                  image:
-                                                                      DecorationImage(
-                                                                    image: NetworkImage(
-                                                                        imageUrl),
-                                                                    fit: BoxFit
-                                                                        .contain,
-                                                                  ),
+                                                      child: CarouselSlider(
+                                                          items: (event[
+                                                                      'imageUrls']
+                                                                  as List<
+                                                                      dynamic>?)
+                                                              ?.map<Widget>(
+                                                                  (imageUrl) {
+                                                            return Container(
+                                                              width:
+                                                                  MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                              margin:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          5),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                                image:
+                                                                    DecorationImage(
+                                                                  image: NetworkImage(
+                                                                      imageUrl),
+                                                                  fit: BoxFit
+                                                                      .contain,
                                                                 ),
-                                                              );
-                                                            }).toList(),
-                                                            options:
-                                                                CarouselOptions()),
-                                                      ),
+                                                              ),
+                                                            );
+                                                          }).toList(),
+                                                          options:
+                                                              CarouselOptions()),
                                                     ),
                                                     Padding(
                                                       padding: const EdgeInsets
