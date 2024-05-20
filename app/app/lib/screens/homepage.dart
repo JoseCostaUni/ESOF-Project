@@ -108,6 +108,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _LikeEvent(String eventId) async {
+    print('Liking event $eventId');
+
     String userEmail = FirebaseAuth.instance.currentUser?.email ?? '';
 
     if (userEmail == '') {
@@ -119,6 +121,8 @@ class _HomePageState extends State<HomePage> {
           .get();
       Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
 
+      print('User data: $userData');
+
       if (userData['likes'] == null) {
         await FirebaseFirestore.instance
             .collection('users')
@@ -127,10 +131,9 @@ class _HomePageState extends State<HomePage> {
       } else {
         await FirebaseFirestore.instance
             .collection('users')
-            .doc(eventId)
+            .doc(userEmail)
             .update({
-          'likes':
-              FieldValue.arrayUnion([FirebaseAuth.instance.currentUser?.email])
+          'likes': FieldValue.arrayUnion([eventId])
         });
       }
     }
@@ -157,10 +160,9 @@ class _HomePageState extends State<HomePage> {
       } else {
         await FirebaseFirestore.instance
             .collection('users')
-            .doc(eventId)
+            .doc(userEmail)
             .update({
-          'likes':
-              FieldValue.arrayRemove([FirebaseAuth.instance.currentUser?.email])
+          'likes': FieldValue.arrayRemove([eventId])
         });
       }
     }
@@ -383,7 +385,8 @@ class _HomePageState extends State<HomePage> {
                                                                 Icons.favorite,
                                                                 color: liked
                                                                     ? Colors.red
-                                                                    : null,
+                                                                    : Colors
+                                                                        .yellow,
                                                               ),
                                                             );
                                                           }
