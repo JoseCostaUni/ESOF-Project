@@ -19,8 +19,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   final TextEditingController _searchcontroller = TextEditingController();
-  String _orderBy = 'createdAt';
-  bool _descending = true;
 
   Future<String> getUserName(String userEmail) async {
     DocumentSnapshot userDoc = await FirebaseFirestore.instance
@@ -55,20 +53,14 @@ class _HomePageState extends State<HomePage> {
               ListTile(
                 title: Text('Sort by Created At'),
                 onTap: () {
-                  setState(() {
-                    _orderBy = 'createdAt';
-                    _descending = false;
-                  });
+                  setState(() {});
                   Navigator.pop(context);
                 },
               ),
               ListTile(
                 title: Text('Sort by Date Time'),
                 onTap: () {
-                  setState(() {
-                    _orderBy = 'dateTime';
-                    _descending = false;
-                  });
+                  setState(() {});
                   Navigator.pop(context);
                 },
               ),
@@ -115,6 +107,91 @@ class _HomePageState extends State<HomePage> {
         .toList();
   }
 
+  Future<void> _LikeEvent(String eventId) async {
+    String userEmail = FirebaseAuth.instance.currentUser?.email ?? '';
+
+    if (userEmail == '') {
+      return Future<void>.value();
+    } else {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userEmail)
+          .get();
+      Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+
+      if (userData['likes'] == null) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userEmail)
+            .update({'likes': []});
+      } else {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(eventId)
+            .update({
+          'likes':
+              FieldValue.arrayUnion([FirebaseAuth.instance.currentUser?.email])
+        });
+      }
+    }
+    return Future<void>.value();
+  }
+
+  Future<void> _Dislike(String eventId) async {
+    String userEmail = FirebaseAuth.instance.currentUser?.email ?? '';
+
+    if (userEmail == '') {
+      return Future<void>.value();
+    } else {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userEmail)
+          .get();
+      Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+
+      if (userData['likes'] == null) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userEmail)
+            .update({'likes': []});
+      } else {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(eventId)
+            .update({
+          'likes':
+              FieldValue.arrayRemove([FirebaseAuth.instance.currentUser?.email])
+        });
+      }
+    }
+    return Future<void>.value();
+  }
+
+  Future<bool> isLiked(String eventId) async {
+    String userEmail = FirebaseAuth.instance.currentUser?.email ?? '';
+
+    if (userEmail == '') {
+      return false;
+    } else {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userEmail)
+          .get();
+      Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+
+      if (userData['likes'] == null) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userEmail)
+            .update({'likes': []});
+      }
+
+      List<dynamic> likedEvents = List<dynamic>.from(userData['likes'] ?? []);
+
+      return likedEvents.contains(eventId);
+    }
+  }
+
   Future<void> _refreshPage() async {
     setState(() {});
   }
@@ -152,7 +229,7 @@ class _HomePageState extends State<HomePage> {
               child: RefreshIndicator(
                 onRefresh: _refreshPage,
                 child: FutureBuilder<List<Map<String, dynamic>>>(
-                  future: getEvents(orderBy: _orderBy, descending: _descending),
+                  future: getEvents(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(
@@ -264,6 +341,54 @@ class _HomePageState extends State<HomePage> {
                                                       Text(userData[
                                                               'username'] ??
                                                           ''),
+                                                      FutureBuilder<bool>(
+                                                        future: isLiked(
+                                                            event['id']),
+                                                        builder: (context,
+                                                            snapshot) {
+                                                          if (snapshot
+                                                                  .connectionState ==
+                                                              ConnectionState
+                                                                  .waiting) {
+                                                            return CircularProgressIndicator();
+                                                          } else if (snapshot
+                                                              .hasError) {
+                                                            return Text(
+                                                                'Error: ${snapshot.error}');
+                                                          } else {
+                                                            bool liked = snapshot
+                                                                    .data ??
+                                                                false; // Get the result from the future
+                                                            return IconButton(
+                                                              onPressed: () {
+                                                                if (liked) {
+                                                                  _Dislike(event[
+                                                                          'id'])
+                                                                      .then(
+                                                                          (_) {
+                                                                    setState(
+                                                                        () {}); // Update UI after disliking
+                                                                  });
+                                                                } else {
+                                                                  _LikeEvent(event[
+                                                                          'id'])
+                                                                      .then(
+                                                                          (_) {
+                                                                    setState(
+                                                                        () {}); // Update UI after liking
+                                                                  });
+                                                                }
+                                                              },
+                                                              icon: Icon(
+                                                                Icons.favorite,
+                                                                color: liked
+                                                                    ? Colors.red
+                                                                    : null,
+                                                              ),
+                                                            );
+                                                          }
+                                                        },
+                                                      )
                                                     ],
                                                   ),
                                                   const SizedBox(height: 2),
