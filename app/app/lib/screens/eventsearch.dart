@@ -8,7 +8,6 @@ import 'package:app/backend/Search_Bar/Search_Bar_Algo.dart';
 import 'package:app/screens/searched_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 class EventSearch extends StatefulWidget {
   // ignore: use_super_parameters
   const EventSearch({Key? key}) : super(key: key);
@@ -55,20 +54,20 @@ class _EventSearchState extends State<EventSearch> {
   }
 
   Future<List<Map<String, dynamic>>> getUsers() async {
-  // Fetch the list of blocked users
-  DocumentSnapshot userDoc = await FirebaseFirestore.instance
-      .collection('users')
-      .doc(FirebaseAuth.instance.currentUser?.email)
-      .get();
-  Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
-  List<String> blockedUsers = List<String>.from(userData['blocked'] ?? []);
+    // Fetch the list of blocked users
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser?.email)
+        .get();
+    Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+    List<String> blockedUsers = List<String>.from(userData['blocked'] ?? []);
 
-  // Filter out blocked users
-  List<Map<String, dynamic>> filteredUsers = users.where((user) {
-    return !blockedUsers.contains(user['email']);
-  }).toList();
+    // Filter out blocked users
+    List<Map<String, dynamic>> filteredUsers = users.where((user) {
+      return !blockedUsers.contains(user['email']);
+    }).toList();
 
-  return filteredUsers;
+    return filteredUsers;
   }
 
   Future<List<Map<String, dynamic>>> getEvents1({
@@ -346,10 +345,10 @@ class _EventSearchState extends State<EventSearch> {
                                                                 .location_on),
                                                             iconSize: 20,
                                                           ),
-                                                          Expanded(child: 
-                                                          Text(
-                                                              event['location'])
-                                                  )]),
+                                                          Expanded(
+                                                              child: Text(event[
+                                                                  'location']))
+                                                        ]),
                                                   ),
                                                   Padding(
                                                     padding:

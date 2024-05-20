@@ -1,20 +1,19 @@
+import 'dart:async';
 import 'package:app/features/bottomappnavigator.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:app/features/bottomappnavigator.dart';
-import 'package:app/screens/editprofile.dart';
-import 'package:app/screens/settingpages.dart';
+import 'package:app/features/maps_screen.dart';
+import 'package:app/screens/event_page.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class SearchedProfile extends StatefulWidget {
   final Map<String, dynamic> user;
 
-  // Constructor with named parameter user
   const SearchedProfile({
     super.key,
     required this.user,
-  }); // Call the super constructor
+  });
 
   @override
   State<StatefulWidget> createState() => _SearchedProfileState();
@@ -35,29 +34,36 @@ class _BlockUnblockButtonState extends State<BlockUnblockButton> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DocumentSnapshot>(
-      future: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.email).get(),
-      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+      future: FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser?.email)
+          .get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasData) {
-          Map<String, dynamic>? data = snapshot.data?.data() as Map<String, dynamic>?;
-          isBlocked = data != null && data['blocked'] != null && data['blocked'].contains(widget.userEmail);
+          Map<String, dynamic>? data =
+              snapshot.data?.data() as Map<String, dynamic>?;
+          isBlocked = data != null &&
+              data['blocked'] != null &&
+              data['blocked'].contains(widget.userEmail);
           return ElevatedButton(
             onPressed: () async {
               String? currentUser = FirebaseAuth.instance.currentUser?.email;
               if (currentUser != null) {
                 if (isBlocked) {
                   await FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(currentUser)
-                    .update({
-                      'blocked': FieldValue.arrayRemove([widget.userEmail])
-                    });
+                      .collection('users')
+                      .doc(currentUser)
+                      .update({
+                    'blocked': FieldValue.arrayRemove([widget.userEmail])
+                  });
                 } else {
                   await FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(currentUser)
-                    .update({
-                      'blocked': FieldValue.arrayUnion([widget.userEmail])
-                    });
+                      .collection('users')
+                      .doc(currentUser)
+                      .update({
+                    'blocked': FieldValue.arrayUnion([widget.userEmail])
+                  });
                 }
                 setState(() {
                   isBlocked = !isBlocked;
@@ -76,201 +82,564 @@ class _BlockUnblockButtonState extends State<BlockUnblockButton> {
 
 class _SearchedProfileState extends State<SearchedProfile> {
   int _currentIndex = 1;
+  String _image = "";
+  String _selectedEventType = 'created';
+  int __numberOfCreatedEvents = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadImage();
+  }
+
+  Future<void> _loadImage() async {
+    if (widget.user['profilepicture'] != null) {
+      setState(() {
+        _image = widget.user['profilepicture'];
+      });
+    }
+  }
+
+  Future<String> getUserDescription() async {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(widget.user['email'])
+        .get();
+    if (snapshot.exists) {
+      return snapshot.data()?['description'] ?? '';
+    } else {
+      return '';
+    }
+  }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> getuserdetails() async {
+    return await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.user['email'])
+        .get();
+  }
+
+  Future<int> getRegisteredEventsCount(String userEmail) async {
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore
+        .instance
+        .collection('event')
+        .where('eventosInscritos', arrayContains: userEmail)
+        .get();
+    return querySnapshot.docs.length;
+  }
+
+  Future<List<Map<String, dynamic>>> getEvents(String type) async {
+    QuerySnapshot<Map<String, dynamic>> querySnapshot;
+    if (type == 'created') {
+      querySnapshot = await FirebaseFirestore.instance
+          .collection('event')
+          .where('userEmail', isEqualTo: widget.user['email'])
+          .get();
+    } else {
+      return [];
+    }
+
+    __numberOfCreatedEvents = querySnapshot.size;
+
+    return querySnapshot.docs.map((doc) {
+      final data = doc.data() as Map<String, dynamic>;
+      data['id'] = doc.id;
+      return data;
+    }).toList();
+  }
+
+  Future<String> getUsername() async {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(widget.user['email'])
+        .get();
+    if (snapshot.exists) {
+      return snapshot.data()?['username'] ?? '';
+    } else {
+      return '';
+    }
+  }
+
+  void refreshProfilePage() async {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> user = widget.user;
-
     return Scaffold(
       backgroundColor: const Color.fromARGB(239, 255, 228, 225),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 30),
-                    // Profile Picture
-                    CircleAvatar(
-                      radius: 60,
-                      backgroundImage: NetworkImage(
-                        user['profilepicture'] ?? '',
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    // User Name
-                    Text(
-                      user['name'] ?? '',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    // Placeholder for number of participations
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '12', // Placeholder for number of participations
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          'Participations',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    // Placeholder for number of organized events
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '2', // Placeholder for number of organized events
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          'Organized',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    // Buttons for Edit Profile and Share Profile
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 50, left: 10),
-                          child: BlockUnblockButton(userEmail: user['email']),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              right: 10, left: 10),
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            child: const Text('Share Profile'),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    // Placeholder for user description
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 25),
-                      child: Text(
-                        'User Description', // Placeholder for user description
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    // Placeholder for last attended events
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 25),
-                      child: Text(
-                        'Last Attended Events:', // Placeholder for last attended events
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    // Placeholder for last attended events list
-                    Container(
-                      width: 300,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(239, 255, 228, 225),
-                        borderRadius: BorderRadius.circular(10.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 40, left: 10),
-                            child: Container(
-                              width: 40,
-                              height: 40,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.blue,
-                              ),
-                              child: const Padding(
-                                padding: EdgeInsets.only(right: 8.0),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 20),
-                          const Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+              future: getuserdetails(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Text("Error: ${snapshot.error}");
+                } else if (snapshot.hasData) {
+                  Map<String, dynamic>? user = snapshot.data!.data();
+                  if (user != null && user.containsKey('name')) {
+                    return SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                SizedBox(height: 10),
-                                Text(
-                                  'Event Name', // Placeholder for event name
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
+                                ClipOval(
+                                  child: SizedBox(
+                                    width: 120,
+                                    height: 120,
+                                    child: _image.isNotEmpty
+                                        ? Image.network(
+                                            _image,
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Container(
+                                            color: const Color.fromARGB(
+                                                239, 255, 228, 225),
+                                          ),
                                   ),
                                 ),
-                                SizedBox(height: 5),
-                                Text(
-                                  'Event Location', // Placeholder for event location
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey,
+                                const SizedBox(width: 20),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    FutureBuilder<int>(
+                                      future: getRegisteredEventsCount(
+                                          widget.user['email']),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        }
+                                        if (snapshot.hasError) {
+                                          return Text(
+                                              "Error: ${snapshot.error}");
+                                        }
+                                        int registeredEventsCount =
+                                            snapshot.data ?? 0;
+                                        return Text(
+                                          'Number of Joined Events: $registeredEventsCount',
+                                          style: const TextStyle(
+                                              fontSize: 16, color: Colors.grey),
+                                        );
+                                      },
+                                    ),
+                                    const SizedBox(height: 10),
+                                    FutureBuilder<
+                                        DocumentSnapshot<Map<String, dynamic>>>(
+                                      future: getuserdetails(),
+                                      builder: (context, snapshot) {
+                                        if (!snapshot.hasData) {
+                                          return const SizedBox();
+                                        }
+                                        int organizedEventsCount =
+                                            snapshot.data!.data()?[
+                                                    'organizedEventsCount'] ??
+                                                0;
+                                        return Text(
+                                          'Number of Created Events: $organizedEventsCount',
+                                          style: const TextStyle(
+                                              fontSize: 16, color: Colors.grey),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+                            FutureBuilder<String>(
+                              future: getUsername(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                                if (snapshot.hasError) {
+                                  return Text("Error: ${snapshot.error}");
+                                }
+                                String username =
+                                    snapshot.data ?? "No username";
+                                return Text(
+                                  username,
+                                  style: const TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold),
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 10),
+                            FutureBuilder<String>(
+                              future: getUserDescription(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                                if (snapshot.hasError) {
+                                  return Text("Error: ${snapshot.error}");
+                                }
+                                String description =
+                                    snapshot.data ?? "No description";
+                                return Text(description);
+                              },
+                            ),
+                            const SizedBox(height: 20),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: BlockUnblockButton(
+                                  userEmail: widget.user['email']),
+                            ),
+                            const SizedBox(height: 20),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {});
+                                  },
+                                  child: Container(
+                                    color: _selectedEventType == 'created'
+                                        ? Colors.grey.shade200
+                                        : null,
+                                    padding: EdgeInsets.all(8),
+                                    child: Row(
+                                      children: [
+                                        const Text(
+                                          'Created Events',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 5),
+                                        const Icon(Icons.event, size: 20),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                        ],
+                            const Divider(height: 20, thickness: 1),
+                            const SizedBox(height: 20),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height - 500,
+                              child: FutureBuilder<List<Map<String, dynamic>>>(
+                                future: getEvents(_selectedEventType),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    return Center(
+                                      child: Text('Error: ${snapshot.error}'),
+                                    );
+                                  } else {
+                                    return ListView.builder(
+                                      itemCount: snapshot.data!.length,
+                                      itemBuilder: (context, index) {
+                                        final event = snapshot.data![index];
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: GestureDetector(
+                                            onTap: () async {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (_) => EventPage(
+                                                      eventId: event['id'],
+                                                      onEventUpdated:
+                                                          refreshProfilePage),
+                                                ),
+                                              );
+                                              setState(() {});
+                                            },
+                                            child: Card(
+                                              elevation: 4,
+                                              color: const Color.fromARGB(
+                                                  255, 243, 190, 177),
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 8.0,
+                                                      horizontal: 16.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Container(
+                                                    width: double.infinity,
+                                                    height: 200,
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(
+                                                                15.0),
+                                                        topRight:
+                                                            Radius.circular(
+                                                                15.0),
+                                                      ),
+                                                    ),
+                                                    clipBehavior:
+                                                        Clip.antiAlias,
+                                                    child: Container(
+                                                      child: CarouselSlider(
+                                                          items: (event[
+                                                                      'imageUrls']
+                                                                  as List<
+                                                                      dynamic>?)
+                                                              ?.map<Widget>(
+                                                                  (imageUrl) {
+                                                            return Container(
+                                                              width:
+                                                                  MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                              margin:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          5),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                                image:
+                                                                    DecorationImage(
+                                                                  image: NetworkImage(
+                                                                      imageUrl),
+                                                                  fit: BoxFit
+                                                                      .contain,
+                                                                ),
+                                                              ),
+                                                            );
+                                                          }).toList(),
+                                                          options:
+                                                              CarouselOptions()),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 16.0,
+                                                        vertical: 10),
+                                                    child: FutureBuilder<
+                                                        DocumentSnapshot>(
+                                                      future: FirebaseFirestore
+                                                          .instance
+                                                          .collection('users')
+                                                          .doc(event[
+                                                              'userEmail'])
+                                                          .get(),
+                                                      builder:
+                                                          (context, snapshot) {
+                                                        if (snapshot
+                                                                .connectionState ==
+                                                            ConnectionState
+                                                                .waiting) {
+                                                          return const CircularProgressIndicator();
+                                                        } else if (snapshot
+                                                            .hasError) {
+                                                          return Text(
+                                                              'Error: ${snapshot.error}');
+                                                        } else {
+                                                          Map<String, dynamic>?
+                                                              userData =
+                                                              snapshot.data
+                                                                      ?.data()
+                                                                  as Map<String,
+                                                                      dynamic>?;
+
+                                                          if (userData !=
+                                                              null) {
+                                                            return Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: <Widget>[
+                                                                Row(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .center,
+                                                                  children: <Widget>[
+                                                                    CircleAvatar(
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .grey,
+                                                                      backgroundImage:
+                                                                          NetworkImage(userData['profilepicture'] ??
+                                                                              ''),
+                                                                    ),
+                                                                    const SizedBox(
+                                                                        width:
+                                                                            10),
+                                                                    Text(userData[
+                                                                            'username'] ??
+                                                                        ''),
+                                                                  ],
+                                                                ),
+                                                                const SizedBox(
+                                                                    height: 2),
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .only(
+                                                                          top:
+                                                                              0),
+                                                                  child: Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        IconButton(
+                                                                          onPressed:
+                                                                              () {},
+                                                                          icon:
+                                                                              const Icon(Icons.event_sharp),
+                                                                          iconSize:
+                                                                              20,
+                                                                        ),
+                                                                        Text(event['title'] ??
+                                                                            ''),
+                                                                      ]),
+                                                                ),
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .only(
+                                                                          top:
+                                                                              0),
+                                                                  child: Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        IconButton(
+                                                                          onPressed:
+                                                                              () {
+                                                                            Navigator.push(
+                                                                                context,
+                                                                                MaterialPageRoute(
+                                                                                    builder: (_) => MapsScreen(locationNames: [
+                                                                                          event['location'],
+                                                                                        ])));
+                                                                          },
+                                                                          icon:
+                                                                              const Icon(Icons.location_on),
+                                                                          iconSize:
+                                                                              20,
+                                                                        ),
+                                                                        Expanded(
+                                                                            child:
+                                                                                Text(event['location']))
+                                                                      ]),
+                                                                ),
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .only(
+                                                                          top:
+                                                                              0),
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    children: [
+                                                                      Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.start,
+                                                                        children: [
+                                                                          IconButton(
+                                                                            onPressed:
+                                                                                () {},
+                                                                            icon:
+                                                                                const Icon(Icons.date_range_rounded),
+                                                                            iconSize:
+                                                                                20,
+                                                                          ),
+                                                                          Text(event['dateTime'] ??
+                                                                              ''),
+                                                                        ],
+                                                                      ),
+                                                                      Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.start,
+                                                                        children: [
+                                                                          IconButton(
+                                                                            onPressed:
+                                                                                () {},
+                                                                            icon:
+                                                                                const Icon(Icons.people),
+                                                                            iconSize:
+                                                                                20,
+                                                                          ),
+                                                                          Text(
+                                                                            '${event['eventosInscritos']?.length ?? 0}/${event['attendanceLimit']}',
+                                                                          )
+                                                                        ],
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            );
+                                                          } else {
+                                                            return const Text(
+                                                                'User data not found');
+                                                          }
+                                                        }
+                                                      },
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          Positioned(
-            top: 10,
-            left: 10,
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context);
+                    );
+                  } else {
+                    return const Text("User data not found");
+                  }
+                } else {
+                  return const Text("No user data");
+                }
               },
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _currentIndex,
