@@ -373,7 +373,7 @@ class _HomePageState extends State<HomePage>
                                                       .size
                                                       .width,
                                                   margin: const EdgeInsets
-                                                      .symmetric(horizontal: 5),
+                                                      .symmetric(horizontal: 2),
                                                   decoration: BoxDecoration(
                                                     borderRadius:
                                                         BorderRadius.circular(
@@ -381,12 +381,14 @@ class _HomePageState extends State<HomePage>
                                                     image: DecorationImage(
                                                       image: NetworkImage(
                                                           imageUrl),
-                                                      fit: BoxFit.contain,
+                                                      fit: BoxFit.cover,
                                                     ),
                                                   ),
                                                 );
                                               }).toList(),
-                                              options: CarouselOptions()),
+                                              options: CarouselOptions(
+                                                aspectRatio: 16 / 9,
+                                              )),
                                         ),
                                       ),
                                       Padding(

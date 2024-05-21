@@ -114,17 +114,19 @@ class _EventPageState extends State<EventPage> {
                               ?.map<Widget>((imageUrl) {
                             return Container(
                               width: MediaQuery.of(context).size.width,
-                              margin: const EdgeInsets.symmetric(horizontal: 5),
+                              margin: const EdgeInsets.symmetric(horizontal: 2),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 image: DecorationImage(
                                   image: NetworkImage(imageUrl),
-                                  fit: BoxFit.contain,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             );
                           }).toList(),
-                          options: CarouselOptions(),
+                          options: CarouselOptions(
+                            aspectRatio: 16 / 9,
+                          ),
                         ),
                         Positioned(
                           top: 10.0,
