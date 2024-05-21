@@ -169,7 +169,7 @@ class _CreateEventState extends State<CreateEvent> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 233, 191, 180),
-      body: Padding(
+      body: SafeArea(child:  Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
           child: Column(
@@ -461,7 +461,7 @@ class _CreateEventState extends State<CreateEvent> {
             ],
           ),
         ),
-      ),
+      ),),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
