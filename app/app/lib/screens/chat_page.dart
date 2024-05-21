@@ -50,13 +50,14 @@ class _ChatPageState extends State<ChatPage> {
                           child: Text('Event data not available'),
                         );
                       } else {
-                        return Text(
+                        return Expanded(child: 
+                        Text(
                           snapshot.data!['title'],
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
-                        );
+                        ));
                       }
                     },
                   ),

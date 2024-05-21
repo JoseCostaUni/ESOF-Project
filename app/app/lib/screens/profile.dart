@@ -605,8 +605,9 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                                                             iconSize:
                                                                                 20,
                                                                           ),
+                                                                          Expanded(child: 
                                                                           Text(event['title'] ??
-                                                                              ''),
+                                                                              ''),)
                                                                         ]),
                                                                   ),
                                                                   Padding(

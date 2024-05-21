@@ -134,6 +134,10 @@ class _LocationAutocompleteState extends State<LocationAutocomplete> {
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
                     hintText: "Location",
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                    ),
+
                     alignLabelWithHint: true, // Align labelText with hintText
                   ),
                   onChanged: (text) {

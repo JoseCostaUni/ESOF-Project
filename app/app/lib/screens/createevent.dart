@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:app/features/autocompletelocation.dart';
 import 'package:app/features/maps_screen.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:image_picker/image_picker.dart';
@@ -277,84 +278,119 @@ class _CreateEventState extends State<CreateEvent> {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      TextField(
-                        controller: _titleController,
-                        decoration: const InputDecoration(
-                          hintText: 'Event Title',
-                          hintStyle: TextStyle(
-                              color: Color.fromARGB(255, 167, 166, 166)),
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black)),
-                          disabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black)),
-                          prefixIcon: Icon(Icons.text_fields),
-                        ),
-                      ),
+                      Row(children: [
+                        Icon(Icons.text_fields),
+                        Expanded(
+                            child: Padding(
+                          padding: EdgeInsets.only(left: 25, right: 25),
+                          child: TextField(
+                            controller: _titleController,
+                            decoration: const InputDecoration(
+                              hintText: 'Event Title',
+                              hintStyle: TextStyle(
+                                  color: Color.fromARGB(255, 167, 166, 166)),
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey)),
+                              disabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey)),
+                            ),
+                          ),
+                        ))
+                      ]),
                       const SizedBox(height: 10),
                       GestureDetector(
-                        onTap: () async {
-                          DateTime? dateTime = await showOmniDateTimePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(1600)
-                                .subtract(const Duration(days: 3652)),
-                            lastDate:
-                                DateTime.now().add(const Duration(days: 3652)),
-                          );
-                          if (dateTime != null) {
-                            String formattedDateTime =
-                                DateFormat('yyyy-MM-dd HH:mm').format(dateTime);
-                            setState(() {
-                              _dateController.text = formattedDateTime;
-                            });
-                          }
-                        },
-                        child: TextField(
-                          controller: _dateController,
-                          decoration: const InputDecoration(
-                            hintText: 'Select Date and Time',
-                            prefixIcon: Icon(Icons.calendar_today),
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black)),
-                            disabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black)),
-                          ),
-                          enabled: false,
-                          style: const TextStyle(color: Colors.black),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      SizedBox(
-                        width: 6000, // Defina a largura desejada
-                        height: 65, // Defina a altura desejada
-                        child: LocationAutocomplete(
-                          locationName: locationName,
-                          onChanged: (value) async {
-                            setState(() {
-                              locationName = value;
-                            });
-                            if (value.isNotEmpty) {
-                              if (value.isNotEmpty) {
-                                getLocationCoordinates(value);
-                              }
+                          onTap: () async {
+                            DateTime? dateTime = await showOmniDateTimePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(1600)
+                                  .subtract(const Duration(days: 3652)),
+                              lastDate: DateTime.now()
+                                  .add(const Duration(days: 3652)),
+                            );
+                            if (dateTime != null) {
+                              String formattedDateTime =
+                                  DateFormat('yyyy-MM-dd HH:mm')
+                                      .format(dateTime);
+                              setState(() {
+                                _dateController.text = formattedDateTime;
+                              });
                             }
                           },
-                        ),
-                      ),
+                          child: Row(
+                            children: [
+                              Icon(Icons.calendar_today),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 25, right: 25),
+                                  child: TextField(
+                                    controller: _dateController,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Select Date and Time',
+                                      hintStyle: TextStyle(
+                                          color: Colors.grey),
+
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.grey),
+                                      ),
+                                      disabledBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.grey),
+                                      ),
+                                    ),
+                                    enabled: false,
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )),
                       const SizedBox(height: 10),
-                      TextField(
-                        controller: _attendanceLimitsController,
-                        decoration: const InputDecoration(
-                          hintText: 'Attendance limit',
-                          hintStyle: TextStyle(
-                              color: Color.fromARGB(255, 167, 166, 166)),
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black)),
-                          disabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black)),
-                          prefixIcon: Icon(Icons.person_add_rounded),
-                        ),
-                      ),
+                      Row(children: [
+                        Icon(Icons.location_on),
+                        Expanded(
+                            child: SizedBox(
+                          width: 6000, // Defina a largura desejada
+                          height: 65, // Defina a altura desejada
+                          child: LocationAutocomplete(
+                            locationName: locationName,
+                            onChanged: (value) async {
+                              setState(() {
+                                locationName = value;
+                              });
+                              if (value.isNotEmpty) {
+                                if (value.isNotEmpty) {
+                                  getLocationCoordinates(value);
+                                }
+                              }
+                            },
+                          ),
+                        ))
+                      ]),
+                      const SizedBox(height: 10),
+                      Row(children: [
+                        Icon(Icons.person_add_rounded),
+                        Expanded(
+                             
+
+                            child: Padding(
+                          padding: EdgeInsets.only(left: 25, right: 25),
+                          child: TextField(
+                            controller: _attendanceLimitsController,
+                            decoration: const InputDecoration(
+                              hintText: 'Attendance limit',
+                              hintStyle: TextStyle(
+                                  color: Color.fromARGB(255, 167, 166, 166)),
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey)),
+                              disabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey)),
+                            ),
+                          ),
+                        ))
+                      ]),
                       const SizedBox(height: 10),
                       TextField(
                         controller: _descriptionController,
