@@ -63,6 +63,14 @@ class _HomePageState extends State<HomePage>
     return userData['profilepicture'] ?? 'default_picture_url';
   }
 
+  void sortEvents(String orderBy, bool descending) {
+    setState(() {
+      _orderBy = orderBy;
+      _descending = descending;
+    });
+    Navigator.pop(context);
+  }
+
   void refresh() {
     setState(() {});
   }
@@ -280,23 +288,22 @@ class _HomePageState extends State<HomePage>
           children: [
             Row(
               children: [
-                IconButton(
-                  onPressed: _showSortOptionsSheet,
-                  icon: const Icon(Icons.sort),
-                ),
                 Expanded(
                   child: CustomSearchBar(
-                    search: _searchcontroller,
-                    onTapMenu: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const EventSearch()),
-                      );
-                    },
-                    onChanged: () {},
-                    currentScreen: '',
-                  ),
+                      search: _searchcontroller,
+                      onTapMenu: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const EventSearch()),
+                        );
+                      },
+                      onChanged: () {},
+                      currentScreen: '',
+                      onSearchTextChanged: (orderBy, descending) => sortEvents(
+                            orderBy,
+                            descending,
+                          )),
                 ),
               ],
             ),

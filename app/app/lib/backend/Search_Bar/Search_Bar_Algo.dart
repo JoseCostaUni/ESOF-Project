@@ -19,10 +19,27 @@ class EventHandler {
   List<Map<String, dynamic>> events = [];
   List<Map<String, dynamic>> Allusers = [];
 
-  Future<List<Map<String, dynamic>>> getAllEvents() async {
+  Future<List<Map<String, dynamic>>> getAllEvents(
+      String? _orderBy, bool? _descending) async {
     List<Map<String, dynamic>> events = [];
-    QuerySnapshot<Map<String, dynamic>> querySnapshot =
-        await FirebaseFirestore.instance.collection('event').get();
+    if (_orderBy == null || _descending == null) {
+      _orderBy = 'createdAt';
+      _descending = true;
+    }
+
+    QuerySnapshot<Map<String, dynamic>> querySnapshot;
+
+    if (_orderBy == 'createdAt') {
+      querySnapshot = await FirebaseFirestore.instance
+          .collection('event')
+          .orderBy('createdAt', descending: _descending)
+          .get();
+    } else {
+      querySnapshot = await FirebaseFirestore.instance
+          .collection('event')
+          .orderBy('createdAt', descending: false)
+          .get();
+    }
 
     querySnapshot.docs.forEach((doc) {
       Map<String, dynamic> eventData = doc.data();
@@ -167,13 +184,15 @@ class EventHandler {
     return events;
   }
 
-  Future<List<Map<String, dynamic>>> calcEvents(String input) async {
+  Future<List<Map<String, dynamic>>> calcEvents(
+      String input, String? _orderBy, bool? _descending) async {
     if (input.isNotEmpty) {
       List<Map<String, dynamic>> recommendations = [];
       List<String> itemNames = [];
       Map<String, Map<String, dynamic>> eventsMap = {};
 
-      List<Map<String, dynamic>> allEvents = await getAllEvents();
+      List<Map<String, dynamic>> allEvents =
+          await getAllEvents(_orderBy ?? 'createdAt', _descending ?? true);
 
       for (var event in allEvents) {
         String title = event['title'];
@@ -222,14 +241,15 @@ class EventHandler {
         }
       }
 
-      suggestions = recommendations; // Update suggestions with the latest data
+      suggestions = recommendations;
     } else {
-      List<Map<String, dynamic>> allEvents = await getAllEvents();
+      List<Map<String, dynamic>> allEvents =
+          await getAllEvents(_orderBy ?? 'createdAt', _descending ?? true);
 
       suggestions = [...allEvents];
     }
 
-    events = [...suggestions]; // Update events with the latest suggestions
+    events = [...suggestions];
 
     return events;
   }
