@@ -101,6 +101,9 @@ class _EventPageState extends State<EventPage> {
                 final currentUser = FirebaseAuth.instance.currentUser;
                 final isCreator = currentUser?.email == userEmail;
 
+                DateTime eventDateTime = DateTime.parse(dateTime!);
+                bool isEventInFuture = eventDateTime.isAfter(DateTime.now());
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -225,6 +228,7 @@ class _EventPageState extends State<EventPage> {
                                 ),
 
                             
+                                if (isEventInFuture)
                                 ElevatedButton(
                                   onPressed: () {
                                     final currentUser =
