@@ -429,9 +429,10 @@ class _HomePageState extends State<HomePage>
                                                         ),
                                                         const SizedBox(
                                                             width: 10),
+                                                            Expanded(child: 
                                                         Text(userData[
                                                                 'username'] ??
-                                                            ''),
+                                                            ''),),
                                                         FutureBuilder<bool>(
                                                           future: isLiked(
                                                               event['id']),

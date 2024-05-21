@@ -189,21 +189,28 @@ class _EventPageState extends State<EventPage> {
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
                                       const Text('created by'),
+                                      Container(
+                                        width: 100,
+                                        child:
                                       FutureBuilder<String>(
+                                        
                                         future: userEmail != null
                                             ? getUserName(userEmail)
                                             : null,
+                                          
                                         builder: (BuildContext context,
                                             AsyncSnapshot<String> snapshot) {
+                                              
                                           if (snapshot.connectionState ==
                                               ConnectionState.waiting) {
                                             return const CircularProgressIndicator();
                                           } else {
                                             if (snapshot.hasError) {
                                               return Text(
-                                                  'Error: ${snapshot.error}');
+                                                  'Sem Usuario Encontrado');
                                             }
-                                            return Text(
+                                           
+                                             return Text(
                                               '@${snapshot.data ?? 'Unknown user'}', // display do username
                                               style: const TextStyle(
                                                 fontSize: 18.0,
@@ -213,9 +220,11 @@ class _EventPageState extends State<EventPage> {
                                           }
                                         },
                                       ),
-                                    ],
+                                  )],
                                   ),
                                 ),
+
+                            
                                 ElevatedButton(
                                   onPressed: () {
                                     final currentUser =
@@ -246,7 +255,7 @@ class _EventPageState extends State<EventPage> {
                                             : 'Join Event',
                                   ),
                                 ),
-                              ],
+                            ],
                             ),
                           ),
                           Padding(
@@ -286,7 +295,9 @@ class _EventPageState extends State<EventPage> {
                                   ),
                                 ),
                                 const SizedBox(width: 5.0),
-                                Text('${location ?? ''}'),
+                                Expanded(
+                                  child: Text('${location ?? ''}'),
+                                )
                               ],
                             ),
                           ),
