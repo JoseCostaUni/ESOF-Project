@@ -26,7 +26,8 @@ class _EventSearchState extends State<EventSearch> {
   List<Map<String, dynamic>> users = [];
   final TextEditingController _searchcontroller = TextEditingController();
   String selectedOption = "Events";
-  String orderBy = "createdAt";
+  String _orderBy = 'createdAt';
+  bool _descending = true;
 
   // ignore: unused_element
   Future<List<Map<String, dynamic>>> _loadEvents(String query) async {
@@ -42,8 +43,6 @@ class _EventSearchState extends State<EventSearch> {
         .get();
     Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
     List<String> blockedUsers = List<String>.from(userData['blocked'] ?? []);
-
-    sortEvents(orderBy_: orderBy);
 
     // Filter out events created by blocked users
     List<Map<String, dynamic>> filteredEvents = events.where((event) {
@@ -70,13 +69,10 @@ class _EventSearchState extends State<EventSearch> {
     return filteredUsers;
   }
 
-  Future<List<Map<String, dynamic>>> getEvents1({
-    String? orderBy,
-    bool descending = true,
-  }) async {
+  Future<List<Map<String, dynamic>>> getEvents1() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('event')
-        .orderBy(orderBy ?? 'createdAt', descending: true)
+        .orderBy(_orderBy, descending: _descending)
         .get();
     return querySnapshot.docs.map((doc) {
       final data = doc.data() as Map<String, dynamic>;
@@ -91,44 +87,10 @@ class _EventSearchState extends State<EventSearch> {
     calcReccomendations(selectedOption);
   }
 
-  void _showSortOptionsSheet() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Container(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                title: Text('Sort by Created At'),
-                onTap: () {
-                  setState(() {
-                    orderBy = 'createdAt';
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: Text('Sort by Date Time'),
-                onTap: () {
-                  setState(() {
-                    orderBy = 'dateTime';
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  // ignore: no_leading_underscores_for_local_identifiers
   void calcReccomendations(String _selectedOption) async {
     if (selectedOption == 'Events') {
       String input = _searchcontroller.text;
-      await eventHandler.calcEvents(input);
+      await eventHandler.calcEvents(input, _orderBy, _descending);
       suggestions = eventHandler.getEvents();
       events = suggestions
           .where((event) =>
@@ -144,6 +106,14 @@ class _EventSearchState extends State<EventSearch> {
           .toList();
     }
     setState(() {});
+  }
+
+  void _setSortingAttributes(String orderBy, bool descending) {
+    setState(() {
+      _orderBy = orderBy;
+      _descending = descending;
+    });
+    Navigator.pop(context);
   }
 
   void sortEvents({
@@ -179,10 +149,6 @@ class _EventSearchState extends State<EventSearch> {
           children: [
             Row(
               children: [
-                IconButton(
-                  onPressed: _showSortOptionsSheet,
-                  icon: const Icon(Icons.sort),
-                ),
                 Expanded(
                   child: CustomSearchBar(
                     search: _searchcontroller,
@@ -194,6 +160,8 @@ class _EventSearchState extends State<EventSearch> {
                       selectedOption = value;
                       calcReccomendations(selectedOption);
                     },
+                    onSearchTextChanged: (orderBy, descending) =>
+                        _setSortingAttributes(orderBy, descending),
                   ),
                 ),
               ],
