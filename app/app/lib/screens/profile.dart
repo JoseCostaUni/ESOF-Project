@@ -99,14 +99,13 @@ class _MyProfilePageState extends State<MyProfilePage> {
         String dateTimeString = doc['dateTime'];
         DateTime eventDateTime = DateTime.parse(dateTimeString);
         return eventDateTime.isAfter(now);
-      }).toList();   
+      }).toList();
 
       return Events.map((doc) {
-      final data = doc.data() as Map<String, dynamic>;
-      data['id'] = doc.id;
-      return data;
-    }).toList(); 
-
+        final data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id;
+        return data;
+      }).toList();
     } else if (type == 'joined') {
       querySnapshot = await FirebaseFirestore.instance
           .collection('event')
@@ -118,34 +117,46 @@ class _MyProfilePageState extends State<MyProfilePage> {
         String dateTimeString = doc['dateTime'];
         DateTime eventDateTime = DateTime.parse(dateTimeString);
         return eventDateTime.isAfter(now);
-      }).toList();   
+      }).toList();
 
       return Events.map((doc) {
-      final data = doc.data() as Map<String, dynamic>;
-      data['id'] = doc.id;
-      return data;
-    }).toList();  
-           
-    }else if (type == 'past'){
+        final data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id;
+        return data;
+      }).toList();
+    } else if (type == 'past') {
       querySnapshot = await FirebaseFirestore.instance
-      .collection('event')
-      .where('eventosInscritos', arrayContains: _currentuser!.email)
-      .get();
+          .collection('event')
+          .where('eventosInscritos', arrayContains: _currentuser!.email)
+          .get();
 
       DateTime now = DateTime.now();
-      List<DocumentSnapshot> pastEvents = querySnapshot.docs.where((doc) {
+      List<DocumentSnapshot> pastJoinedEvents = querySnapshot.docs.where((doc) {
         String dateTimeString = doc['dateTime'];
         DateTime eventDateTime = DateTime.parse(dateTimeString);
         return eventDateTime.isBefore(now);
       }).toList();
 
-      return pastEvents.map((doc) {
-      final data = doc.data() as Map<String, dynamic>;
-      data['id'] = doc.id;
-      return data;
-    }).toList();
+      querySnapshot = await FirebaseFirestore.instance
+          .collection('event')
+          .where('userEmail', isEqualTo: _currentuser!.email)
+          .get();
 
-    }else {
+      List<DocumentSnapshot> pastCreatedEvents =
+          querySnapshot.docs.where((doc) {
+        String dateTimeString = doc['dateTime'];
+        DateTime eventDateTime = DateTime.parse(dateTimeString);
+        return eventDateTime.isBefore(now);
+      }).toList();
+
+      List<DocumentSnapshot> pastEvents = pastJoinedEvents + pastCreatedEvents;
+
+      return pastEvents.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id;
+        return data;
+      }).toList();
+    } else {
       querySnapshot = await FirebaseFirestore.instance
           .collection('event')
           .where('participants', arrayContains: _currentuser!.email)

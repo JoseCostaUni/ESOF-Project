@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage>
     setState(() {});
   }
 
-   void _showSortOptionsSheet() {
+  void _showSortOptionsSheet() {
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -102,44 +102,43 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-
   Future<List<Map<String, dynamic>>> getEvents({
-   String? orderBy,
-   bool descending = true,
+    String? orderBy,
+    bool descending = true,
   }) async {
-   // gets the list of blocked users
-   DocumentSnapshot userDoc = await FirebaseFirestore.instance
-      .collection('users')
-      .doc(FirebaseAuth.instance.currentUser?.email)
-      .get();
-   Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
-   List<String> blockedUsers = List<String>.from(userData['blocked'] ?? []);
+    // gets the list of blocked users
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser?.email)
+        .get();
+    Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+    List<String> blockedUsers = List<String>.from(userData['blocked'] ?? []);
 
-   QuerySnapshot querySnapshot;
-   if (orderBy == 'dateTime') {
-    querySnapshot = await FirebaseFirestore.instance
-       .collection('event')
-       .orderBy('dateTime', descending: descending)
-       .get();
-   } else {
-    querySnapshot = await FirebaseFirestore.instance
-       .collection('event')
-       .orderBy('createdAt', descending: false)
-       .get();
-   }
+    QuerySnapshot querySnapshot;
+    if (orderBy == 'dateTime') {
+      querySnapshot = await FirebaseFirestore.instance
+          .collection('event')
+          .orderBy('dateTime', descending: descending)
+          .get();
+    } else {
+      querySnapshot = await FirebaseFirestore.instance
+          .collection('event')
+          .orderBy('createdAt', descending: false)
+          .get();
+    }
 
-   DateTime now = DateTime.now();
-   return querySnapshot.docs
-      .map((doc) {
-       final data = doc.data() as Map<String, dynamic>;
-       data['id'] = doc.id;
-       return data;
-      })
-      .toList()
-      .where((event) =>
-        !blockedUsers.contains(event['userEmail']) &&
-        DateTime.parse(event['dateTime']).isAfter(now))
-      .toList();
+    DateTime now = DateTime.now();
+    return querySnapshot.docs
+        .map((doc) {
+          final data = doc.data() as Map<String, dynamic>;
+          data['id'] = doc.id;
+          return data;
+        })
+        .toList()
+        .where((event) =>
+            !blockedUsers.contains(event['userEmail']) &&
+            DateTime.parse(event['dateTime']).isAfter(now))
+        .toList();
   }
 
   Future<void> _LikeEvent(String eventId) async {
@@ -310,7 +309,8 @@ class _HomePageState extends State<HomePage>
                 onRefresh: _refreshPage,
                 child: TabBarView(controller: _tabController, children: [
                   FutureBuilder<List<Map<String, dynamic>>>(
-                    future: getEvents(orderBy: _orderBy, descending: _descending),
+                    future:
+                        getEvents(orderBy: _orderBy, descending: _descending),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(
@@ -608,7 +608,7 @@ class _HomePageState extends State<HomePage>
                         return const Center(
                           child: Text('No liked events'),
                         );
-                      }else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                         return const Center(
                           child: Text('No liked events'),
                         );
