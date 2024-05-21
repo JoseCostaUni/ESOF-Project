@@ -503,7 +503,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                                                   const EdgeInsets
                                                                       .symmetric(
                                                                       horizontal:
-                                                                          5),
+                                                                          2),
                                                               decoration:
                                                                   BoxDecoration(
                                                                 borderRadius:
@@ -515,13 +515,16 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                                                   image: NetworkImage(
                                                                       imageUrl),
                                                                   fit: BoxFit
-                                                                      .contain,
+                                                                      .cover,
                                                                 ),
                                                               ),
                                                             );
                                                           }).toList(),
                                                           options:
-                                                              CarouselOptions()),
+                                                              CarouselOptions(
+                                                                aspectRatio: 16 /
+                                                                    9,  
+                                                              )),
                                                     ),
                                                     Padding(
                                                       padding: const EdgeInsets

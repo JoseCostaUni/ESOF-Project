@@ -225,19 +225,21 @@ class _EventSearchState extends State<EventSearch> {
                                                     .width,
                                                 margin:
                                                     const EdgeInsets.symmetric(
-                                                        horizontal: 5),
+                                                        horizontal: 2),
                                                 decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(10),
                                                   image: DecorationImage(
                                                     image:
                                                         NetworkImage(imageUrl),
-                                                    fit: BoxFit.contain,
+                                                    fit: BoxFit.cover,
                                                   ),
                                                 ),
                                               );
                                             }).toList(),
-                                            options: CarouselOptions()),
+                                            options: CarouselOptions(
+                                              aspectRatio: 16 / 9,
+                                            )),
                                       ),
                                     ),
                                     Padding(
