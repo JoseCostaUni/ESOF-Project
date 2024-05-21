@@ -103,40 +103,43 @@ class _HomePageState extends State<HomePage>
   }
 
 
-   Future<List<Map<String, dynamic>>> getEvents({
-    String? orderBy,
-    bool descending = true,
+  Future<List<Map<String, dynamic>>> getEvents({
+   String? orderBy,
+   bool descending = true,
   }) async {
-    // gets the list of blocked users
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser?.email)
-        .get();
-    Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
-    List<String> blockedUsers = List<String>.from(userData['blocked'] ?? []);
+   // gets the list of blocked users
+   DocumentSnapshot userDoc = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(FirebaseAuth.instance.currentUser?.email)
+      .get();
+   Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+   List<String> blockedUsers = List<String>.from(userData['blocked'] ?? []);
 
-    QuerySnapshot querySnapshot;
-    if (orderBy == 'dateTime') {
-      querySnapshot = await FirebaseFirestore.instance
-          .collection('event')
-          .orderBy('dateTime', descending: descending)
-          .get();
-    } else {
-      querySnapshot = await FirebaseFirestore.instance
-          .collection('event')
-          .orderBy('createdAt', descending: false)
-          .get();
-    }
+   QuerySnapshot querySnapshot;
+   if (orderBy == 'dateTime') {
+    querySnapshot = await FirebaseFirestore.instance
+       .collection('event')
+       .orderBy('dateTime', descending: descending)
+       .get();
+   } else {
+    querySnapshot = await FirebaseFirestore.instance
+       .collection('event')
+       .orderBy('createdAt', descending: false)
+       .get();
+   }
 
-    return querySnapshot.docs
-        .map((doc) {
-          final data = doc.data() as Map<String, dynamic>;
-          data['id'] = doc.id;
-          return data;
-        })
-        .toList()
-        .where((event) => !blockedUsers.contains(event['userEmail']))
-        .toList();
+   DateTime now = DateTime.now();
+   return querySnapshot.docs
+      .map((doc) {
+       final data = doc.data() as Map<String, dynamic>;
+       data['id'] = doc.id;
+       return data;
+      })
+      .toList()
+      .where((event) =>
+        !blockedUsers.contains(event['userEmail']) &&
+        DateTime.parse(event['dateTime']).isAfter(now))
+      .toList();
   }
 
   Future<void> _LikeEvent(String eventId) async {
