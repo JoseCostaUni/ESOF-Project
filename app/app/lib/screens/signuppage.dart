@@ -245,7 +245,7 @@ class _SignUp extends State<SignUp> {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                  left: 15.0, right: 15.0, bottom: 20.0, top: 20.0),
+                  left: 15.0, right: 15.0, bottom: 20.0, ),
               child: TextField(
                 key: const ValueKey('Userame'),
                 controller: _usernameController,
@@ -258,7 +258,7 @@ class _SignUp extends State<SignUp> {
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey),
                   ),
-                  labelText: 'Userame',
+                  labelText: 'Username',
                 ),
               ),
             ),
@@ -361,10 +361,19 @@ class _SignUp extends State<SignUp> {
                       fontSize: 15.0),
                 ),
               ),
-            )
+              
+            ),
+             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                IconButton(
+                  icon: const Icon(Icons.facebook),
+                  onPressed: () {
+                    // Ação quando o ícone do Facebook for pressionado
+                  },
+                ),
           ],
         ),
-      ),
-    );
+      ])));
   }
 }

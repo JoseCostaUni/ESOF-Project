@@ -217,18 +217,8 @@ class _LoginPageState extends State<LoginPage> {
                     // Ação quando o ícone do Facebook for pressionado
                   },
                 ),
-                IconButton(
-                  icon: const Icon(Icons.aod),
-                  onPressed: () {
-                    // Ação quando o ícone do Instagram for pressionado
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.aod),
-                  onPressed: () {
-                    // Ação quando o ícone do Google for pressionado
-                  },
-                ),
+             
+                
               ],
             )
           ],
