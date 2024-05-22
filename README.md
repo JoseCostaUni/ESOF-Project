@@ -177,3 +177,27 @@ At first glance , the sprint went better than the first one , since almost all p
 ### Happiness Meter
 ![image](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/94701253/ce3b29bf-895c-48f2-867a-107fa28cf514)
 
+## Sprint 3 (App Version 1.0.3)
+
+### Sprint Planning
+
+![image](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/42c7befb-01e4-4358-b5a1-7f1c94de4f4d)
+
+### End of Sprint 3 Board
+
+![image](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/9c5fda20-6159-4282-80c9-a59b85ec4258)
+
+### Sprint 3 Review (v1.0.3)
+
+In this sprint, our team performed exceptionally well, successfully implementing all the planned increments. We completed every feature we set out to achieve, demonstrating excellent teamwork and organization throughout the process.
+Despite the challenges of balancing this project with numerous side projects and tests, our focus and collaboration ensured that everything went smoothly and according to plan. The cohesive effort of the team was evident in the way we managed to tackle all tasks efficiently.
+Overall, we are very pleased with our progress and the methods we employed. This sprint has shown that our strategies are effective and that we can achieve our goals even when faced with additional responsibilities.
+
+### Happiness Meter
+
+![image](https://github.com/FEUP-LEIC-ES-2023-24/2LEIC04T4/assets/131660816/ce45b390-c306-4a9c-86eb-9dbd22b0665a)
+
+### Sprint Retrospective:
+
+
+
