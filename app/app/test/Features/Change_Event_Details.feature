@@ -1,6 +1,5 @@
 Feature: Changing Event Details and Sending Notifications
 
-
 Scenario: Modifying Event Details
 Given I am logged in as an Event Administrator
 When I navigate to the event details section
