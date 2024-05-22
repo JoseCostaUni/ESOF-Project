@@ -3,7 +3,7 @@ Feature: Event Search
 
     Scenario: User searches events with filters
         Given the user is on the search page
-        When the user applies filters such as date, location, category, and price
+        When the user applies filters 
         Then the system should display events that match the applied filters
 
     Scenario: User searches events with no filters
