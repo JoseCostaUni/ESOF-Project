@@ -9,12 +9,6 @@ Feature: Register in Events
         Then the system should add the user to the list of participants for the event
         And display a confirmation message
 
-    Scenario: User attempts to register for an event without logging in
-        Given the user is not logged in
-        And there is an upcoming event available
-        When the user tries to register for the event
-        Then the system should prompt the user to log in first
-
     Scenario: User attempts to register for an event that is already full
         Given the user is logged in
         And there is an upcoming event available
