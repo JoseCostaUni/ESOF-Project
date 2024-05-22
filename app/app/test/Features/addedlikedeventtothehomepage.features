@@ -1,0 +1,10 @@
+Feature: Adding Liked Event Section to the Homepage
+    As a developer
+    I want to see a section on the homepage that displays my liked events
+
+    Scenario: Displaying liked events on the homepage
+        Given I am a logged-in user
+        And I have liked some events
+        When I visit another tab of the homepage
+        Then I should see a section titled "Liked Events"
+        And I should see a list of my liked events

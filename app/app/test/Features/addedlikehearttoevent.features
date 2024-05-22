@@ -1,0 +1,10 @@
+Feature: Adding a heart to an event
+    As a developer
+    I want to be able to add a heart to an event
+    So that I can add an event to the favorites
+
+    Scenario: Adding a heart to an event
+        Given I am on the homepage
+        When I click on the heart icon
+        Then the heart should turn red
+        And the heart icon should be filled
