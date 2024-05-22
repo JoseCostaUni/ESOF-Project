@@ -49,6 +49,44 @@
 
 - Email verification after creating an account
 
+---
+
+# Sprint 3 (Version 1.0.3)
+
+### Features added
+
+- Liked events Page.
+
+- Added the possibility to like an Event and it will show in your liked events page.
+
+- Fixed a bug that when searching for a user, it you redirect to a print of an youtube video.
+
+- Possibility to add multiple photos to an event.
+
+- Auto-complete to Edit Profile page.
+
+- Created Chat Groups for each individual event.
+
+- Created Chat Group List.
+
+- Remodeled UI from the profile , adding 3 different events types in the profile.
+
+- Remodeled Event's UI.
+
+- Added page where the event's admin can kick users from an event.
+
+- Cancel the event (US 22).
+
+- Unregister in Events (US 09).
+
+- See Participants(US 20).
+
+- Block Accounts and Show Them in the blocked. accounts pages in the settings (US 16).
+
+- Adding google maps to the events.
+
+- Add filters to search page.
+
 - See other person's profile
 
 - Profile information connected to the database and optimized for better storage management
