@@ -196,72 +196,67 @@ class _EventPageState extends State<EventPage> {
                                       const Text('created by'),
                                       Container(
                                         width: 100,
-                                        child:
-                                      FutureBuilder<String>(
-                                        
-                                        future: userEmail != null
-                                            ? getUserName(userEmail)
-                                            : null,
-                                          
-                                        builder: (BuildContext context,
-                                            AsyncSnapshot<String> snapshot) {
-                                              
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.waiting) {
-                                            return const CircularProgressIndicator();
-                                          } else {
-                                            if (snapshot.hasError) {
+                                        child: FutureBuilder<String>(
+                                          future: userEmail != null
+                                              ? getUserName(userEmail)
+                                              : null,
+                                          builder: (BuildContext context,
+                                              AsyncSnapshot<String> snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return const CircularProgressIndicator();
+                                            } else {
+                                              if (snapshot.hasError) {
+                                                return Text(
+                                                    'Sem Usuario Encontrado');
+                                              }
+
                                               return Text(
-                                                  'Sem Usuario Encontrado');
+                                                '@${snapshot.data ?? 'Unknown user'}', // display do username
+                                                style: const TextStyle(
+                                                  fontSize: 18.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              );
                                             }
-                                           
-                                             return Text(
-                                              '@${snapshot.data ?? 'Unknown user'}', // display do username
-                                              style: const TextStyle(
-                                                fontSize: 18.0,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            );
-                                          }
-                                        },
-                                      ),
-                                  )],
+                                          },
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ),
-
-                            
                                 if (isEventInFuture)
-                                ElevatedButton(
-                                  onPressed: () {
-                                    final currentUser =
-                                        FirebaseAuth.instance.currentUser;
-                                    if (currentUser != null) {
-                                      if (currentUser.email == userEmail) {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) => EditeventPage(
-                                                eventId: widget.eventId),
-                                          ),
-                                        );
-                                      } else {
-                                        if (_isJoined) {
-                                          leaveEvent(widget.eventId);
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      final currentUser =
+                                          FirebaseAuth.instance.currentUser;
+                                      if (currentUser != null) {
+                                        if (currentUser.email == userEmail) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (_) => EditeventPage(
+                                                  eventId: widget.eventId),
+                                            ),
+                                          );
                                         } else {
-                                          joinEvent(widget.eventId);
+                                          if (_isJoined) {
+                                            leaveEvent(widget.eventId);
+                                          } else {
+                                            joinEvent(widget.eventId);
+                                          }
                                         }
                                       }
-                                    }
-                                  },
-                                  child: Text(
-                                    isCreator
-                                        ? 'Edit Event'
-                                        : _isJoined
-                                            ? 'Leave Event'
-                                            : 'Join Event',
+                                    },
+                                    child: Text(
+                                      isCreator
+                                          ? 'Edit Event'
+                                          : _isJoined
+                                              ? 'Leave Event'
+                                              : 'Join Event',
+                                    ),
                                   ),
-                                ),
-                            ],
+                              ],
                             ),
                           ),
                           Padding(
@@ -308,76 +303,88 @@ class _EventPageState extends State<EventPage> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () async {
-                              final currentUser =
-                                  FirebaseAuth.instance.currentUser;
-                              if (currentUser != null &&
-                                  currentUser.email == userEmail) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) =>
-                                        UsersPage(eventId: widget.eventId),
-                                  ),
-                                );
-                              } else {
-                                // Adicione aqui a lógica para exibir uma mensagem ou redirecionar para outra página
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: Text('Acesso negado'),
-                                    content: Text(
-                                        'Apenas o criador do evento pode acessar esta página.'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
+                              onTap: () async {
+                                final currentUser =
+                                    FirebaseAuth.instance.currentUser;
+                                if (currentUser != null &&
+                                    currentUser.email == userEmail) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) =>
+                                          UsersPage(eventId: widget.eventId),
+                                    ),
+                                  );
+                                } else {
+                                  // Adicione aqui a lógica para exibir uma mensagem ou redirecionar para outra página
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text('Acesso negado'),
+                                      content: Text(
+                                          'Apenas o criador do evento pode acessar esta página.'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text('OK'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Container(
+                                constraints:
+                                    BoxConstraints(maxWidth: double.infinity),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal:
+                                        8.0), // Adiciona um padding horizontal para melhor espaçamento
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.people,
+                                      color: Colors.black,
+                                      size: 20.0,
+                                    ),
+                                    const SizedBox(width: 5.0),
+                                    Expanded(
+                                      child: FutureBuilder<DocumentSnapshot>(
+                                        future: event.doc(widget.eventId).get(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return const CircularProgressIndicator();
+                                          } else if (snapshot.hasData) {
+                                            final data = snapshot.data?.data()
+                                                as Map<String, dynamic>?;
+
+                                            if (data != null) {
+                                              final inscritos =
+                                                  data['eventosInscritos'] ??
+                                                      [];
+                                              final attendanceLimit =
+                                                  data['attendanceLimit'];
+
+                                              return Text(
+                                                '${inscritos.length}/${attendanceLimit ?? 0}',
+                                                overflow: TextOverflow
+                                                    .ellipsis, // Garantir que o texto não cause overflow
+                                              );
+                                            } else {
+                                              return const Text(
+                                                  'Data not found');
+                                            }
+                                          } else {
+                                            return const Text('Data not found');
+                                          }
                                         },
-                                        child: Text('OK'),
                                       ),
-                                    ],
-                                  ),
-                                );
-                              }
-                            },
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.people,
-                                  color: Colors.black,
-                                  size: 20.0,
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(width: 5.0),
-                                FutureBuilder<DocumentSnapshot>(
-                                  future: event.doc(widget.eventId).get(),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return const CircularProgressIndicator();
-                                    } else if (snapshot.hasData) {
-                                      final data = snapshot.data?.data()
-                                          as Map<String, dynamic>?;
-
-                                      if (data != null) {
-                                        final inscritos =
-                                            data['eventosInscritos'] ?? [];
-                                        final attendanceLimit =
-                                            data['attendanceLimit'];
-
-                                        return Text(
-                                          '${inscritos.length}/${attendanceLimit ?? 0}',
-                                        );
-                                      } else {
-                                        return const Text('Data not found');
-                                      }
-                                    } else {
-                                      return const Text('Data not found');
-                                    }
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
+                              )),
                           Padding(
                             padding: const EdgeInsets.only(top: 30.0),
                             child: Text('Description:\n${description ?? ''}'),

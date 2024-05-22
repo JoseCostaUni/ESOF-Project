@@ -330,46 +330,57 @@ class _EventSearchState extends State<EventSearch> {
                                                     padding:
                                                         const EdgeInsets.only(
                                                             top: 0),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            IconButton(
-                                                              onPressed: () {},
-                                                              icon: const Icon(Icons
-                                                                  .date_range_rounded),
-                                                              iconSize: 20,
-                                                            ),
-                                                            Text(event[
-                                                                    'dateTime'] ??
-                                                                ''),
-                                                          ],
-                                                        ),
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            IconButton(
-                                                              onPressed: () {},
-                                                              icon: const Icon(
-                                                                  Icons.people),
-                                                              iconSize: 20,
-                                                            ),
-                                                            Text(
-                                                              '${event['eventosInscritos']?.length ?? 0}/${event['attendanceLimit']}',
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
+                                                    child:
+                                                                          Container(
+                                                                        padding: const EdgeInsets
+                                                                            .only(
+                                                                            top:
+                                                                                0),
+                                                                        constraints:
+                                                                            BoxConstraints(maxWidth: double.infinity),
+                                                                        child:
+                                                                            Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.spaceBetween,
+                                                                          children: [
+                                                                            Expanded(
+                                                                              child: Row(
+                                                                                children: [
+                                                                                  IconButton(
+                                                                                    onPressed: () {},
+                                                                                    icon: const Icon(Icons.date_range_rounded),
+                                                                                    iconSize: 20,
+                                                                                  ),
+                                                                                  Flexible(
+                                                                                    child: Text(
+                                                                                      event['dateTime'] ?? '',
+                                                                                      overflow: TextOverflow.ellipsis,
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                            Expanded(
+                                                                              child: Row(
+                                                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                                                children: [
+                                                                                  IconButton(
+                                                                                    onPressed: () {},
+                                                                                    icon: const Icon(Icons.people),
+                                                                                    iconSize: 20,
+                                                                                  ),
+                                                                                  Flexible(
+                                                                                    child: Text(
+                                                                                      '${event['eventosInscritos']?.length ?? 0}/${event['attendanceLimit']}',
+                                                                                      overflow: TextOverflow.ellipsis,
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ))
                                                 ],
                                               );
                                             } else {
