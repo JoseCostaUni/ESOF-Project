@@ -514,7 +514,7 @@ class _EditProfileState extends State<EditeventPage> {
                                         borderRadius: BorderRadius.circular(10),
                                         image: DecorationImage(
                                           image: NetworkImage(imageUrl),
-                                          fit: BoxFit.contain,
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
                                     ),
@@ -539,7 +539,9 @@ class _EditProfileState extends State<EditeventPage> {
                                 );
                               }).toList() ??
                               [],
-                          options: CarouselOptions(),
+                          options: CarouselOptions(
+                            aspectRatio: 16 / 9,
+                          ),
                         ),
                         const SizedBox(height: 10),
                         Row(

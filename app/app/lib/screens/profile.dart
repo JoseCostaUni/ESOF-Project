@@ -248,7 +248,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                           int registeredEventsCount =
                                               snapshot.data ?? 0;
                                           return Text(
-                                            'Number of Joined Events: $registeredEventsCount',
+                                            'Joined Events: $registeredEventsCount',
                                             style: const TextStyle(
                                                 fontSize: 16,
                                                 color: Colors.grey),
@@ -269,7 +269,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                                       'organizedEventsCount'] ??
                                                   0;
                                           return Text(
-                                            'Number of Created Events: $organizedEventsCount',
+                                            'Created Events: $organizedEventsCount',
                                             style: const TextStyle(
                                                 fontSize: 16,
                                                 color: Colors.grey),
@@ -522,9 +522,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                                           }).toList(),
                                                           options:
                                                               CarouselOptions(
-                                                                aspectRatio: 16 /
-                                                                    9,  
-                                                              )),
+                                                            aspectRatio: 16 / 9,
+                                                          )),
                                                     ),
                                                     Padding(
                                                       padding: const EdgeInsets
@@ -608,9 +607,10 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                                                             iconSize:
                                                                                 20,
                                                                           ),
-                                                                          Expanded(child: 
-                                                                          Text(event['title'] ??
-                                                                              ''),)
+                                                                          Expanded(
+                                                                            child:
+                                                                                Text(event['title'] ?? ''),
+                                                                          )
                                                                         ]),
                                                                   ),
                                                                   Padding(
@@ -645,46 +645,62 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                                                         ]),
                                                                   ),
                                                                   Padding(
-                                                                    padding:
-                                                                        const EdgeInsets
+                                                                      padding:
+                                                                          const EdgeInsets
+                                                                              .only(
+                                                                        top: 0,
+                                                                      ),
+                                                                      child:
+                                                                          Container(
+                                                                        padding: const EdgeInsets
                                                                             .only(
-                                                                      top: 0,
-                                                                    ),
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .spaceBetween,
-                                                                      children: [
-                                                                        Row(
+                                                                            top:
+                                                                                0),
+                                                                        constraints:
+                                                                            BoxConstraints(maxWidth: double.infinity),
+                                                                        child:
+                                                                            Row(
                                                                           mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
+                                                                              MainAxisAlignment.spaceBetween,
                                                                           children: [
-                                                                            IconButton(
-                                                                              onPressed: () {},
-                                                                              icon: const Icon(Icons.date_range_rounded),
-                                                                              iconSize: 20,
+                                                                            Expanded(
+                                                                              child: Row(
+                                                                                children: [
+                                                                                  IconButton(
+                                                                                    onPressed: () {},
+                                                                                    icon: const Icon(Icons.date_range_rounded),
+                                                                                    iconSize: 20,
+                                                                                  ),
+                                                                                  Flexible(
+                                                                                    child: Text(
+                                                                                      event['dateTime'] ?? '',
+                                                                                      overflow: TextOverflow.ellipsis,
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
                                                                             ),
-                                                                            Text(event['dateTime'] ??
-                                                                                ''),
+                                                                            Expanded(
+                                                                              child: Row(
+                                                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                                                children: [
+                                                                                  IconButton(
+                                                                                    onPressed: () {},
+                                                                                    icon: const Icon(Icons.people),
+                                                                                    iconSize: 20,
+                                                                                  ),
+                                                                                  Flexible(
+                                                                                    child: Text(
+                                                                                      '${event['eventosInscritos']?.length ?? 0}/${event['attendanceLimit']}',
+                                                                                      overflow: TextOverflow.ellipsis,
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
                                                                           ],
                                                                         ),
-                                                                        Row(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          children: [
-                                                                            IconButton(
-                                                                              onPressed: () {},
-                                                                              icon: const Icon(Icons.people),
-                                                                              iconSize: 20,
-                                                                            ),
-                                                                            Text(
-                                                                              '${event['eventosInscritos']?.length ?? 0}/${event['attendanceLimit']}',
-                                                                            )
-                                                                          ],
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
+                                                                      ))
                                                                 ],
                                                               );
                                                             } else {
