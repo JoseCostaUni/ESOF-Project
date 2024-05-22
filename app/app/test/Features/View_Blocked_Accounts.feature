@@ -7,6 +7,6 @@ Feature: Blocked Accounts
   Scenario: User views their blocked accounts list
     Given the user is logged into the app
     And has previously blocked one or more accounts
-    When the user accesses their account settings or privacy settings
+    When the user accesses their account settings
     Then the system should display a list of accounts that the user has blocked
-    And provide options to unblock or manage blocked accounts
+    And provide options to unblock blocked accounts
