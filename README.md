@@ -200,5 +200,31 @@ Overall, we are very pleased with our progress and the methods we employed. This
 
 ### Sprint Retrospective:
 
+#### What went well ?
+- We were able to finish all the ideas we had prepared for the app.
+- We successfully integrated feedback from previous sprints.
+- We fixed the issues related to searching for other users in search bar would redirect to a printscreen instead of a page.
+- The team worked together in groups of 2, to make the code development faster and to avoid possible lapses.
+- Code reviews were thorough and constructive, leading to higher quality and more maintainable code.
+- We added .features files to every issue we created and made acceptance tests for each one.
+
+#### What went wrong ?
+- We weren't able to finish the notifications on time given it's difficulty to implement.
+- Some team members faced difficulties with merging code, which caused delays and additional work.
+
+#### What puzzles us ?
+- Chat messages for each event were difficult to make, causing 2 people to take more time to focus on that task to complete it thoroughly.
+- We encountered unexpected behavior in third-party Flutter packages, which led to additional debugging and troubleshooting time and in the end those packages were substituted or not used at all.
+
+#### What are we would do to improve the app in the future if we had more time?
+- Notifications for when a user received an event related message or an event that he/she is subscribed was deleted/edited.
+- UI changes to make the app look more uniform in all the pages, even in the ones that had a lot less use than the others
+- Create unit test to ensure coverage and to identify and fix bugs earlier in the development process, improving overall app stability.
+- Improve the search functionality to be faster and more accurate, with better filtering and sorting options, in case the user misspelled.
+- Introduce accessibility features to make the app usable for people with disabilities, such as voice commands and high contrast modes.
+- Integrate social media sharing and authentication to allow users to easily share events or invite friends to join the app. 
+
+
+
 
 
