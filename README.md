@@ -218,7 +218,7 @@ Overall, we are very pleased with our progress and the methods we employed. This
 
 #### What are we would do to improve the app in the future if we had more time?
 - Notifications for when a user received an event related message or an event that he/she is subscribed was deleted/edited.
-- UI changes to make the app look more uniform in all the pages, even in the ones that had a lot less use than the others
+- UI changes to make the app look more uniform in all the pages, even in the ones that had a lot less use than the others.
 - Create unit test to ensure coverage and to identify and fix bugs earlier in the development process, improving overall app stability.
 - Improve the search functionality to be faster and more accurate, with better filtering and sorting options, in case the user misspelled.
 - Introduce accessibility features to make the app usable for people with disabilities, such as voice commands and high contrast modes.
